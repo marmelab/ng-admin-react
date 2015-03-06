@@ -6,7 +6,7 @@ var config = {
         this.module.noParse.push(new RegExp('^' + name + '$'));
     },
     entry: {
-        app: ['webpack/hot/dev-server', './app/sample.js'],
+        app: ['webpack-dev-server/client?http://0.0.0.0:8080', 'webpack/hot/dev-server', './app/sample.js'],
         vendors: ['react']
     },
     resolve: {
@@ -29,6 +29,6 @@ var config = {
     }
 };
 
-config.addVendor('react', __dirname + '/bower_components/react/react.min.js');
+config.addVendor('react', __dirname + '/bower_components/react/react.js');
 
 module.exports = config;

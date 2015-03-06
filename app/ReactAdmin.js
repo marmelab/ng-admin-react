@@ -9,8 +9,8 @@ class ReactAdmin extends React.Component {
     render() {
         return (
             <div>
-                <Header title={this.props.configuration.title}/>
-                <Sidebar/>
+                <Header title={this.props.configuration.title()}/>
+                <Sidebar menuViews={this.props.configuration.getViewsOfType("MenuView")}/>
                 <div className="view-wrapper">
                     <h1>Dashboard</h1>
                 </div>

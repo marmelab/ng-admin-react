@@ -6,6 +6,10 @@ body {
     background: #f8f8f8;
 }
 
+a {
+    color: #337ab7;
+}
+
 .header {
     @extend .navbar;
     @extend .navbar-default;
@@ -23,7 +27,21 @@ body {
     position: absolute;
     top: 0;
     width: 250px;
-    margin-top: 51px
+    margin-top: 51px;
+
+    ul {
+        @extend .nav;
+        li {
+            border-bottom: 1px solid #e7e7e7;
+            a {
+                display: inline-block;
+                padding: 10px 15px;
+                .icon {
+                    margin-right: 4px;
+                }
+            }
+        }
+    }
 }
 
 .view-wrapper {

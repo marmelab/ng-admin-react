@@ -1,4 +1,5 @@
 import React from 'react';
+import {RouteHandler} from 'react-router';
 
 import Header from "./View/Common/Header";
 import Sidebar from "./View/Common/Sidebar";
@@ -12,7 +13,7 @@ class ReactAdmin extends React.Component {
                 <Header title={this.props.configuration.title()}/>
                 <Sidebar menuViews={this.props.configuration.getViewsOfType("MenuView")}/>
                 <div className="view-wrapper">
-                    <h1>Dashboard</h1>
+                    <RouteHandler />
                 </div>
             </div>
         );

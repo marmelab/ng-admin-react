@@ -1,6 +1,19 @@
 import React from 'react';
+import Router from 'react-router';
+
 import ReactAdmin from './ReactAdmin';
+import DashboardView from './View/Dashboard';
+import ListView from './View/List';
 
 var configuration = require('./config');
-console.log(configuration);
-React.render(<ReactAdmin configuration={configuration} />, document.body);
+
+var routes = (
+    <Router.Route name="react-admin" path="/" handler={ReactAdmin}>
+        <Router.DefaultRoute name="dashboard" handler={DashboardView} />
+        <Router.Route name="list" path="/list/:entity" handler={ListView} />
+    </Router.Route>
+);
+
+Router.run(routes, function(ReactAdmin) {
+    React.render(<ReactAdmin configuration={configuration}/>, document.body);
+});

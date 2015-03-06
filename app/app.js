@@ -1,4 +1,8 @@
 import React from 'react';
 import ReactAdmin from './ReactAdmin';
 
-React.render(<ReactAdmin/>, document.body);
+var configuration = {
+    title: "rest-admin backend sample"
+};
+
+React.render(<ReactAdmin configuration={configuration} />, document.body);

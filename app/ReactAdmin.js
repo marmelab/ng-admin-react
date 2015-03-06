@@ -1,9 +1,11 @@
-var React = require('react');
+import React from 'react';
 
-module.exports = React.createClass({
-    render: function () {
+class ReactAdmin extends React.Component {
+    render() {
         return (
             <h1>Hello world!</h1>
         );
     }
-});
+}
+
+export default ReactAdmin;

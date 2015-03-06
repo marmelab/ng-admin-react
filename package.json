@@ -4,11 +4,12 @@
   "description": "React.js admin GUI for RESTful API",
   "main": "index.js",
   "dependencies": {
-    "react": "^0.12.2",
+    "react": "0.13.*",
     "webpack": "^1.7.2"
   },
   "devDependencies": {
     "bower": "^1.3.12",
+    "babel-loader": "^4.0.0",
     "jsx-loader": "^0.12.2",
     "react-hot-loader": "^1.1.7",
     "webpack": "^1.7.2",

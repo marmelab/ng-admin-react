@@ -1,34 +1,23 @@
 var webpack = require('webpack');
-
-var config = {
-    addVendor: function(name, path) {
-        this.resolve.alias[name] = path;
-        this.module.noParse.push(new RegExp('^' + name + '$'));
-    },
-    entry: {
-        app: ['webpack-dev-server/client?http://0.0.0.0:8080', 'webpack/hot/dev-server', './app/sample.js'],
-        vendors: ['react']
-    },
-    resolve: {
-        alias: {
-            // filled with addVendor method
-        }
-    },
+module.exports = {
+    entry: [
+        'webpack-dev-server/client?http://0.0.0.0:8080',
+        'webpack/hot/dev-server',
+        "./app/app.js"
+    ],
     output: {
-        path: './build',
-        filename: 'bundle.js'
+        path: __dirname + '/build',
+        filename: "bundle.js"
+    },
+    module: {
+        loaders: [
+            { test: /\.js?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ },
+            { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+            { test: /\.css$/, loader: "style!css" }
+        ]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
-    ],
-    module: {
-        noParse: [], // filled with addVendor method
-        loaders: [
-            { test: /\.js$/, loader: 'jsx-loader' }
-        ]
-    }
+        new webpack.NoErrorsPlugin()
+    ]
+
 };
-
-config.addVendor('react', __dirname + '/bower_components/react/react.js');
-
-module.exports = config;

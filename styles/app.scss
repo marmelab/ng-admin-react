@@ -1,0 +1,40 @@
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+body {
+    background: #f8f8f8;
+}
+
+.header {
+    @extend .navbar;
+    @extend .navbar-default;
+    @extend .navbar-static-top;
+
+    margin: 0;
+
+    h1 {
+        margin: 0;
+        @extend .navbar-brand;
+    }
+}
+
+.sidebar {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin-top: 51px
+}
+
+.view-wrapper {
+    margin-left: 250px;
+    padding-left: 30px;
+    border-left: 1px solid #e7e7e7;
+    min-height: 568px;
+    background: #fff;
+
+    h1 {
+        margin-top: 0;
+        padding-top: 20px;
+    }
+}

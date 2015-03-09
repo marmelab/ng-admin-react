@@ -4,7 +4,7 @@ class Datagrid extends React.Component {
     buildHeaders() {
         var headers = [];
         for (var fieldName in this.props.fields) {
-            headers.push(<th>{this.props.fields[fieldName].label()}</th>);
+            headers.push(<th key={fieldName}>{this.props.fields[fieldName].label()}</th>);
         }
 
         return headers;
@@ -14,7 +14,10 @@ class Datagrid extends React.Component {
         return (
             <table className="datagrid">
                 <thead>
-                    <tr>{this.buildHeaders()}</tr>
+                    <tr>
+                        {this.buildHeaders()}
+                        <th></th> // for actions
+                    </tr>
                 </thead>
                 <tbody>
                     <tr>

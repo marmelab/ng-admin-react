@@ -9,8 +9,8 @@ var configuration = require('./config');
 
 var routes = (
     <Router.Route name="react-admin" path="/" handler={ReactAdmin}>
-        <Router.DefaultRoute name="dashboard" handler={DashboardView} />
-        <Router.Route name="list" path="/list/:entity" handler={ListView} />
+        <Router.DefaultRoute name="dashboard" handler={DashboardView}/>
+        <Router.Route name="list" path="/list/:entity" handler={ListView}/>
     </Router.Route>
 );
 

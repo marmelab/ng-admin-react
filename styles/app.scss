@@ -51,8 +51,22 @@ a {
     min-height: 568px;
     background: #fff;
 
-    h1 {
-        margin-top: 0;
+    .page-header {
         padding-top: 20px;
+        margin: 0 0 15px;
+        h1 {
+            margin-top: 0;
+        }
+        .description {
+            @extend .lead;
+            margin: 0;
+        }
     }
+}
+
+.datagrid {
+    @extend .table;
+    @extend .table-condensed;
+    @extend .table-hover;
+    @extend .table-striped;
 }

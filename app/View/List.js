@@ -4,6 +4,7 @@ import Datagrid from '../Component/Datagrid/Datagrid';
 
 export default React.createClass({
     mixins: [Router.State],
+
     render() {
         var entityName = this.getParams().entity;
         var view = this.props.configuration.getEntity(entityName).views["ListView"];

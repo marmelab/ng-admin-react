@@ -1,6 +1,6 @@
 var alt = require('../alt');
 
-class ListViewActions {
+class DatagridActions {
     constructor() {
         this.generateActions(
             'sort'
@@ -8,4 +8,4 @@ class ListViewActions {
     }
 }
 
-module.exports = alt.createActions(ListViewActions);
+module.exports = alt.createActions(DatagridActions);

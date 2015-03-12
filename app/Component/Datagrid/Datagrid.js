@@ -2,6 +2,7 @@ import React from 'react';
 
 import DatagridActions from '../../Actions/DatagridActions';
 import DatagridStore from '../../Store/DatagridStore';
+import { BooleanField, NumberField, TemplateField } from './Field';
 
 class Datagrid extends React.Component {
     constructor() {
@@ -58,7 +59,36 @@ class Datagrid extends React.Component {
     buildCells(row) {
         var cells = [];
         for (var fieldName in this.props.fields) {
-            cells.push(<td>{row[fieldName]}</td>);
+            if (!this.props.fields.hasOwnProperty(fieldName)) {
+                continue;
+            }
+
+            var field = this.props.fields[fieldName];
+
+            let renderedField;
+
+            switch (field.type()) {
+                case 'string':
+                    renderedField = row[fieldName];
+                    break;
+
+                case 'boolean':
+                    renderedField = <BooleanField value={row[fieldName]} />;
+                    break;
+
+                case 'template':
+                    renderedField = <TemplateField template={field.template()} entry={row} />;
+                    break;
+
+                case 'number':
+                    renderedField = <NumberField value={row[fieldName]} />;
+                    break;
+
+                default:
+                    throw new Error(`Unknown field type "${field.type()}".`);
+            }
+
+            cells.push(<td>{renderedField}</td>);
         }
 
         return cells;

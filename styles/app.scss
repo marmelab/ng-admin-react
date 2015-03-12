@@ -69,4 +69,14 @@ a {
     @extend .table-condensed;
     @extend .table-hover;
     @extend .table-striped;
+
+    .boolean-true {
+        @extend .glyphicon;
+        @extend .glyphicon-ok;
+    }
+
+    .boolean-false {
+        @extend .glyphicon;
+        @extend .glyphicon-remove;
+    }
 }

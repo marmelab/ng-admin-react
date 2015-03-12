@@ -1,6 +1,6 @@
-var alt = require('../alt');
+import alt from '../alt';
 
-var DatagridActions = require('../Actions/DatagridActions');
+import DatagridActions from '../Actions/DatagridActions';
 
 class DatagridStore {
     constructor() {
@@ -8,9 +8,8 @@ class DatagridStore {
     }
 
     onSort() {
-        console.log('Datagrid.sort');
         this.emitChange();
     }
 }
 
-module.exports = alt.createStore(DatagridStore);
+export default alt.createStore(DatagridStore);

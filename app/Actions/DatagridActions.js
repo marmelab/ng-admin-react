@@ -1,4 +1,4 @@
-var alt = require('../alt');
+import alt from '../alt';
 
 class DatagridActions {
     constructor() {
@@ -8,4 +8,4 @@ class DatagridActions {
     }
 }
 
-module.exports = alt.createActions(DatagridActions);
+export default alt.createActions(DatagridActions);

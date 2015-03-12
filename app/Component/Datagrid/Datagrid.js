@@ -4,7 +4,13 @@ class Datagrid extends React.Component {
     buildHeaders() {
         var headers = [];
         for (var fieldName in this.props.fields) {
-            headers.push(<th key={fieldName}>{this.props.fields[fieldName].label()}</th>);
+            headers.push(
+                <th key={fieldName}>
+                    <a href="#" onClick={this.props.onSort}>
+                        {this.props.fields[fieldName].label()}
+                    </a>
+                </th>
+            );
         }
 
         return headers;
@@ -16,7 +22,7 @@ class Datagrid extends React.Component {
                 <thead>
                     <tr>
                         {this.buildHeaders()}
-                        <th></th> // for actions
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

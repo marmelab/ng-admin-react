@@ -6,11 +6,8 @@ import DatagridStore from '../../Store/DatagridStore';
 class Datagrid extends React.Component {
     constructor() {
         this.state = {
-            entries: [
-                { id: 1, name: "Foo", published: "true" },
-                { id: 2, name: "Bar", published: "false" }
-            ]
-        }
+            entries: []
+        };
     }
 
     componentDidMount() {
@@ -22,9 +19,7 @@ class Datagrid extends React.Component {
     }
 
     onChange() {
-        let entries = this.state.entries;
-        let newEntries = [entries[1], entries[0]];
-        this.setState({ entries: newEntries });
+        this.setState({ entries: DatagridStore.getState().entries });
     }
 
     handleSort(e) {

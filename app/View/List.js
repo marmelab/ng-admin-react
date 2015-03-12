@@ -15,7 +15,7 @@ export default React.createClass({
                     <h1>{view.title() || entityName + " list"}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
-                <Datagrid fields={view.fields()} entries={view.entries} />
+                <Datagrid entity={view.entity.name()} perPage={view.perPage()} fields={view.fields()} />
             </div>
         )
     }

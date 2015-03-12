@@ -12,6 +12,13 @@ class Datagrid extends React.Component {
 
     componentDidMount() {
         DatagridStore.listen(this.onChange.bind(this));
+        DatagridActions.loadData(this.props.entity, this.props.perPage);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.entity !== this.props.entity) {
+            DatagridActions.loadData(nextProps.entity, nextProps.perPage);
+        }
     }
 
     componentWillUnmount() {
@@ -50,7 +57,7 @@ class Datagrid extends React.Component {
 
     buildCells(row) {
         var cells = [];
-        for (var fieldName in row) {
+        for (var fieldName in this.props.fields) {
             cells.push(<td>{row[fieldName]}</td>);
         }
 

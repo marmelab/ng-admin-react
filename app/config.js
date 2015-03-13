@@ -191,7 +191,7 @@ tag.dashboardView()
 tag.listView()
     .infinitePagination(false) // by default, the list view uses infinite pagination. Set to false to use regulat pagination
     .fields([
-        nga.field('id').label('ID'),
+        nga.field('id', 'number').label('ID'),
         nga.field('name'),
         nga.field('published', 'boolean').cssClasses(function(entry) { // add custom CSS classes to inputs and columns
             if (entry.values.published) {
@@ -201,7 +201,7 @@ tag.listView()
         }),
         nga.field('custom', 'template')
             .label('Upper name')
-            .template('{{ entry.values.name.toUpperCase() }}')
+            .template(e => e.name.toUpperCase())
     ])
     .listActions(['show']);
 

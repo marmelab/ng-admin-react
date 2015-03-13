@@ -69,4 +69,30 @@ a {
     @extend .table-condensed;
     @extend .table-hover;
     @extend .table-striped;
+
+    .sorted {
+        color: #aaa;
+        font-size: 13px;
+        margin-right: 4px;
+
+        &.sorted-asc {
+            @extend .glyphicon;
+            @extend .glyphicon-chevron-up;
+        }
+
+        &.sorted-desc {
+            @extend .glyphicon;
+            @extend .glyphicon-chevron-down;
+        }
+    }
+
+    .boolean-true {
+        @extend .glyphicon;
+        @extend .glyphicon-ok;
+    }
+
+    .boolean-false {
+        @extend .glyphicon;
+        @extend .glyphicon-remove;
+    }
 }

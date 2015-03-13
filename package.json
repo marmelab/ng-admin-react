@@ -6,6 +6,7 @@
   "dependencies": {
     "react": "0.13.*",
     "react-router": "git://github.com/rackt/react-router#0.13-compat",
+    "restful.js": "^0.5.2",
     "webpack": "^1.7.2"
   },
   "devDependencies": {

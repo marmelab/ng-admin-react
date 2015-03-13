@@ -1,19 +1,33 @@
 import alt from '../alt';
 
+import ApiRequester from '../Services/ApiRequester';
 import DatagridActions from '../Actions/DatagridActions';
 
 class DatagridStore {
     constructor() {
         this.bindActions(DatagridActions);
-        this.entries = [
-            { id: 1, name: "Foo", published: "true" },
-            { id: 2, name: "Bar", published: "false" }
-        ];
+
+        this.entries = [];
+        this.sortDir = null;
+        this.sortField = null;
     }
 
-    onSort() {
-        this.entries = [this.entries[1], this.entries[0]];
-        this.emitChange();
+    loadData(view) {
+        var sortField = this.sortField || view.sortField() || 'id';
+        var sortDir = this.sortDir || view.sortDir() || 'DESC';
+
+        ApiRequester.getAll(view, 1, true, [], sortField, sortDir)
+            .then(function(data) {
+                this.entries = data;
+                this.emitChange();
+            }.bind(this));
+    }
+
+    sort(args) {
+        this.sortDir = args.sortDir;
+        this.sortField = args.sortField;
+
+        return this.loadData(args.view);
     }
 }
 

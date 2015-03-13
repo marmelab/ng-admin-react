@@ -6,19 +6,28 @@ import DatagridActions from '../Actions/DatagridActions';
 class DatagridStore {
     constructor() {
         this.bindActions(DatagridActions);
+
         this.entries = [];
+        this.sortDir = null;
+        this.sortField = null;
     }
 
-    loadData(args) {
-        ApiRequester.getAll(args[0], args[1])
+    loadData(view) {
+        var sortField = this.sortField || view.sortField() || 'id';
+        var sortDir = this.sortDir || view.sortDir() || 'DESC';
+
+        ApiRequester.getAll(view, 1, true, [], sortField, sortDir)
             .then(function(data) {
                 this.entries = data;
                 this.emitChange();
             }.bind(this));
     }
 
-    onSort() {
-        this.emitChange();
+    sort(args) {
+        this.sortDir = args.sortDir;
+        this.sortField = args.sortField;
+
+        return this.loadData(args.view);
     }
 }
 

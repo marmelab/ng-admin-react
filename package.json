@@ -19,6 +19,7 @@
     "css-loader": "^0.9.1",
     "file-loader": "^0.8.1",
     "jest-cli": "^0.4.0",
+    "json-server": "^0.7.8",
     "react-hot-loader": "^1.1.7",
     "sass-loader": "^0.4.1",
     "style-loader": "^0.8.3",

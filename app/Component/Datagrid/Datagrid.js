@@ -4,7 +4,7 @@ import DatagridActions from '../../Actions/DatagridActions';
 import DatagridStore from '../../Store/DatagridStore';
 import Header from '../../Component/Datagrid/ColumnHeader';
 
-import { BooleanField, DateField, NumberField, ReferenceField, TemplateField } from './Field';
+import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyField, TemplateField } from './Field';
 
 class Datagrid extends React.Component {
     constructor() {
@@ -65,14 +65,10 @@ class Datagrid extends React.Component {
 
     buildCells(row) {
         var cells = [];
-        for (var fieldName in this.props.fields) {
-            if (!this.props.fields.hasOwnProperty(fieldName)) {
-                continue;
-            }
-
-            var field = this.props.fields[fieldName];
-
-            let renderedField;
+        for (let i in this.props.fields) {
+            let field = this.props.fields[i],
+                fieldName = field.name(),
+                renderedField;
 
             switch (field.type()) {
                 case 'string':
@@ -97,6 +93,10 @@ class Datagrid extends React.Component {
 
                 case 'reference':
                     renderedField = <ReferenceField value={row[fieldName]} />;
+                    break;
+
+                case 'reference_many':
+                    renderedField = <ReferenceManyField values={row[fieldName]} />;
                     break;
 
                 default:

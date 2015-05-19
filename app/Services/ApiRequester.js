@@ -27,7 +27,7 @@ class ApiRequester {
             _start: 0,
             _end: params._perPage,
             _sort: params._sortField,
-            _sortDir: params._sortDir
+            _order: params._sortDir
         };
 
         //if (filters && Object.keys(filters).length !== 0) {
@@ -45,11 +45,11 @@ class ApiRequester {
 
         return restful('localhost:3000')
             .all(listView.entity.name())
-            .addRequestInterceptor(function(data, headers, method, url) {
-                // Doesn't work (restful.js issue?)
-                console.log('Requested: ', data);
-                return data;
-            })
+            //.addRequestInterceptor(function(data, headers, method, url) {
+            //    // Doesn't work (restful.js issue?)
+            //    console.log('Requested: ', data);
+            //    return data;
+            //})
             .getAll(params);
     };
 }

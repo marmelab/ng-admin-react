@@ -2,6 +2,7 @@ import BooleanField from './BooleanField';
 import DateField from './DateField';
 import NumberField from './NumberField';
 import ReferenceField from './ReferenceField';
+import ReferenceManyField from './ReferenceManyField';
 import TemplateField from './TemplateField';
 
 export {
@@ -9,5 +10,6 @@ export {
     DateField,
     NumberField,
     ReferenceField,
+    ReferenceManyField,
     TemplateField
 };

@@ -91,4 +91,4 @@ post.showView() // a showView displays one entry in full page - allows to displa
 make run
 ```
 
-The application is now available at `http://localhost:8080/build/`.
+The application is now available at `http://localhost:8080/examples/blog`.

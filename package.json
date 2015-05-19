@@ -27,7 +27,7 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --hot --devtool eval --progress --colors --content-base build",
-    "test": "jest"
+    "test": "make test"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",

@@ -10,7 +10,7 @@ export default React.createClass({
         var view = this.props.configuration.getEntity(entityName).views["ListView"];
 
         return (
-            <div class="view list-view">
+            <div className="view list-view">
                 <div className="page-header">
                     <h1>{view.title() || entityName + " list"}</h1>
                     <p className="description">{view.description()}</p>

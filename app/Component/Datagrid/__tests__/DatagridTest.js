@@ -3,7 +3,7 @@ jest.dontMock('../Datagrid');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-xdescribe('Datagrid', function() {
+describe('Datagrid', function() {
     var Datagrid;
 
     beforeEach(function() {

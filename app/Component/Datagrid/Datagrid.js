@@ -4,7 +4,7 @@ import DatagridActions from '../../Actions/DatagridActions';
 import DatagridStore from '../../Store/DatagridStore';
 import Header from '../../Component/Datagrid/ColumnHeader';
 
-import { BooleanField, DateField, NumberField, ReferenceField, TemplateField } from './Field';
+import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyField, TemplateField } from './Field';
 
 class Datagrid extends React.Component {
     constructor() {
@@ -58,21 +58,18 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        return this.state.entries.map(r => (
-            <tr>{this.buildCells(r)}</tr>
+        return this.state.entries.map((r, i) => (
+            <tr key={i}>{this.buildCells(r)}</tr>
         ));
     }
 
     buildCells(row) {
-        var cells = [];
-        for (var fieldName in this.props.fields) {
-            if (!this.props.fields.hasOwnProperty(fieldName)) {
-                continue;
-            }
+        let cells = [];
 
-            var field = this.props.fields[fieldName];
-
-            let renderedField;
+        for (let i in this.props.fields) {
+            let field = this.props.fields[i],
+                fieldName = field.name(),
+                renderedField;
 
             switch (field.type()) {
                 case 'string':
@@ -99,11 +96,15 @@ class Datagrid extends React.Component {
                     renderedField = <ReferenceField value={row[fieldName]} />;
                     break;
 
+                case 'reference_many':
+                    renderedField = <ReferenceManyField values={row[fieldName]} />;
+                    break;
+
                 default:
                     throw new Error(`Unknown field type "${field.type()}".`);
             }
 
-            cells.push(<td>{renderedField}</td>);
+            cells.push(<td key={i}>{renderedField}</td>);
         }
 
         return cells;

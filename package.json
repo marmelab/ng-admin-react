@@ -10,6 +10,8 @@
     "webpack": "^1.7.2"
   },
   "devDependencies": {
+    "admin-config": "^0.1.0",
+    "alt": "^0.16.5",
     "babel-jest": "^4.0.0",
     "babel-loader": "^4.0.0",
     "bootstrap-sass": "^3.3.3",
@@ -17,7 +19,6 @@
     "css-loader": "^0.9.1",
     "file-loader": "^0.8.1",
     "jest-cli": "^0.4.0",
-    "jsx-loader": "^0.12.2",
     "react-hot-loader": "^1.1.7",
     "sass-loader": "^0.4.1",
     "style-loader": "^0.8.3",

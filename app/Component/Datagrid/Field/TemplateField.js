@@ -2,9 +2,9 @@ import React from 'react';
 
 class TemplateField extends React.Component {
     render() {
-        var template = this.props.template;
+        let template = this.props.template,
+            computedTemplate = template;
 
-        var computedTemplate = template;
         if (typeof(template) === 'function') {
             computedTemplate = template(this.props.entry);
         }

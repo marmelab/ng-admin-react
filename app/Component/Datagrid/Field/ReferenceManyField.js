@@ -2,11 +2,13 @@ import React from 'react';
 
 class ReferenceField extends React.Component {
     render() {
-        var values = this.props.values;
+        let values = this.props.values;
 
-        return values.map(value => (
-            <span className="label label-default">{value}</span>
-        ));
+        return <span>
+            {values.map((value) => (
+                <span>{value}</span>
+            ))}
+        </span>;
     }
 }
 

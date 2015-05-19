@@ -58,13 +58,14 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        return this.state.entries.map(r => (
-            <tr>{this.buildCells(r)}</tr>
+        return this.state.entries.map((r, i) => (
+            <tr key={i}>{this.buildCells(r)}</tr>
         ));
     }
 
     buildCells(row) {
-        var cells = [];
+        let cells = [];
+
         for (let i in this.props.fields) {
             let field = this.props.fields[i],
                 fieldName = field.name(),
@@ -103,7 +104,7 @@ class Datagrid extends React.Component {
                     throw new Error(`Unknown field type "${field.type()}".`);
             }
 
-            cells.push(<td>{renderedField}</td>);
+            cells.push(<td key={i}>{renderedField}</td>);
         }
 
         return cells;

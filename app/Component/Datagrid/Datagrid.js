@@ -8,6 +8,7 @@ import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyFiel
 
 class Datagrid extends React.Component {
     constructor() {
+        super();
         this.state = {
             entries: []
         };

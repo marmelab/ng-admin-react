@@ -88,5 +88,7 @@ post.showView() // a showView displays one entry in full page - allows to displa
 ## Running server locally
 
 ``` sh
-npm run dev
+make run
 ```
+
+The application is now available at `http://localhost:8080/build/`.

@@ -1,4 +1,4 @@
-import ConfigurationFactory from './config/Factory';
+import ConfigurationFactory from 'admin-config/lib/Factory';
 
 function truncate(value) {
     if (!value) {

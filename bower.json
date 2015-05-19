@@ -16,5 +16,9 @@
   ],
   "dependencies": {
     "react": "~0.12.2"
+  },
+  "devDependencies": {
+    "fakerest": "master",
+    "sinon-server": "http://sinonjs.org/releases/sinon-server-1.14.1.js"
   }
 }

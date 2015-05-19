@@ -1,34 +1,43 @@
-import alt from '../alt';
+import Fluxxor from 'fluxxor';
 
 import ApiRequester from '../Services/ApiRequester';
-import DatagridActions from '../Actions/DatagridActions';
 
-class DatagridStore {
-    constructor() {
-        this.bindActions(DatagridActions);
-
+export default Fluxxor.createStore({
+    initialize: function() {
         this.entries = [];
         this.sortDir = null;
         this.sortField = null;
-    }
 
-    loadData(view) {
+        this.bindActions(
+            'load_data', this.loadData,
+            'sort', this.sort
+        );
+    },
+
+    loadData: function(view) {
         var sortField = this.sortField || view.sortField() || 'id';
         var sortDir = this.sortDir || view.sortDir() || 'DESC';
 
-        ApiRequester.getAll(view, 1, true, [], sortField, sortDir)
+        ApiRequester
+            .getAll(view, 1, true, [], sortField, sortDir)
             .then(function(data) {
                 this.entries = data;
-                this.emitChange();
+                this.emit('change');
             }.bind(this));
-    }
+    },
 
-    sort(args) {
+    sort: function(args) {
         this.sortDir = args.sortDir;
         this.sortField = args.sortField;
 
         return this.loadData(args.view);
-    }
-}
+    },
 
-export default alt.createStore(DatagridStore);
+    getState: function() {
+        return {
+            entries: this.entries,
+            sortDir: this.sortDir,
+            sortField: this.sortField
+        };
+    }
+});

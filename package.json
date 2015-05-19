@@ -5,13 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "react": "0.13.*",
-    "react-router": "git://github.com/rackt/react-router#0.13-compat",
+    "react-router": "0.13.*",
     "restful.js": "^0.5.2",
     "webpack": "^1.7.2"
   },
   "devDependencies": {
     "admin-config": "^0.1.0",
-    "alt": "^0.16.5",
+    "fluxxor": "^1.5.3",
     "babel-jest": "^4.0.0",
     "babel-loader": "^5.1.2",
     "babel-runtime": "^5.4.3",

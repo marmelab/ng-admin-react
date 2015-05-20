@@ -85,10 +85,11 @@ post.showView() // a showView displays one entry in full page - allows to displa
     ]);
 ```
 
-## Running server locally
+## Running blog bakend admin demo locally
 
 ``` sh
-make run
+make install-blog
+make run-blog
 ```
 
-The application is now available at `http://localhost:8080/examples/blog/`.
+The application is now available at `http://localhost:8080/`.

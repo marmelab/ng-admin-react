@@ -1,12 +1,17 @@
-import alt from '../alt';
+import AppDispatcher from '../Services/AppDispatcher';
 
-class DatagridActions {
-    constructor() {
-        this.generateActions(
-            'loadData',
-            'sort'
-        )
+export default {
+    loadData(view) {
+        AppDispatcher.dispatch({
+            actionType: 'load_data',
+            view: view
+        });
+    },
+
+    sort(args) {
+        AppDispatcher.dispatch({
+            actionType: 'sort',
+            args: args
+        });
     }
 }
-
-export default alt.createActions(DatagridActions);

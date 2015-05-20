@@ -13,9 +13,9 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.js?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ },
-            { test: /\.js$/, loader: 'babel-loader?stage=1&optional[]=runtime', exclude: /node_modules\/(?!admin-config)/ },
-            { test: /react-router\/.*\.js$/, loader: 'babel-loader'},
+            { test: /\.js?$/, loaders: ['react-hot', 'babel?stage=1&optional[]=runtime'], exclude: /node_modules/ },
+            { test: /\.js$/, loader: 'babel?stage=1&optional[]=runtime', exclude: /node_modules\/(?!admin-config)/ },
+            { test: /react-router\/.*\.js$/, loader: 'babel'},
             {
                 test: /\.scss$/,
                 loader: "style!css!sass?" +

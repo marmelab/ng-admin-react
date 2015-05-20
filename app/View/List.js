@@ -1,12 +1,10 @@
 import React from 'react';
-import Router from 'react-router';
 import Datagrid from '../Component/Datagrid/Datagrid';
 
-export default React.createClass({
-    mixins: [Router.State],
-
+class ListView extends React.Component {
     render() {
-        var entityName = this.getParams().entity;
+        var params = this.context.router.getCurrentParams();
+        var entityName = params.entity;
         var view = this.props.configuration.getEntity(entityName).views["ListView"];
 
         return (
@@ -19,4 +17,13 @@ export default React.createClass({
             </div>
         )
     }
-});
+}
+
+ListView.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
+ListView.propTypes = {
+    configuration: React.PropTypes.object.isRequired
+}
+
+export default ListView;

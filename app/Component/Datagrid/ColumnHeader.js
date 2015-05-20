@@ -30,4 +30,11 @@ class ColumnHeader extends React.Component {
     }
 }
 
+ColumnHeader.propTypes = {
+    view: React.PropTypes.object.isRequired,
+    fieldName: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string.isRequired,
+    sort: React.PropTypes.string
+}
+
 export default ColumnHeader;

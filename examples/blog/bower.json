@@ -4,19 +4,13 @@
   "authors": [
     "marmelab <info@marmelab.com>"
   ],
-  "description": "React.js admin GUI for RESTful API",
+  "description": "React-admin blog backend demo",
   "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "bower_components"
   ],
-  "dependencies": {
-    "react": "~0.12.2"
-  },
   "devDependencies": {
     "fakerest": "master",
     "sinon-server": "http://sinonjs.org/releases/sinon-server-1.14.1.js"

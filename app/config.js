@@ -9,7 +9,7 @@ function truncate(value) {
 }
 
 var nga = new ConfigurationFactory();
-var admin = nga.application('rest-admin backend demo') // application main title
+var admin = nga.application('react-admin blog backend demo') // application main title
     .baseApiUrl('http://localhost:3000/'); // main API endpoint
 
 // define all entities at the top to allow references between them

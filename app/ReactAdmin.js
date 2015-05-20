@@ -20,4 +20,8 @@ class ReactAdmin extends React.Component {
     }
 }
 
+ReactAdmin.propTypes = {
+    configuration: React.PropTypes.object.isRequired
+}
+
 export default ReactAdmin;

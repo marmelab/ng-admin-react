@@ -36,8 +36,14 @@
     });
 
     // use sinon.js to monkey-patch XmlHttpRequest
+    sinon.FakeXMLHttpRequest.useFilters = true;
+    sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
+        return url.indexOf('/socket.io/') !== -1;
+    });
+
     var server = sinon.fakeServer.create();
     server.autoRespond = true;
     server.autoRespondAfter = 0; // answer immediately
+
     server.respondWith(restServer.getHandler());
 }());

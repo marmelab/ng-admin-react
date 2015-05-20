@@ -1,7 +1,5 @@
 import React from 'react';
 
-import DatagridActions from '../../Actions/DatagridActions';
-import DatagridStore from '../../Store/DatagridStore';
 import Header from '../../Component/Datagrid/ColumnHeader';
 
 import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyField, TemplateField } from './Field';
@@ -15,7 +13,7 @@ class Datagrid extends React.Component {
     }
 
     componentDidMount() {
-        DatagridStore.listen(this.onChange.bind(this));
+        this.props.store.on('change', this.onChange.bind(this));
         this.refreshData(this.props.view);
     }
 
@@ -27,22 +25,23 @@ class Datagrid extends React.Component {
     }
 
     componentWillUnmount() {
-        DatagridStore.unlisten(this.onChange.bind(this));
+        this.props.store.removeListener('change', this.onChange.bind(this))
     }
 
     onChange() {
-        this.setState({ entries: DatagridStore.getState().entries });
+        this.setState({ entries: this.props.store.getState().entries });
     }
 
     refreshData(view) {
-        DatagridActions.loadData(view);
+        this.props.actions.loadData(view);
     }
 
     buildHeaders() {
         let headers = [];
 
-        let sortDir = DatagridStore.getState().sortDir;
-        let sortField = DatagridStore.getState().sortField;
+        let sortDir = this.props.store.getState().sortDir;
+        let sortField = this.props.store.getState().sortField;
+        let actions = this.props.actions;
 
         for (let fieldName in this.props.fields) {
             let sort = null;
@@ -51,7 +50,8 @@ class Datagrid extends React.Component {
             }
 
             headers.push(
-                <Header sort={sort} view={this.props.view} fieldName={fieldName} label={this.props.fields[fieldName].label()} />
+                <Header sort={sort} view={this.props.view} fieldName={fieldName}
+                        label={this.props.fields[fieldName].label()} actions={actions} />
             );
         }
 
@@ -126,6 +126,12 @@ class Datagrid extends React.Component {
             </table>
         );
     }
+}
+
+Datagrid.propTypes = {
+    store: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired,
+    fields: React.PropTypes.array.isRequired
 }
 
 export default Datagrid;

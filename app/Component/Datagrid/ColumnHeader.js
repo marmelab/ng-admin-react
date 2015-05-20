@@ -1,12 +1,10 @@
 import React from 'react';
 
-import DatagridActions from '../../Actions/DatagridActions';
-
 class ColumnHeader extends React.Component {
     handleSort(e) {
         e.preventDefault();
 
-        DatagridActions.sort({
+        this.props.actions.sort({
             sortField: this.props.view.name() + "." + this.props.fieldName,
             sortDir: this.props.sort === 'ASC' ? 'DESC' : 'ASC',
             view: this.props.view
@@ -28,6 +26,14 @@ class ColumnHeader extends React.Component {
             </th>
         );
     }
+}
+
+ColumnHeader.propTypes = {
+    view: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired,
+    fieldName: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string.isRequired,
+    sort: React.PropTypes.string
 }
 
 export default ColumnHeader;

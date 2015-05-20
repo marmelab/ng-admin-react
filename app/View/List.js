@@ -1,13 +1,13 @@
 import React from 'react';
-import Router from 'react-router';
 import Datagrid from '../Component/Datagrid/Datagrid';
 
-export default React.createClass({
-    mixins: [Router.State],
-
+class ListView extends React.Component {
     render() {
-        var entityName = this.getParams().entity;
-        var view = this.props.configuration.getEntity(entityName).views["ListView"];
+        var params = this.context.router.getCurrentParams();
+        var entityName = params.entity;
+        var view = this.props.configuration.getEntity(entityName).views['ListView'];
+        var store = this.props.flux.store('datagrid');
+        var actions = this.props.flux.actions.datagrid;
 
         return (
             <div className="view list-view">
@@ -15,8 +15,18 @@ export default React.createClass({
                     <h1>{view.title() || entityName + " list"}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
-                <Datagrid view={view} fields={view.fields()} />
+                <Datagrid view={view} fields={view.fields()} store={store} actions={actions} />
             </div>
         )
     }
-});
+}
+
+ListView.contextTypes = {
+    router: React.PropTypes.func
+};
+ListView.propTypes = {
+    configuration: React.PropTypes.object.isRequired,
+    flux: React.PropTypes.object.isRequired
+}
+
+export default ListView;

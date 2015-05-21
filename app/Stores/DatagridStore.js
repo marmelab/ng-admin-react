@@ -3,6 +3,7 @@ import { fromJS, Map, List } from 'immutable';
 import AppDispatcher from '../Services/AppDispatcher';
 
 import ApiRequester from '../Services/ApiRequester';
+import DataStore from 'admin-config/lib/DataStore/DataStore';
 
 class DatagridStore extends EventEmitter {
     constructor(...args) {
@@ -20,20 +21,25 @@ class DatagridStore extends EventEmitter {
         this.data = this.data.update('pending', v => true);
         this.emitChange();
 
-        var sortField = this.sortField || view.sortField() || 'id';
-        var sortDir = this.sortDir || view.sortDir() || 'DESC';
+        let dataStore = new DataStore(),
+            entity = view.entity,
+            sortField = this.sortField || view.sortField() || 'id',
+            sortDir = this.sortDir || view.sortDir() || 'DESC';
 
         ApiRequester
             .getAll(view, 1, true, [], sortField, sortDir)
             .then(function(data) {
                 this.data = this.data.update('entries', (list) => {
                     list = list.clear();
-                    data.forEach((entry) => {
+                    data.forEach((datum) => {
+                        let entry = dataStore.mapEntry(entity.name(), view.identifier(), view.getFields(), datum);
+
                         list = list.push(fromJS(entry));
                     });
 
                     return list;
                 });
+
                 this.data = this.data.update('pending', v => false);
                 this.emitChange();
             }.bind(this));

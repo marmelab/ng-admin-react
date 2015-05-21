@@ -2,31 +2,30 @@ import React from 'react';
 import Datagrid from '../Component/Datagrid/Datagrid';
 import ViewActions from '../Component/ViewActions';
 
-class ListView extends React.Component {
+class ShowView extends React.Component {
     render() {
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity,
-            view = this.props.configuration.getEntity(entityName).views["ListView"];
+            view = this.props.configuration.getEntity(entityName).views["ShowView"];
 
         return (
-            <div className="view list-view">
+            <div className="view show-view">
                 <div className="page-header">
-                    <h1>{view.title() || entityName + " list"}</h1>
+                    <h1>{view.title() || entityName + " detail"}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
-                <ViewActions view={view} buttons={['create']} />
 
-                <Datagrid view={view} fields={view.fields()} />
+                <ViewActions view={view} buttons={['list' /* @TODO add other links when entry is present*/]} />
             </div>
         )
     }
 }
 
-ListView.contextTypes = {
+ShowView.contextTypes = {
     router: React.PropTypes.func.isRequired
 };
-ListView.propTypes = {
+ShowView.propTypes = {
     configuration: React.PropTypes.object.isRequired
 };
 
-export default ListView;
+export default ShowView;

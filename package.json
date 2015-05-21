@@ -19,6 +19,7 @@
     "file-loader": "^0.8.1",
     "flux": "^2.0.3",
     "immutable": "^3.7.3",
+    "inflected": "^1.1.6",
     "jest-cli": "^0.4.0",
     "omniscient": "^3.1.0",
     "react-hot-loader": "^1.1.7",

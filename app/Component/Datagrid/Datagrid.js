@@ -1,4 +1,5 @@
 import React from 'react';
+import shouldComponentUpdate from 'omniscient/shouldupdate';
 
 import DatagridActions from '../../Actions/DatagridActions';
 import DatagridStore from '../../Stores/DatagridStore';
@@ -7,10 +8,11 @@ import Header from '../../Component/Datagrid/ColumnHeader';
 import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyField, TemplateField } from './Field';
 
 class Datagrid extends React.Component {
-    constructor(...args) {
-        super(...args);
+    constructor() {
+        super();
         this.state = DatagridStore.getState();
         this.onChange = this.onChange.bind(this);
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
     componentDidMount() {
@@ -18,10 +20,13 @@ class Datagrid extends React.Component {
         this.refreshData(this.props.view);
     }
 
+    shouldComponentUpdate(newProps, newState) {
+        return this.shouldComponentUpdate(newProps, newState);
+    }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.view !== this.props.view) {
             // Shouldn't switching view prop re-render component directly?
-            this.state.entries = []; // hack...
             this.refreshData(nextProps.view);
         }
     }
@@ -41,8 +46,8 @@ class Datagrid extends React.Component {
     buildHeaders() {
         let headers = [];
 
-        let sortDir = this.state.sortDir;
-        let sortField = this.state.sortField;
+        let sortDir = this.state.data.get('sortDir');
+        let sortField = this.state.data.get('sortField');
 
         for (let fieldName in this.props.fields) {
             let sort = null;
@@ -59,7 +64,7 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        return this.state.entries.map((r, i) => (
+        return this.state.data.get('entries').map((r, i) => (
             <tr key={i}>{this.buildCells(r)}</tr>
         ));
     }
@@ -74,31 +79,31 @@ class Datagrid extends React.Component {
 
             switch (field.type()) {
                 case 'string':
-                    renderedField = row[fieldName];
+                    renderedField = row.get(fieldName);
                     break;
 
                 case 'boolean':
-                    renderedField = <BooleanField value={row[fieldName]} />;
+                    renderedField = <BooleanField value={row.get(fieldName)} />;
                     break;
 
                 case 'date':
-                    renderedField = <DateField value={row[fieldName]} format={field.format()} />;
+                    renderedField = <DateField value={row.get(fieldName)} format={field.format()} />;
                     break;
 
                 case 'template':
-                    renderedField = <TemplateField template={field.template()} entry={row} />;
+                    renderedField = <TemplateField template={field.template()} entry={row.toJS()} />;
                     break;
 
                 case 'number':
-                    renderedField = <NumberField value={row[fieldName]} />;
+                    renderedField = <NumberField value={row.get(fieldName)} />;
                     break;
 
                 case 'reference':
-                    renderedField = <ReferenceField value={row[fieldName]} />;
+                    renderedField = <ReferenceField value={row.get(fieldName)} />;
                     break;
 
                 case 'reference_many':
-                    renderedField = <ReferenceManyField values={row[fieldName]} />;
+                    renderedField = <ReferenceManyField values={row.get(fieldName)} />;
                     break;
 
                 default:
@@ -112,6 +117,8 @@ class Datagrid extends React.Component {
     }
 
     render() {
+        if (this.state.data.get('pending')) return null;
+
         return (
             <table className="datagrid">
                 <thead>

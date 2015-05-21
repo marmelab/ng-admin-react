@@ -21,7 +21,7 @@ module.exports = {
             { test: /\.js$/, loader: 'babel?stage=1&optional[]=runtime', exclude: /node_modules\/(?!admin-config)/ },
             { test: /react-router\/.*\.js$/, loader: 'babel'},
             {
-                test: /\.scss$/,
+                test: /\.scss|\.css$/,
                 loader: "style!css!sass?" +
                     "includePaths[]=" + path.resolve(__dirname, "./node_modules/bootstrap-sass/assets/stylesheets/")
             },

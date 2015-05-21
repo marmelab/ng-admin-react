@@ -9,7 +9,7 @@ module.exports = {
     ],
     output: {
         path: __dirname + '/build',
-        filename: "bundle.js",
+        filename: "react-admin-standalone.min.js",
         library: "ReactAdmin"
     },
     externals: {

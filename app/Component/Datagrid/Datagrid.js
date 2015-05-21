@@ -40,10 +40,10 @@ class Datagrid extends React.Component {
     }
 
     buildHeaders() {
-        let headers = [],
-            actions = this.props.view.listActions(),
-            sortDir = this.state.data.get('sortDir'),
-            sortField = this.state.data.get('sortField');
+        let headers = [];
+        let actions = this.props.view.listActions();
+        let sortDir = this.state.data.get('sortDir');
+        let sortField = this.state.data.get('sortField');
 
         for (let fieldName in this.props.fields) {
             let sort = null;
@@ -71,13 +71,13 @@ class Datagrid extends React.Component {
     }
 
     buildCells(row) {
-        let cells = [],
-            actions = this.props.view.listActions();
+        let cells = [];
+        let actions = this.props.view.listActions();
 
         for (let i in this.props.fields) {
-            let field = this.props.fields[i],
-                fieldName = field.name(),
-                renderedField;
+            let field = this.props.fields[i];
+            let fieldName = field.name();
+            let renderedField;
 
             switch (field.type()) {
                 case 'string':

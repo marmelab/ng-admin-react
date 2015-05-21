@@ -9,7 +9,11 @@ module.exports = {
     ],
     output: {
         path: __dirname + '/build',
-        filename: "bundle.js"
+        filename: "bundle.js",
+        library: "ReactAdmin"
+    },
+    externals: {
+        "react": "React"
     },
     module: {
         loaders: [
@@ -27,5 +31,4 @@ module.exports = {
     plugins: [
         new webpack.NoErrorsPlugin()
     ]
-
 };

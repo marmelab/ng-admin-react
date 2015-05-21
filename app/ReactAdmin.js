@@ -39,8 +39,6 @@ ReactAdmin.propTypes = {
 };
 
 // Exports classes that can be used by ES5 files
-global.React = React;
 global.ConfigurationFactory = ConfigurationFactory;
-global.ReactAdmin = ReactAdmin;
 
 export default ReactAdmin;

@@ -16,7 +16,7 @@ var routes = (
 class ReactAdmin extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { handler: null };
+        this.state = { handler: null, factory: ConfigurationFactory};
     }
     componentDidMount() {
         Router.run(routes, this.handleNavigation.bind(this));
@@ -27,7 +27,7 @@ class ReactAdmin extends React.Component {
         });
     }
     render() {
-        if(!this.state.handler) return null;
+        if(!this.state.handler || !this.props.configuration) return null;
 
         var Handler = this.state.handler;
         return <Handler configuration={this.props.configuration}/>;
@@ -37,8 +37,5 @@ class ReactAdmin extends React.Component {
 ReactAdmin.propTypes = {
     configuration: React.PropTypes.object.isRequired
 };
-
-// Exports classes that can be used by ES5 files
-global.ConfigurationFactory = ConfigurationFactory;
 
 export default ReactAdmin;

@@ -40,6 +40,7 @@ class DatagridStore extends EventEmitter {
                     return list;
                 });
 
+                this.data = this.data.update('totalItems', 15); // @TMP
                 this.data = this.data.update('pending', v => false);
                 this.emitChange();
             }.bind(this));

@@ -1,6 +1,7 @@
 import React from 'react';
 import shouldComponentUpdate from 'omniscient/shouldupdate';
 
+import MaDatagridPagination from './MaDatagridPagination';
 import DatagridActions from '../../Actions/DatagridActions';
 import DatagridStore from '../../Stores/DatagridStore';
 import Header from '../../Component/Datagrid/ColumnHeader';
@@ -124,18 +125,24 @@ class Datagrid extends React.Component {
 
     render() {
         if (this.state.data.get('pending')) return null;
+        let totalItems = this.state.data.get('totalItems');
 
         return (
-            <table className="datagrid">
-                <thead>
-                <tr>
-                    {this.buildHeaders()}
-                </tr>
-                </thead>
-                <tbody>
-                    {this.buildRecords()}
-                </tbody>
-            </table>
+            <div>
+                <table className="datagrid">
+                    <thead>
+                    <tr>
+                        {this.buildHeaders()}
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {this.buildRecords()}
+                    </tbody>
+                </table>
+
+                <MaDatagridPagination totalItems={totalItems} perPage={view.perPage()} />
+            </div>
         );
     }
 }

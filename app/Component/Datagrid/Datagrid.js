@@ -121,7 +121,7 @@ class Datagrid extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                {this.buildRecords()}
+                    {this.buildRecords()}
                 </tbody>
             </table>
         );
@@ -131,6 +131,6 @@ class Datagrid extends React.Component {
 Datagrid.propTypes = {
     view: React.PropTypes.object.isRequired,
     fields: React.PropTypes.array.isRequired
-}
+};
 
 export default Datagrid;

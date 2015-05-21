@@ -1,27 +1,46 @@
 import React from 'react';
-import {RouteHandler} from 'react-router';
+import Router from 'react-router';
 
-import Header from "./View/Common/Header";
-import Sidebar from "./View/Common/Sidebar";
+import AdminBootstrap from './AdminBootstrap';
+import DashboardView from './View/Dashboard';
+import ListView from './View/List';
+import ConfigurationFactory from 'admin-config/lib/Factory';
 
-require('../styles/app.scss');
+var routes = (
+    <Router.Route name="react-admin" path="/" handler={AdminBootstrap}>
+        <Router.DefaultRoute name="dashboard" handler={DashboardView}/>
+        <Router.Route name="list" path="/list/:entity" handler={ListView}/>
+    </Router.Route>
+);
 
 class ReactAdmin extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { handler: null };
+    }
+    componentDidMount() {
+        Router.run(routes, this.handleNavigation.bind(this));
+    }
+    handleNavigation(Handler) {
+        this.setState({
+            handler: Handler
+        });
+    }
     render() {
-        return (
-            <div>
-                <Header title={this.props.configuration.title()}/>
-                <Sidebar menuViews={this.props.configuration.getViewsOfType("MenuView")}/>
-                <div className="view-wrapper">
-                    <RouteHandler configuration={this.props.configuration}/>
-                </div>
-            </div>
-        );
+        if(!this.state.handler) return null;
+
+        var Handler = this.state.handler;
+        return <Handler configuration={this.props.configuration}/>;
     }
 }
 
 ReactAdmin.propTypes = {
     configuration: React.PropTypes.object.isRequired
-}
+};
+
+// Exports classes that can be used by ES5 files
+global.React = React;
+global.ConfigurationFactory = ConfigurationFactory;
+global.ReactAdmin = ReactAdmin;
 
 export default ReactAdmin;

@@ -5,7 +5,7 @@ module.exports = {
     entry: [
         'webpack-dev-server/client?http://0.0.0.0:8080',
         'webpack/hot/dev-server',
-        "./app/app.js"
+        "./app/ReactAdmin.js"
     ],
     output: {
         path: __dirname + '/build',

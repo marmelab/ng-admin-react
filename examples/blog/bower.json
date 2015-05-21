@@ -11,8 +11,9 @@
     "**/.*",
     "bower_components"
   ],
-  "devDependencies": {
+  "dependencies": {
     "fakerest": "master",
+    "react": "~0.13.*",
     "sinon-server": "http://sinonjs.org/releases/sinon-server-1.14.1.js"
   }
 }

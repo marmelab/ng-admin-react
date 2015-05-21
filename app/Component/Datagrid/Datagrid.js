@@ -11,17 +11,12 @@ class Datagrid extends React.Component {
     constructor() {
         super();
         this.state = DatagridStore.getState();
-        this.onChange = this.onChange.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
     componentDidMount() {
-        DatagridStore.addChangeListener(this.onChange);
+        DatagridStore.addChangeListener(this.onChange.bind(this));
         this.refreshData(this.props.view);
-    }
-
-    shouldComponentUpdate(newProps, newState) {
-        return this.shouldComponentUpdate(newProps, newState);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -32,7 +27,7 @@ class Datagrid extends React.Component {
     }
 
     componentWillUnmount() {
-        DatagridStore.removeChangeListener(this.onChange);
+        DatagridStore.removeChangeListener(this.onChange.bind(this));
     }
 
     onChange() {

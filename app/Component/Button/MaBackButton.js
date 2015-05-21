@@ -5,12 +5,12 @@ class MaBackButton extends React.Component {
         window.history.back();
     }
     render() {
-        let size = this.props.size ? ' btn-' + size : '',
-            className = 'btn btn-default' + size;
+        let size = 'btn-' + (this.props.size ? size : 'xs'),
+            className = 'btn btn-default ' + size;
 
         return (
             <a className={className} click={this.back}>
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>&nbsp;{this.props.label || 'Back'}
+                <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>&nbsp;{this.props.label || 'Back'}
             </a>
         );
     }

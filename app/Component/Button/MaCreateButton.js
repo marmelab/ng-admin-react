@@ -3,15 +3,15 @@ import {Link} from 'react-router';
 
 class MaCreateButton extends React.Component {
     render() {
-        let size = this.props.size ? ' btn-' + size : '',
-            className = 'btn btn-default' + size,
+        let size = this.props.size ? 'btn-' + size : '',
+            className = 'btn btn-default ' + size,
             params = {
                 entity: this.props.entity.name()
             };
 
         return (
             <Link className={className} to="create" params={params}>
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;{this.props.label || 'Create'}
+                <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;{this.props.label || 'Create'}
             </Link>
         );
     }

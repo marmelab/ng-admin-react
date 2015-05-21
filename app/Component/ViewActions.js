@@ -33,7 +33,7 @@ class ViewActions extends React.Component {
         });
 
         return (
-            <span>{buttons}</span>
+            <span className="ma-view-actions">{buttons}</span>
         );
     }
 }

@@ -10,11 +10,12 @@ class ListView extends React.Component {
 
         return (
             <div className="view list-view">
+                <ViewActions view={view} buttons={['create']} />
+
                 <div className="page-header">
                     <h1>{view.title() || entityName + " list"}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
-                <ViewActions view={view} buttons={['create']} />
 
                 <Datagrid view={view} fields={view.fields()} />
             </div>

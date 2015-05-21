@@ -6,6 +6,8 @@ import DashboardView from './View/Dashboard';
 import ListView from './View/List';
 import ConfigurationFactory from 'admin-config/lib/Factory';
 
+import Pace from 'pace';
+
 var routes = (
     <Router.Route name="react-admin" path="/" handler={AdminBootstrap}>
         <Router.DefaultRoute name="dashboard" handler={DashboardView}/>
@@ -28,6 +30,9 @@ class ReactAdmin extends React.Component {
     }
     render() {
         if(!this.state.handler || !this.props.configuration) return null;
+
+        // (re)start progress bar
+        Pace.restart();
 
         var Handler = this.state.handler;
         return <Handler configuration={this.props.configuration}/>;

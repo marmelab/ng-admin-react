@@ -6,8 +6,7 @@
   "dependencies": {
     "react": "0.13.*",
     "react-router": "0.13.*",
-    "restful.js": "^0.5.2",
-    "webpack": "^1.7.2"
+    "restful.js": "^0.5.2"
   },
   "devDependencies": {
     "admin-config": "^0.1.0",
@@ -26,7 +25,8 @@
     "sass-loader": "^0.4.1",
     "style-loader": "^0.8.3",
     "webpack": "^1.7.2",
-    "webpack-dev-server": "^1.7.0"
+    "webpack-dev-server": "^1.7.0",
+    "pace": "HubSpot/pace"
   },
   "scripts": {
     "test": "make test"

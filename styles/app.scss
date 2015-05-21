@@ -48,6 +48,7 @@ a {
 .view-wrapper {
     margin-left: 250px;
     padding-left: 30px;
+    padding-right: 30px;
     border-left: 1px solid #e7e7e7;
     min-height: 568px;
     background: #fff;
@@ -87,6 +88,10 @@ a {
         }
     }
 
+    .btn-default {
+        margin-right: 5px;
+    }
+
     .boolean-true {
         @extend .glyphicon;
         @extend .glyphicon-ok;
@@ -100,4 +105,8 @@ a {
 
 .pace-activity {
     left: 50%;
+}
+.ma-view-actions {
+    margin: 25px 0 15px 0;
+    float: right;
 }

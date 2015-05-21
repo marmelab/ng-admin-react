@@ -1,33 +1,32 @@
 import React from 'react';
+import Inflector from 'inflected'
 import Datagrid from '../Component/Datagrid/Datagrid';
 import ViewActions from '../Component/ViewActions';
 
-class ListView extends React.Component {
+class CreateView extends React.Component {
     render() {
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity,
-            view = this.props.configuration.getEntity(entityName).views["ListView"];
+            view = this.props.configuration.getEntity(entityName).views["CreateView"];
 
         return (
-            <div className="view list-view">
-                <ViewActions view={view} buttons={['create']} />
+            <div className="view show-view">
+                <ViewActions view={view} buttons={['list']} />
 
                 <div className="page-header">
-                    <h1>{view.title() || entityName + " list"}</h1>
+                    <h1>{view.title() || "Create new " + Inflector.singularize(entityName)}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
-
-                <Datagrid view={view} fields={view.fields()} />
             </div>
         )
     }
 }
 
-ListView.contextTypes = {
+CreateView.contextTypes = {
     router: React.PropTypes.func.isRequired
 };
-ListView.propTypes = {
+CreateView.propTypes = {
     configuration: React.PropTypes.object.isRequired
 };
 
-export default ListView;
+export default CreateView;

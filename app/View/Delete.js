@@ -1,4 +1,5 @@
 import React from 'react';
+import Inflector from 'inflected'
 import ViewActions from '../Component/ViewActions';
 
 class DeleteView extends React.Component {
@@ -9,11 +10,12 @@ class DeleteView extends React.Component {
 
         return (
             <div className="view list-view">
+                <ViewActions view={view} buttons={['back']} />
+
                 <div className="page-header">
-                    <h1>{view.title() || "Delete one " +entityName}</h1>
+                    <h1>{view.title() || "Delete one " + Inflector.singularize(entityName)}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
-                <ViewActions view={view} buttons={['back']} />
             </div>
         )
     }

@@ -9,11 +9,12 @@ class EditView extends React.Component {
 
         return (
             <div className="view list-view">
+                <ViewActions view={view} buttons={['list'/* @TODO add other links when entry is present*/]} />
+
                 <div className="page-header">
                     <h1>{view.title() || "Edit one " +entityName}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
-                <ViewActions view={view} buttons={['list'/* @TODO add other links when entry is present*/]} />
             </div>
         )
     }

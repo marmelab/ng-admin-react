@@ -1,6 +1,7 @@
 import React from 'react';
 import shouldComponentUpdate from 'omniscient/shouldupdate';
 
+import MaDatagridPagination from './MaDatagridPagination';
 import DatagridActions from '../../Actions/DatagridActions';
 import DatagridStore from '../../Stores/DatagridStore';
 import Header from '../../Component/Datagrid/ColumnHeader';
@@ -11,19 +12,25 @@ import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyFiel
 class Datagrid extends React.Component {
     constructor() {
         super();
+
         this.state = DatagridStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
     componentDidMount() {
         DatagridStore.addChangeListener(this.onChange.bind(this));
-        this.refreshData(this.props.view);
+
+        let {page} = this.props.router.getCurrentQuery();
+        this.refreshData(this.props.view, page);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.view !== this.props.view) {
+        let {page} = this.props.router.getCurrentQuery();
+        let currentPage = this.state.data.get('page');
+
+        if (nextProps.view !== this.props.view || page !== currentPage) {
             // Shouldn't switching view prop re-render component directly?
-            this.refreshData(nextProps.view);
+            this.refreshData(nextProps.view, page);
         }
     }
 
@@ -35,8 +42,8 @@ class Datagrid extends React.Component {
         this.setState(DatagridStore.getState());
     }
 
-    refreshData(view) {
-        DatagridActions.loadData(view);
+    refreshData(view, page) {
+        DatagridActions.loadData(view, page);
     }
 
     buildHeaders() {
@@ -124,18 +131,26 @@ class Datagrid extends React.Component {
 
     render() {
         if (this.state.data.get('pending')) return null;
+        let totalItems = this.state.data.get('totalItems');
+        let {page} = this.props.router.getCurrentQuery();
+        let view = this.props.view;
 
         return (
-            <table className="datagrid">
-                <thead>
-                <tr>
-                    {this.buildHeaders()}
-                </tr>
-                </thead>
-                <tbody>
-                    {this.buildRecords()}
-                </tbody>
-            </table>
+            <div>
+                <table className="datagrid">
+                    <thead>
+                        <tr>
+                            {this.buildHeaders()}
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.buildRecords()}
+                    </tbody>
+                </table>
+
+                <MaDatagridPagination totalItems={totalItems} entity={view.entity.name()} page={page} perPage={view.perPage()} />
+            </div>
         );
     }
 }

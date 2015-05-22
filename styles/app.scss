@@ -49,6 +49,7 @@ a {
     margin-left: 250px;
     padding-left: 30px;
     padding-right: 30px;
+    padding-bottom: 10px;
     border-left: 1px solid #e7e7e7;
     min-height: 568px;
     background: #fff;
@@ -103,10 +104,24 @@ a {
     }
 }
 
+
 .pace-activity {
     left: 50%;
 }
 .ma-view-actions {
     margin: 25px 0 15px 0;
     float: right;
+}
+.pagination-bar {
+    text-align: right;
+    margin: 20px 0;
+
+    .total {
+        display: inline-block;
+        padding: 5px;
+    }
+
+    .pagination {
+        margin: 0 0 0 20px;
+    }
 }

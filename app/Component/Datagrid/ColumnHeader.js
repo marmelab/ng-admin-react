@@ -35,6 +35,6 @@ ColumnHeader.propTypes = {
     fieldName: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired,
     sort: React.PropTypes.string
-}
+};
 
 export default ColumnHeader;

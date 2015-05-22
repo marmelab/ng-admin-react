@@ -1,0 +1,35 @@
+var React = require('react/addons');
+var TestUtils = React.addons.TestUtils;
+
+var MaDatagridPagination = require('../Component/Datagrid/MaDatagridPagination');
+
+// Mock router
+// @see https://github.com/rackt/react-router/blob/master/docs/guides/testing.md
+function RouterStub() { }
+RouterStub.makePath = function () { };
+RouterStub.makeHref = function () { };
+RouterStub.isActive = function () { };
+
+function wrapComponent(cb) {
+    var TestWrapper = React.createClass({
+        childContextTypes: {
+            router: React.PropTypes.func
+        },
+
+        getChildContext () {
+            return {
+                router: RouterStub
+            };
+        },
+
+        render () {
+            return cb();
+        }
+    });
+
+    return TestUtils.renderIntoDocument(
+        <TestWrapper />
+    );
+}
+
+export default wrapComponent;

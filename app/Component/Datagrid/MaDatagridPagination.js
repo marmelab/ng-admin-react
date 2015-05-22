@@ -2,15 +2,6 @@ import React from 'react';
 import {Link} from 'react-router';
 
 class MaDatagridPagination extends React.Component {
-    getInitialState() {
-        return {
-            offsetBegin: 0,
-            offsetEnd: 0,
-            nbPages: 1,
-            displayPagination: true
-        };
-    }
-
     componentDidMount() {
         let totalItems = this.props.totalItems;
         let page = this.props.page || 1;
@@ -101,9 +92,9 @@ class MaDatagridPagination extends React.Component {
                 let className = i == page ? 'active' : '';
 
                 if (i == '.') {
-                    items.push(<li className={className}><span>&hellip;</span></li>)
+                    items.push(<li key={i} className={className}><span>&hellip;</span></li>)
                 } else {
-                    items.push(<li className={className}><Link to="list" params={{entity: entity}} query={{page: i}}>{i}</Link></li>)
+                    items.push(<li key={i} className={className}><Link to="list" params={{entity: entity}} query={{page: i}}>{i}</Link></li>)
                 }
             });
 
@@ -126,9 +117,7 @@ class MaDatagridPagination extends React.Component {
 
 MaDatagridPagination.propTypes = {
     totalItems: React.PropTypes.number.isRequired,
-    perPage: React.PropTypes.number.isRequired,
-    offsetBegin: React.PropTypes.number.offsetBegin,
-    offsetEnd: React.PropTypes.number.isRequired
+    perPage: React.PropTypes.number.isRequired
 };
 
 export default MaDatagridPagination;

@@ -3,16 +3,17 @@ import MenuItem from './MenuItem.js';
 
 class Sidebar extends React.Component {
     render() {
-        var menuViews = this.props.menuViews
-            .sort((a, b) => (b.order() < a.order()))
-            .map(v => <MenuItem menuView={v} />);
+        var menuViews = this.props.menuViews.children()
+            .map(menu => <MenuItem menu={menu} />);
 
         return (
-            <aside className="sidebar">
-                <nav>
-                    <ul>{menuViews}</ul>
-                </nav>
-            </aside>
+            <div className="navbar-default sidebar" role="navigation">
+                <div className="sidebar-nav navbar-collapse">
+                    <ul className="nav" id="side-menu">
+                        {menuViews}
+                    </ul>
+                </div>
+            </div>
         )
     }
 }

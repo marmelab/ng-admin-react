@@ -11,7 +11,7 @@ class AdminBootstrap extends React.Component {
         return (
             <div>
                 <Header title={this.props.configuration.title()}/>
-                <Sidebar menuViews={this.props.configuration.getViewsOfType("MenuView")}/>
+                <Sidebar menuViews={this.props.configuration.menu()}/>
                 <div className="view-wrapper">
                     <RouteHandler configuration={this.props.configuration}/>
                 </div>

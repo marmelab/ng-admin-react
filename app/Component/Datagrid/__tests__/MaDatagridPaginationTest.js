@@ -1,43 +1,22 @@
 jest.dontMock('../MaDatagridPagination');
+jest.dontMock('../../../Test/RouterWrapper');
 
 var React = require('react/addons');
 var MaDatagridPagination = require('../MaDatagridPagination');
-var TestUtils = React.addons.TestUtils;
-
-// Mock router
-function RouterStub() { }
-RouterStub.makePath = function () { };
-RouterStub.makeHref = function () { };
-RouterStub.isActive = function () { };
-
+var routerWrapper = require('../../../Test/RouterWrapper');
 
 function getPagination(items, page, perPage) {
-    var TestWrapper = React.createClass({
-        childContextTypes: {
-            router: React.PropTypes.func
-        },
-
-        getChildContext () {
-            return {
-                router: RouterStub
-            };
-        },
-
-        render () {
-            return <MaDatagridPagination totalItems={items} entity={null} page={page} perPage={perPage} />
-        }
+    return routerWrapper(function() {
+        return <MaDatagridPagination totalItems={items} entity={null} page={page} perPage={perPage} />
     });
-
-    return TestUtils.renderIntoDocument(
-        <TestWrapper />
-    );
 }
 
-ddescribe('MaDatagridPagination', function() {
+describe('MaDatagridPagination', function() {
 
     describe('Without items', () => {
         it('Should display "No record found"', () => {
             var pagination = getPagination(0, 1, 10);
+
             pagination = React.findDOMNode(pagination);
 
             expect(pagination.innerHTML).toContain('No record found.');

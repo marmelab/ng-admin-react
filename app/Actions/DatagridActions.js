@@ -1,7 +1,7 @@
 import AppDispatcher from '../Services/AppDispatcher';
 
 export default {
-    loadData(view) {
+    loadData(view, page) {
         AppDispatcher.dispatch({
             actionType: 'load_data',
             view: view

@@ -12,14 +12,17 @@ class DatagridStore extends EventEmitter {
         this.data = Map({
             pending: true,
             totalItems: 0,
+            page: 1,
             entries: List(),
             sortDir: null,
             sortField: null
         });
     }
 
-    loadData(view) {
+    loadData(view, page) {
+        page = page || this.data.get('page');
         this.data = this.data.update('pending', v => true);
+        this.data = this.data.update('page', v => page);
         this.emitChange();
 
         let dataStore = new DataStore(),
@@ -51,7 +54,7 @@ class DatagridStore extends EventEmitter {
         this.data = this.data.update('sortDir', v => args.sortDir);
         this.data = this.data.update('sortField', v => args.sortField);
 
-        return this.loadData(args.view);
+        return this.loadData(args.view, this.data.get('page'));
     }
 
     getState() {

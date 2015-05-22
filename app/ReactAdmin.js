@@ -29,6 +29,11 @@ class ReactAdmin extends React.Component {
         super(props);
         this.state = { handler: null, factory: ConfigurationFactory};
     }
+    componentDidUpdate() {
+        // stop progress bar
+        Pace.stop();
+    }
+
     componentDidMount() {
         Router.run(routes, this.handleNavigation.bind(this));
     }
@@ -40,8 +45,8 @@ class ReactAdmin extends React.Component {
     render() {
         if(!this.state.handler || !this.props.configuration) return null;
 
-        // (re)start progress bar
-        Pace.restart();
+        // start progress bar
+        Pace.start();
 
         var Handler = this.state.handler;
         return <Handler configuration={this.props.configuration}/>;

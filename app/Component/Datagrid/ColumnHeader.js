@@ -7,8 +7,9 @@ class ColumnHeader extends React.Component {
         e.preventDefault();
 
         DatagridActions.sort({
-            sortField: this.props.view.name() + "." + this.props.fieldName,
+            sortField: this.props.view.name() + '.' + this.props.fieldName,
             sortDir: this.props.sort === 'ASC' ? 'DESC' : 'ASC',
+            configuration: this.props.configuration,
             view: this.props.view
         });
     }
@@ -32,6 +33,7 @@ class ColumnHeader extends React.Component {
 
 ColumnHeader.propTypes = {
     view: React.PropTypes.object.isRequired,
+    configuration: React.PropTypes.object.isRequired,
     fieldName: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired,
     sort: React.PropTypes.string

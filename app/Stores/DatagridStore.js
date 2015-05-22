@@ -2,8 +2,11 @@ import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import AppDispatcher from '../Services/AppDispatcher';
 
-import ApiRequester from '../Services/ApiRequester';
+import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
+import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
+
+import RestWrapper from '../Services/RestWrapper';
 
 class DatagridStore extends EventEmitter {
     constructor(...args) {
@@ -19,24 +22,24 @@ class DatagridStore extends EventEmitter {
         });
     }
 
-    loadData(view, page) {
+    loadData(configuration, view, page) {
         page = page || this.data.get('page');
+
         this.data = this.data.update('pending', v => true);
         this.data = this.data.update('page', v => page);
         this.emitChange();
 
-        let dataStore = new DataStore(),
-            entity = view.entity,
-            sortField = this.sortField || view.sortField() || 'id',
-            sortDir = this.sortDir || view.sortDir() || 'DESC';
+        let dataStore = new DataStore();
+        let readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
+        let entity = view.entity;
 
-        ApiRequester
-            .getAll(view, 1, true, [], sortField, sortDir)
-            .then(function(data) {
+        readQueries
+            .getAll(view, page, [], this.sortField, this.sortDir)
+            .then(function(response) {
                 this.data = this.data.update('entries', (list) => {
                     list = list.clear();
-                    data.forEach((datum) => {
-                        let entry = dataStore.mapEntry(entity.name(), view.identifier(), view.getFields(), datum);
+                    response.data.forEach((rawEntry) => {
+                        let entry = dataStore.mapEntry(entity.name(), view.identifier(), view.getFields(), rawEntry);
 
                         list = list.push(fromJS(entry));
                     });
@@ -44,7 +47,7 @@ class DatagridStore extends EventEmitter {
                     return list;
                 });
 
-                this.data = this.data.update('totalItems', v => 65); // @TMP
+                this.data = this.data.update('totalItems', v => response.totalItems);
                 this.data = this.data.update('pending', v => false);
                 this.emitChange();
             }.bind(this));
@@ -54,7 +57,7 @@ class DatagridStore extends EventEmitter {
         this.data = this.data.update('sortDir', v => args.sortDir);
         this.data = this.data.update('sortField', v => args.sortField);
 
-        return this.loadData(args.view, this.data.get('page'));
+        return this.loadData(args.configuration, args.view, this.data.get('page'));
     }
 
     getState() {
@@ -79,7 +82,7 @@ let store = new DatagridStore();
 AppDispatcher.register((action) => {
   switch(action.actionType) {
     case 'load_data':
-      store.loadData(action.view);
+      store.loadData(action.configuration, action.view, action.page);
       break;
     case 'sort':
       store.sort(action.args);

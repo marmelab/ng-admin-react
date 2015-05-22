@@ -43,7 +43,7 @@ class Datagrid extends React.Component {
     }
 
     refreshData(view, page) {
-        DatagridActions.loadData(view, page);
+        DatagridActions.loadData(this.props.configuration, view, page);
     }
 
     buildHeaders() {
@@ -100,7 +100,7 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'template':
-                    renderedField = <TemplateField template={field.template()} entry={row.toJS()} />;
+                    renderedField = <TemplateField template={field.template()} entry={row} />;
                     break;
 
                 case 'number':
@@ -156,6 +156,7 @@ class Datagrid extends React.Component {
 }
 
 Datagrid.propTypes = {
+    configuration: React.PropTypes.object.isRequired,
     view: React.PropTypes.object.isRequired,
     fields: React.PropTypes.array.isRequired
 };

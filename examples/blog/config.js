@@ -207,7 +207,7 @@
                     nga.field('custom', 'template')
                         .label('Upper name')
                         .template(function (entity) {
-                            entity.name.toUpperCase();
+                            return entity.values.name.toUpperCase();
                         })
                 ])
                 .listActions(['show']);

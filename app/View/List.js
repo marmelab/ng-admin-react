@@ -4,9 +4,9 @@ import ViewActions from '../Component/ViewActions';
 
 class ListView extends React.Component {
     render() {
-        let params = this.context.router.getCurrentParams(),
-            entityName = params.entity,
-            view = this.props.configuration.getEntity(entityName).views["ListView"];
+        let params = this.context.router.getCurrentParams();
+        let entityName = params.entity;
+        let view = this.props.configuration.getEntity(entityName).views["ListView"];
 
         return (
             <div className="view list-view">
@@ -17,7 +17,7 @@ class ListView extends React.Component {
                     <p className="description">{view.description()}</p>
                 </div>
 
-                <Datagrid view={view} fields={view.fields()} />
+                <Datagrid router={this.context.router} view={view} fields={view.fields()} />
             </div>
         )
     }

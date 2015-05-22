@@ -1,11 +1,21 @@
 import React from 'react';
+import {Link} from 'react-router';
 
 class MaDatagridPagination extends React.Component {
+    getInitialState() {
+        return {
+            offsetBegin: 0,
+            offsetEnd: 0,
+            nbPages: 1,
+            displayPagination: true
+        };
+    }
+
     componentDidMount() {
-        let params = this.context.router.getCurrentParams();
-        let page = params.page || 1;
+        let totalItems = this.props.totalItems;
+        let page = this.props.page || 1;
         let perPage = this.props.perPage || 1;
-        let nbPages =  Math.ceil(this.props.totalItems / perPage) || 1;
+        let nbPages =  Math.ceil(totalItems / perPage) || 1;
         let offsetEnd = Math.min(page * perPage, totalItems);
         let offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
         let displayPagination = perPage < totalItems;
@@ -14,8 +24,9 @@ class MaDatagridPagination extends React.Component {
             offsetBegin: offsetBegin,
             offsetEnd: offsetEnd,
             nbPages: nbPages,
-            displayPagination: displayPagination
-        })
+            displayPagination: displayPagination,
+            page: page
+        });
     }
 
     range (page) {
@@ -53,17 +64,22 @@ class MaDatagridPagination extends React.Component {
     }
 
     render() {
+        if (!this.state) {
+            return null;
+        }
+
         let totalItems = this.props.totalItems;
-        let page = this.props.page;
+        let entity = this.props.entity;
+        let page = +this.state.page;
         let itemCount = null;
         let pagination = null;
 
         if (totalItems > 0) {
-            itemCount = <div class="total">
+            itemCount = <div className="total">
                 <strong>{ this.state.offsetBegin }</strong> - <strong>{ this.state.offsetEnd }</strong> on <strong>{ totalItems }</strong>
             </div>
         } else {
-            itemCount = <div class="total no-record">
+            itemCount = <div className="total no-record">
                 <strong>No record found.</strong>
             </div>
         }
@@ -73,32 +89,33 @@ class MaDatagridPagination extends React.Component {
             let next = null;
             let items = [];
 
-            if (this.state.page != 1) {
-                prev = <li><a href onClick="this.setPage(this.state.page - 1)">« Prev</a></li>
+            if (page != 1) {
+                prev = <li><Link to="list" params={{entity: entity}} query={{page: page - 1}}>« Prev</Link></li>
             }
 
-            if (this.state.page != this.state.nbPages) {
-                next = <li><a href onClick="this.setPage(this.state.page + 1)">Next »</a></li>
+            if (page != this.state.nbPages) {
+                next = <li><Link to="list" params={{entity: entity}} query={{page: page + 1}}>Next »</Link></li>
             }
 
-            for (var i in this.range(this.state.page)) {
+            this.range(page).map(i => {
                 let className = i == page ? 'active' : '';
 
                 if (i == '.') {
                     items.push(<li className={className}><span>&hellip;</span></li>)
                 } else {
-                    items.push(<li className={className}><span  onClick="set.setPage(i)">{i}</span></li>)
+                    items.push(<li className={className}><Link to="list" params={{entity: entity}} query={{page: i}}>{i}</Link></li>)
                 }
-            }
+            });
 
-            pagination = <ul class="pagination pagination-sm pull-right" role="group" aria-label="pagination">
+            pagination = <ul className="pagination pagination-sm pull-right" role="group" aria-label="pagination">
                 {prev}
+                {items}
                 {next}
             </ul>
         }
 
         return (
-            <nav class="pagination-bar">
+            <nav className="pagination-bar">
                 {itemCount}
 
                 {pagination}

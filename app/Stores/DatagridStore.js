@@ -11,6 +11,7 @@ class DatagridStore extends EventEmitter {
 
         this.data = Map({
             pending: true,
+            totalItems: 0,
             entries: List(),
             sortDir: null,
             sortField: null
@@ -40,7 +41,7 @@ class DatagridStore extends EventEmitter {
                     return list;
                 });
 
-                this.data = this.data.update('totalItems', 15); // @TMP
+                this.data = this.data.update('totalItems', v => 65); // @TMP
                 this.data = this.data.update('pending', v => false);
                 this.emitChange();
             }.bind(this));

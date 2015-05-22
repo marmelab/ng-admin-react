@@ -126,22 +126,24 @@ class Datagrid extends React.Component {
     render() {
         if (this.state.data.get('pending')) return null;
         let totalItems = this.state.data.get('totalItems');
+        let {page} = this.props.router.getCurrentQuery();
+        let view = this.props.view;
 
         return (
             <div>
                 <table className="datagrid">
                     <thead>
-                    <tr>
-                        {this.buildHeaders()}
-                        <th></th>
-                    </tr>
+                        <tr>
+                            {this.buildHeaders()}
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
                         {this.buildRecords()}
                     </tbody>
                 </table>
 
-                <MaDatagridPagination totalItems={totalItems} perPage={view.perPage()} />
+                <MaDatagridPagination totalItems={totalItems} entity={view.entity.name()} page={page} perPage={view.perPage()} />
             </div>
         );
     }

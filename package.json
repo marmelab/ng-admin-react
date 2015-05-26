@@ -5,8 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "react": "0.13.*",
-    "react-router": "0.13.*",
-    "restful.js": "^0.5.2"
+    "react-router": "0.13.*"
   },
   "devDependencies": {
     "admin-config": "^0.1.0",
@@ -22,12 +21,13 @@
     "inflected": "^1.1.6",
     "jest-cli": "^0.2.1",
     "omniscient": "^3.1.0",
+    "pace": "HubSpot/pace",
     "react-hot-loader": "^1.1.7",
+    "restful.js": "marmelab/restful.js#custom_url",
     "sass-loader": "^0.4.1",
     "style-loader": "^0.8.3",
     "webpack": "^1.7.2",
-    "webpack-dev-server": "^1.7.0",
-    "pace": "HubSpot/pace"
+    "webpack-dev-server": "^1.7.0"
   },
   "scripts": {
     "test": "make test"

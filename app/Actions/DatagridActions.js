@@ -1,10 +1,12 @@
 import AppDispatcher from '../Services/AppDispatcher';
 
 export default {
-    loadData(view, page) {
+    loadData(configuration, view, page) {
         AppDispatcher.dispatch({
             actionType: 'load_data',
-            view: view
+            configuration: configuration,
+            view: view,
+            page: page
         });
     },
 
@@ -14,4 +16,4 @@ export default {
             args: args
         });
     }
-}
+};

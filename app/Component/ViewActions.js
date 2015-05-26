@@ -9,7 +9,7 @@ import MaListButton from './Button/MaListButton';
 class ViewActions extends React.Component {
     render() {
         let view = this.props.view,
-            entity = view.entity,
+            entity = view ? view.entity : null,
             buttonNames = this.props.buttons,
             buttons;
 
@@ -39,7 +39,6 @@ class ViewActions extends React.Component {
 }
 
 ViewActions.propTypes = {
-    view: React.PropTypes.object.isRequired,
     buttons: React.PropTypes.array.isRequired
 };
 

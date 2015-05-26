@@ -42,6 +42,30 @@ a {
                 }
             }
         }
+
+        &.collapsible {
+            max-height: 500px;
+            transition: max-height .25s ease-in;
+            overflow-y: hidden;
+        }
+
+        &.collapsed {
+            max-height: 0;
+            transition: max-height .15s ease-out;
+        }
+    }
+
+    .arrow {
+        color: #337ab7;
+        float: right;
+    }
+
+    .nav-second-level li {
+        border-bottom: 0!important;
+
+        a {
+            padding-left: 37px;
+        }
     }
 }
 

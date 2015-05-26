@@ -16,7 +16,7 @@ let routes = (
     <Router.Route name="react-admin" path="/" handler={AdminBootstrap}>
         <Router.DefaultRoute name="dashboard" handler={DashboardView}/>
 
-        <Router.Route name="list" path="/:entity" handler={ListView}/>
+        <Router.Route name="list" path="/:entity/list" handler={ListView}/>
         <Router.Route name="create" path="/:entity/create" handler={CreateView}/>
         <Router.Route name="edit" path="/:entity/edit/:id" handler={EditView}/>
         <Router.Route name="delete" path="/:entity/delete/:id" handler={DeleteView}/>

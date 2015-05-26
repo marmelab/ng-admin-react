@@ -34,10 +34,6 @@
                 .addEntity(tag)
                 .addEntity(comment);
 
-            // customize entities and views
-            post.views["MenuView"]
-                .icon('<span class="glyphicon glyphicon-file"></span>'); // customize the entity menu icon
-
             post.views['DashboardView'] // customize the dashboard panel for this entity
                 .title('Recent posts')
                 .order(1) // display the post panel first in the dashboard
@@ -98,10 +94,6 @@
                         .label('')
                         .template('<send-email post="entry"></send-email>')
                 ]);
-
-            comment.views['MenuView']
-                .order(2) // set the menu position in the sidebar
-                .icon('<strong style="font-size:1.3em;line-height:1em">✉</strong>'); // you can even use utf-8 symbols!
 
             comment.views['DashboardView']
                 .title('Last comments')
@@ -179,10 +171,6 @@
             comment.views['DeleteView']
                 .title('Deletion confirmation'); // customize the deletion confirmation message
 
-            tag.views['MenuView']
-                .order(3)
-                .icon('<span class="glyphicon glyphicon-tags"></span>');
-
             tag.views['DashboardView']
                 .title('Recent tags')
                 .order(3)
@@ -217,6 +205,16 @@
                     nga.field('name'),
                     nga.field('published', 'boolean')
                 ]);
+
+            // customize menu
+            admin.menu(nga.menu()
+                    .addChild(nga.menu(post).icon('<span class="glyphicon glyphicon-file"></span>')) // customize the entity menu icon
+                    .addChild(nga.menu(comment).icon('<strong style="font-size:1.3em;line-height:1em">✉</strong>')) // you can even use utf-8 symbols!
+                    .addChild(nga.menu(tag).icon('<span class="glyphicon glyphicon-tags"></span>'))
+                    .addChild(nga.menu().title('Other')
+                        .addChild(nga.menu().title('Stats').icon('').link('/stats'))
+                )
+            );
 
             this.setState({
                 configuration: admin

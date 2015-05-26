@@ -14,7 +14,9 @@ class MenuItem extends React.Component {
         return menu.isChildActive(path) || this.state.openMenus.indexOf(menu) !== -1;
     }
 
-    toggleChildren() {
+    toggleChildren(e) {
+        e.preventDefault();
+
         let menu = this.props.menu;
         let path = window.location.pathname;
         let openMenus = this.state.openMenus;

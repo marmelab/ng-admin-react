@@ -13,11 +13,12 @@ class Link extends React.Component {
         // So we pass params in props
         this.setState({
             clickedTo: this.props.to,
-            params: JSON.stringify(this.props.params)
+            params: JSON.stringify(this.props.params),
+            query: JSON.stringify(this.props.query)
         });
     }
     render() {
-        return <a className={this.props.className} data-click-to={this.state.clickedTo} data-params={this.state.params} onClick={this.click.bind(this)}>{this.props.children}</a>
+        return <a className={this.props.className} data-click-to={this.state.clickedTo} data-params={this.state.params} data-query={this.state.query} onClick={this.click.bind(this)}>{this.props.children}</a>
     }
 }
 

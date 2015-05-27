@@ -1,13 +1,18 @@
+jest.autoMockOff();
 jest.dontMock('../MaDatagridPagination');
 jest.dontMock('../../../Test/RouterWrapper');
+jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
 
 var React = require('react/addons');
+var TestUtils = React.addons.TestUtils;
 var MaDatagridPagination = require('../MaDatagridPagination');
 var routerWrapper = require('../../../Test/RouterWrapper');
 
-function getPagination(items, page, perPage) {
+function getPagination(items, page, perPage, entity) {
+    entity = entity || null;
+
     return routerWrapper(() => {
-        return <MaDatagridPagination totalItems={items} entity={null} page={page} perPage={perPage} />
+        return <MaDatagridPagination totalItems={items} entity={entity} page={page} perPage={perPage} />
     });
 }
 
@@ -63,6 +68,25 @@ describe('MaDatagridPagination', () => {
             expect(paginationElements[2].textContent).toEqual('2');
             expect(paginationElements[3].textContent).toEqual('3');
             expect(paginationElements[4].textContent).toEqual('Next »');
+        });
+    });
+
+    describe('pagination link', () => {
+        it('Should change url parameters', () => {
+            var entity = {
+                name: 'MyEntity'
+            };
+
+            var pagination = getPagination(56, 2, 10, entity);
+            var nextPage = React.findDOMNode(pagination).querySelector('a.next');
+
+            TestUtils.Simulate.click(nextPage);
+
+            var params = JSON.parse(nextPage.attributes['data-params'].value);
+            var query = JSON.parse(nextPage.attributes['data-query'].value);
+
+            expect(params.entity.name).toEqual('MyEntity');
+            expect(query.page).toEqual(3);
         });
     });
 });

@@ -1,14 +1,14 @@
 jest.autoMockOff();
-jest.setMock('../../../Stores/DatagridStore', require('../__mocks__/DatagridStore'));
-jest.setMock('../../../Actions/DatagridActions', require('../__mocks__/DatagridActions'));
+jest.setMock('../../../Stores/ListStore', require('../__mocks__/ListStore'));
+jest.setMock('../../../Actions/ListActions', require('../__mocks__/ListActions'));
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Datagrid = require('../Datagrid');
 var routerWrapper = require('../../../Test/RouterWrapper');
 
-function getDatagrid(fields, view, router) {
-    return routerWrapper(() => <Datagrid fields={fields} view={view} router={router} />);
+function getDatagrid(fields, view, router, actions, entries, sortDir, sortField) {
+    return routerWrapper(() => <Datagrid fields={fields} view={view} router={router} entries={entries} sortDir={sortDir} sortField={sortField} actions={actions} />);
 }
 
 describe('Datagrid', () => {
@@ -16,7 +16,7 @@ describe('Datagrid', () => {
     var router;
 
     beforeEach(() => {
-        view = view = {
+        view = {
             listActions: () => [],
             perPage: () => 10,
             name: () => 'myView',
@@ -35,12 +35,14 @@ describe('Datagrid', () => {
     describe('Column headers', () => {
         it('should set header with correct label for each field, plus an empty header for actions', () => {
             var fields = {
-                'id': { label: () => '#' },
-                'title': { label: () => 'Title' },
-                'created_at': { label: () => 'Creation date' }
+                'id': { label: () => '#', name: () => 'id' },
+                'title': { label: () => 'Title', name: () => 'title' },
+                'created_at': { label: () => 'Creation date', name: () => 'created_at' }
             };
 
-            var datagrid = getDatagrid(fields, view, router);
+            var ListActions = require('../../../Actions/ListActions');
+
+            var datagrid = getDatagrid(fields, view, router, ListActions, [], null, null);
             datagrid = React.findDOMNode(datagrid);
 
             var headers = [].slice.call(datagrid.querySelectorAll('thead th')).map(h => h.textContent);
@@ -50,17 +52,17 @@ describe('Datagrid', () => {
 
         it('should send `sort` event to datagrid when clicking on header', () => {
             var fields = {
-                'id': { label: () => '#' }
+                'id': { label: () => '#', name: () => 'id' }
             };
 
-            var DatagridActions = require('../../../Actions/DatagridActions');
+            var ListActions = require('../../../Actions/ListActions');
 
-            var datagrid = getDatagrid(fields, view, router);
+            var datagrid = getDatagrid(fields, view, router, ListActions, [], null, null);
             var datagridNode = React.findDOMNode(datagrid);
             var header = datagridNode.querySelector('thead th a');
             TestUtils.Simulate.click(header);
 
-            expect(DatagridActions.sort).toBeCalled();
+            expect(ListActions.sort).toBeCalled();
         });
     });
 });

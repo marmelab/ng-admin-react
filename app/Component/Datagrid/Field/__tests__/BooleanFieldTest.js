@@ -3,15 +3,15 @@ jest.dontMock('../BooleanField');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-describe('BooleanField', function() {
+describe('BooleanField', () => {
     var BooleanField;
 
-    beforeEach(function() {
+    beforeEach(() => {
         BooleanField = require('../BooleanField');
     });
 
-    it('should get a span with correct class depending of field value', function() {
-        [true, false].forEach(function(booleanValue) {
+    it('should get a span with correct class depending of field value', () => {
+        [true, false].forEach((booleanValue) => {
             var boolean = TestUtils.renderIntoDocument(<BooleanField value={booleanValue}/>);
                 boolean = React.findDOMNode(boolean);
 

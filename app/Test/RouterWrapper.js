@@ -6,9 +6,9 @@ var MaDatagridPagination = require('../Component/Datagrid/MaDatagridPagination')
 // Mock router
 // @see https://github.com/rackt/react-router/blob/master/docs/guides/testing.md
 function RouterStub() { }
-RouterStub.makePath = function () { };
-RouterStub.makeHref = function () { };
-RouterStub.isActive = function () { };
+RouterStub.makePath = () => { };
+RouterStub.makeHref = () => { };
+RouterStub.isActive = () => { };
 
 function wrapComponent(cb) {
     var TestWrapper = React.createClass({

@@ -6,12 +6,12 @@ var MaDatagridPagination = require('../MaDatagridPagination');
 var routerWrapper = require('../../../Test/RouterWrapper');
 
 function getPagination(items, page, perPage) {
-    return routerWrapper(function() {
+    return routerWrapper(() => {
         return <MaDatagridPagination totalItems={items} entity={null} page={page} perPage={perPage} />
     });
 }
 
-describe('MaDatagridPagination', function() {
+describe('MaDatagridPagination', () => {
 
     describe('Without items', () => {
         it('Should display "No record found"', () => {
@@ -31,7 +31,7 @@ describe('MaDatagridPagination', function() {
     });
 
     describe('Without less item than perPage', () => {
-        it.only('Should display record number', () => {
+        it('Should display record number', () => {
             var pagination = getPagination(10, 1, 10);
             pagination = React.findDOMNode(pagination);
 
@@ -54,7 +54,7 @@ describe('MaDatagridPagination', function() {
             expect(pagination.textContent).toContain('11 - 20 on 30');
         });
 
-        it.only('Should display a pagination', () => {
+        it('Should display a pagination', () => {
             var pagination = getPagination(30, 2, 10);
             var paginationElements = React.findDOMNode(pagination).querySelectorAll('.pagination li');
 

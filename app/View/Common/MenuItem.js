@@ -42,6 +42,7 @@ class MenuItem extends React.Component {
         if (!this.state) {
             return null;
         }
+
         let menu = this.props.menu;
         let link = menu.link();
         let hasChild = menu.hasChild();

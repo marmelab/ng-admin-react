@@ -35,7 +35,7 @@ class DatagridStore extends EventEmitter {
 
         readQueries
             .getAll(view, page, [], this.sortField, this.sortDir)
-            .then(function(response) {
+            .then((response) => {
                 this.data = this.data.update('entries', (list) => {
                     list = list.clear();
                     response.data.forEach((rawEntry) => {

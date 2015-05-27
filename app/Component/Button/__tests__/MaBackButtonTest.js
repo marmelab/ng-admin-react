@@ -3,10 +3,10 @@ jest.dontMock('../MaBackButton');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-describe('MaBackButton', function() {
+describe('MaBackButton', () => {
     var MaBackButton;
 
-    beforeEach(function() {
+    beforeEach(() => {
         MaBackButton = require('../MaBackButton');
     });
 

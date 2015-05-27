@@ -8,38 +8,26 @@ var Datagrid = require('../Datagrid');
 var routerWrapper = require('../../../Test/RouterWrapper');
 
 function getDatagrid(fields, view, router) {
-    return routerWrapper(function() {
-        return <Datagrid fields={fields} view={view} router={router} />;
-    });
+    return routerWrapper(() => <Datagrid fields={fields} view={view} router={router} />);
 }
 
 describe('Datagrid', () => {
     var view;
     var router;
 
-    beforeEach(function() {
+    beforeEach(() => {
         view = view = {
-            listActions: function() {
-                return [];
-            },
-            perPage: function() {
-                return 10;
-            },
-            name: function() {
-                return 'myView';
-            },
+            listActions: () => [],
+            perPage: () => 10,
+            name: () => 'myView',
             entity: {
-                name: function () {
-                    return 'myEntity';
-                }
+                name: () => 'myEntity'
             }
         };
 
         router = {
-            getCurrentQuery: function() {
-                return {
-                    page: 1
-                };
+            getCurrentQuery: () => {
+                return 1;
             }
         };
     });
@@ -47,9 +35,9 @@ describe('Datagrid', () => {
     describe('Column headers', () => {
         it('should set header with correct label for each field, plus an empty header for actions', () => {
             var fields = {
-                'id': { label: function() { return '#'; } },
-                'title': { label: function() { return 'Title'; } },
-                'created_at': { label: function() { return 'Creation date'; } }
+                'id': { label: () => '#' },
+                'title': { label: () => 'Title' },
+                'created_at': { label: () => 'Creation date' }
             };
 
             var datagrid = getDatagrid(fields, view, router);
@@ -60,9 +48,9 @@ describe('Datagrid', () => {
             expect(true).toEqual(true);
         });
 
-        it('should send `sort` event to datagrid when clicking on header', function() {
+        it('should send `sort` event to datagrid when clicking on header', () => {
             var fields = {
-                'id': { label: function() { return '#'; } }
+                'id': { label: () => '#' }
             };
 
             var DatagridActions = require('../../../Actions/DatagridActions');

@@ -10,6 +10,8 @@ import EditView from './View/Edit';
 import DeleteView from './View/Delete';
 import ConfigurationFactory from 'admin-config/lib/Factory';
 
+import ViewActions from './Component/ViewActions';
+
 import Pace from 'pace';
 
 let routes = (
@@ -27,14 +29,22 @@ let routes = (
 class ReactAdmin extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { handler: null, factory: ConfigurationFactory};
+
+        this.state = {
+            handler: null,
+            factory: ConfigurationFactory,
+            routes: routes,
+            components: {
+                ViewActions: ViewActions
+            }
+        };
     }
     componentDidUpdate() {
         // stop progress bar
         Pace.stop();
     }
 
-    componentDidMount() {
+    componentWillMount() {
         Router.run(routes, this.handleNavigation.bind(this));
     }
     handleNavigation(Handler) {

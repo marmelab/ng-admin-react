@@ -213,7 +213,24 @@
                     .addChild(nga.menu(tag).icon('<span class="glyphicon glyphicon-tags"></span>'))
                     .addChild(nga.menu().title('Other')
                         .addChild(nga.menu().title('Stats').icon('').link('/stats'))
-                )
+                    )
+                );
+
+            // Add custom route
+            var ViewActions = this.refs.admin.state.components.ViewActions;
+            var Stats = React.createClass({
+                render: function () {
+                    return React.createElement('div', {className: 'page-header'},
+                        React.createElement(ViewActions, {buttons: ['back']}),
+                        React.createElement('h1', null, 'Stats'),
+                        React.createElement('p', {className: 'lead'}, 'You can add custom pages, too')
+                        );
+                }
+            });
+
+            var routes = this.refs.admin.state.routes;
+            routes.props.children.push(
+                React.createElement(ReactRouter.Route, {name: 'stats', path: '/stats', handler: Stats})
             );
 
             this.setState({

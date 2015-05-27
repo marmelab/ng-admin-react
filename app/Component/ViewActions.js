@@ -9,26 +9,26 @@ import MaListButton from './Button/MaListButton';
 class ViewActions extends React.Component {
     render() {
         let view = this.props.view,
-            entity = view.entity,
+            entity = view ? view.entity : null,
             buttonNames = this.props.buttons,
             buttons;
 
         buttons = buttonNames.map(button => {
             switch (button) {
                 case 'create':
-                    return <MaCreateButton entity={entity} />
+                    return <MaCreateButton entity={entity} />;
                 case 'show':
-                    return <MaShowButton entity={entity} entry={this.props.entry} />
+                    return <MaShowButton entity={entity} entry={this.props.entry} />;
                 case 'back':
-                    return <MaBackButton />
+                    return <MaBackButton />;
                 case 'list':
-                    return <MaListButton entity={entity} />
+                    return <MaListButton entity={entity} />;
                 case 'edit':
-                    return <MaEditButton entity={entity} entry={this.props.entry} />
+                    return <MaEditButton entity={entity} entry={this.props.entry} />;
                 case 'delete':
-                    return <MaDeleteButton entity={entity} entry={this.props.entry} />
+                    return <MaDeleteButton entity={entity} entry={this.props.entry} />;
                 default:
-                    return React.createElement(button)
+                    return React.createElement(button);
             }
         });
 
@@ -39,8 +39,10 @@ class ViewActions extends React.Component {
 }
 
 ViewActions.propTypes = {
-    view: React.PropTypes.object.isRequired,
+    view: React.PropTypes.object,
     buttons: React.PropTypes.array.isRequired
 };
+
+ViewActions.defaultProps = { view: null };
 
 export default ViewActions;

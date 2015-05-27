@@ -14,6 +14,7 @@
   "dependencies": {
     "fakerest": "master",
     "react": "~0.13.*",
-    "sinon-server": "http://sinonjs.org/releases/sinon-server-1.14.1.js"
+    "sinon-server": "http://sinonjs.org/releases/sinon-server-1.14.1.js",
+    "react-router": "~0.13.3"
   }
 }

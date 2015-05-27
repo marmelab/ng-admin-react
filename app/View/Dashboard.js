@@ -1,46 +1,71 @@
 import React from 'react';
+import shouldComponentUpdate from 'omniscient/shouldupdate';
 
 import DashboardPanel from '../Component/DashboardPanel';
 
+import DashboardActions from '../Actions/DashboardActions';
+import DashboardStore from '../Stores/DashboardStore';
+
 class DashboardView extends React.Component {
+    constructor() {
+        super();
+
+        this.state = DashboardStore.getState();
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+    }
+
+    componentWillMount() {
+        DashboardStore.addChangeListener(this.onChange.bind(this));
+
+        this.refreshData();
+    }
+
+    componentWillUnmount() {
+        DashboardStore.removeChangeListener(this.onChange.bind(this));
+    }
+
+    onChange() {
+        this.setState(DashboardStore.getState());
+    }
+
+    refreshData() {
+        DashboardActions.loadPanels(this.props.configuration);
+    }
+
     buildPanels(panels, odd=true) {
         let panelViews = [];
-        let i, label, view;
+        let i, label, view, sortDir, sortField, entries;
 
-        for (i in panels) {
-            if ((odd && (0 == i % 2)) || (!odd && (0 != i % 2))) {
-                continue;
-            }
+        panels
+            .filter((v, k) => (odd && (0 !== k % 2)) || (!odd && (0 === k % 2)))
+            .forEach((panel, key) => {
+                label = panel.get('label');
+                view = panel.get('view');
+                sortDir = panel.get('sortDir');
+                sortField = panel.get('sortField');
+                entries = this.state.data.get('dataStore').getEntries(view.entity.uniqueId);
 
-            label = panels[i].label;
-            view = panels[i].view;
+                panelViews.push((
+                    <div className="panel panel-default">
+                        <DashboardPanel
+                            router={this.context.router}
+                            configuration={this.props.configuration}
+                            label={label}
+                            view={view}
+                            entries={entries}
+                            sortDir={sortDir}
+                            sortField={sortField} />
+                    </div>
+                ));
+            });
 
-            panelViews.push((
-                <div className="panel panel-default">
-                    <DashboardPanel router={this.context.router} configuration={this.props.configuration} label={label} view={view} />
-                </div>
-            ));
-
-            return panelViews;
-        }
+        return panelViews;
     }
 
     render() {
-        let dashboardViews = this.props.configuration.getViewsOfType('DashboardView');
-        let i,
-            view,
-            entity,
-            panels = [];
+        if (this.state.data.get('pending')) return null;
 
-        for (i in dashboardViews) {
-            view = dashboardViews[i];
-            entity = view.getEntity();
-
-            panels.push({
-                label: view.title() || entity.label(),
-                view: view
-            });
-        }
+        let panels = this.state.data.get('panels');
 
         return (
             <div className="view dashboard-view">

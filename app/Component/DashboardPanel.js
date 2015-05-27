@@ -16,17 +16,27 @@ class DashboardPanel extends React.Component {
                     <Link to="list" params={params}>{this.props.label}</Link>
                 </div>
 
-                <Datagrid router={this.props.router} configuration={this.props.configuration} view={view} fields={view.fields()} />
+                <Datagrid
+                    router={this.props.router}
+                    configuration={this.props.configuration}
+                    view={view}
+                    fields={view.fields()}
+                    entries={this.props.entries}
+                    sortDir={this.props.sortDir}
+                    sortField={this.props.sortField} />
             </div>
         );
     }
 }
 
 DashboardPanel.propTypes = {
-    label: React.PropTypes.string.isRequired,
     router: React.PropTypes.object.isRequired,
     configuration: React.PropTypes.object.isRequired,
-    view: React.PropTypes.object.isRequired
+    view: React.PropTypes.object.isRequired,
+    label: React.PropTypes.string.isRequired,
+    entries: React.PropTypes.object.isRequired,
+    sortDir: React.PropTypes.string.isRequired,
+    sortField: React.PropTypes.string.isRequired
 };
 
 export default DashboardPanel;

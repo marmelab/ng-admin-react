@@ -63,7 +63,7 @@ class ListView extends React.Component {
         let view = this.getView(entityName);
         let sortDir = this.state.data.get('sortDir');
         let sortField = this.state.data.get('sortField');
-        let entries = this.state.data.get('entries');
+        let dataStore = this.state.data.get('dataStore');
 
         return (
             <div className="view list-view">
@@ -80,7 +80,7 @@ class ListView extends React.Component {
                     actions={ListActions}
                     view={view}
                     fields={view.getFields()}
-                    entries={entries}
+                    dataStore={dataStore}
                     sortDir={sortDir}
                     sortField={sortField} />
 

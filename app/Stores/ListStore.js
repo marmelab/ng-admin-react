@@ -1,5 +1,7 @@
 import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
+import objectAssign from 'object-assign';
+
 import AppDispatcher from '../Services/AppDispatcher';
 
 import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
@@ -16,7 +18,7 @@ class ListStore extends EventEmitter {
             pending: true,
             totalItems: 0,
             page: 1,
-            entries: List(),
+            dataStore: List(),
             sortDir: null,
             sortField: null
         });
@@ -32,25 +34,71 @@ class ListStore extends EventEmitter {
         let dataStore = new DataStore();
         let readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
         let entity = view.entity;
+        let rawEntries, nonOptimizedReferencedData, optimizedReferencedData;
 
         readQueries
             .getAll(view, page, [], this.data.get('sortField'), this.data.get('sortDir'))
             .then((response) => {
-                this.data = this.data.update('entries', (list) => {
-                    list = list.clear();
-                    response.data.forEach((rawEntry) => {
-                        let entry = dataStore.mapEntry(entity.name(), view.identifier(), view.getFields(), rawEntry);
-
-                        list = list.push(fromJS(entry));
-                    });
-
-                    return list;
-                });
+                rawEntries = response.data;
 
                 this.data = this.data.update('totalItems', v => response.totalItems);
+
+                return rawEntries;
+            }, this)
+            .then((rawEntries) => {
+                console.log('rawEntries', rawEntries);
+
+                return readQueries.getFilteredReferenceData(view.getNonOptimizedReferences(), rawEntries);
+            })
+            .then((nonOptimizedReference) => {
+                console.log('nonOptimizedReference', nonOptimizedReference);
+                nonOptimizedReferencedData = nonOptimizedReference;
+
+                return readQueries.getOptimizedReferencedData(view.getOptimizedReferences(), rawEntries);
+            })
+            .then((optimizedReference) => {
+                console.log('optimizedReference', optimizedReference);
+                optimizedReferencedData = optimizedReference;
+
+                var references = view.getReferences(),
+                    referencedData = objectAssign(nonOptimizedReferencedData, optimizedReferencedData),
+                    referencedEntries;
+
+                console.log('referencedData', referencedData);
+
+                for (var name in referencedData) {
+                    referencedEntries = dataStore.mapEntries(
+                        references[name].targetEntity().name(),
+                        references[name].targetEntity().identifier(),
+                        [references[name].targetField()],
+                        referencedData[name]
+                    );
+
+                    dataStore.setEntries(
+                        references[name].targetEntity().uniqueId + '_values',
+                        referencedEntries
+                    );
+                }
+            })
+            .then(() => {
+                this.data = this.data.update('dataStore', v => {
+                    let entries = dataStore.mapEntries(entity.name(), view.identifier(), view.getFields(), rawEntries);
+console.log('before', entries);
+                    // shortcut to diplay collection of entry with included referenced values
+                    dataStore.fillReferencesValuesFromCollection(entries, view.getReferences(), true);
+console.log('after', entries);
+                    dataStore.setEntries(
+                        entity.uniqueId,
+                        entries
+                    );
+
+                    console.log('entries', entries);
+
+                    return dataStore;
+                });
                 this.data = this.data.update('pending', v => false);
                 this.emitChange();
-            }.bind(this));
+            }, this);
     }
 
     sort(args) {

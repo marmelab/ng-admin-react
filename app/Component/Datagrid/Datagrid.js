@@ -40,7 +40,7 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        return this.props.entries.map((r, i) => (
+        return this.props.dataStore.getEntries(this.props.view.entity.uniqueId).map((r, i) => (
             <tr key={i}>{this.buildCells(r)}</tr>
         ));
     }
@@ -76,11 +76,11 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'reference':
-                    renderedField = <ReferenceField value={row.values[fieldName]} />;
+                    renderedField = <ReferenceField value={row.listValues[fieldName]} />;
                     break;
 
                 case 'reference_many':
-                    renderedField = <ReferenceManyField values={row.values[fieldName]} />;
+                    renderedField = <ReferenceManyField values={row.listValues[fieldName]} />;
                     break;
 
                 default:
@@ -119,7 +119,7 @@ Datagrid.propTypes = {
     actions: React.PropTypes.object.isRequired,
     view: React.PropTypes.object.isRequired,
     fields: React.PropTypes.array.isRequired,
-    entries: React.PropTypes.object.isRequired,
+    dataStore: React.PropTypes.object.isRequired,
     sortDir: React.PropTypes.string.isRequired,
     sortField: React.PropTypes.string.isRequired
 };

@@ -26,7 +26,9 @@ class DashboardPanel extends React.Component {
                     fields={view.fields()}
                     entries={entries}
                     sortDir={this.props.sortDir}
-                    sortField={this.props.sortField} />
+                    sortField={this.props.sortField}
+                    view={view}
+                    />
             </div>
         );
     }

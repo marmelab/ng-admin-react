@@ -122,7 +122,8 @@ Datagrid.propTypes = {
     fields: React.PropTypes.array.isRequired,
     entries: React.PropTypes.array.isRequired,
     sortDir: React.PropTypes.string.isRequired,
-    sortField: React.PropTypes.string.isRequired
+    sortField: React.PropTypes.string.isRequired,
+    view: React.PropTypes.object
 };
 
 export default Datagrid;

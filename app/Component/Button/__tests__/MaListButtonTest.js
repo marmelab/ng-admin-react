@@ -6,18 +6,14 @@ var TestUtils = React.addons.TestUtils;
 
 describe('MaListButton', () => {
     var MaListButton;
-    var entity;
 
     beforeEach(() => {
         MaListButton = require('../MaListButton');
-        entity = {
-            name: () => 'MyEntity'
-        };
     });
 
     describe('With good props', () => {
         it('Should display label and size', () => {
-            var listButton = TestUtils.renderIntoDocument(<MaListButton entity={entity} label={'Hello'} size={'xs'} />);
+            var listButton = TestUtils.renderIntoDocument(<MaListButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
             listButton = React.findDOMNode(listButton);
 
             expect(listButton.className).toContain('btn btn-default btn-xs');
@@ -25,7 +21,7 @@ describe('MaListButton', () => {
         });
 
         it('Should redirect to the create route', () => {
-            var listButton = TestUtils.renderIntoDocument(<MaListButton entity={entity} label={'Hello'} size={'xs'} />);
+            var listButton = TestUtils.renderIntoDocument(<MaListButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
             listButtonNode = React.findDOMNode(listButton);
 
             expect(listButtonNode.attributes['data-click-to'].value).toEqual('');

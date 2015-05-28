@@ -6,14 +6,10 @@ var TestUtils = React.addons.TestUtils;
 
 describe('MaEditButton', () => {
     var MaEditButton;
-    var entity;
     var entry;
 
     beforeEach(() => {
         MaEditButton = require('../MaEditButton');
-        entity = {
-            name: () => 'MyEntity'
-        };
 
         entry = {
             identifierValue: 23
@@ -22,7 +18,7 @@ describe('MaEditButton', () => {
 
     describe('With good props', () => {
         it('Should display label and size', () => {
-            var editButton = TestUtils.renderIntoDocument(<MaEditButton entry={entry} entity={entity} label={'Delete'} size={'xs'} />);
+            var editButton = TestUtils.renderIntoDocument(<MaEditButton entityName={'MyEntity'} entry={entry} label={'Delete'} size={'xs'} />);
             editButton = React.findDOMNode(editButton);
 
             expect(editButton.className).toContain('btn btn-default btn-xs');
@@ -30,7 +26,7 @@ describe('MaEditButton', () => {
         });
 
         it('Should redirect to the create route', () => {
-            var editButton = TestUtils.renderIntoDocument(<MaEditButton entry={entry} entity={entity} label={'Hello'} size={'xs'} />);
+            var editButton = TestUtils.renderIntoDocument(<MaEditButton entityName={'MyEntity'} entry={entry} label={'Hello'} size={'xs'} />);
             editButtonNode = React.findDOMNode(editButton);
 
             expect(editButtonNode.attributes['data-click-to'].value).toEqual('');

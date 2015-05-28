@@ -85,7 +85,9 @@ class ListView extends React.Component {
                     fields={view.getFields()}
                     entries={entries}
                     sortDir={sortDir}
-                    sortField={sortField} />
+                    sortField={sortField}
+                    view={view}
+                    />
 
                 {this.buildPagination(view)}
             </div>

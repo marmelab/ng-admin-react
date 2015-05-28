@@ -12,7 +12,10 @@ class RestWrapper {
     getOne(entityName, url) {
         return Restful()
             .oneUrl(entityName, url)
-            .get();
+            .get()
+            .then((response) => {
+                return response.body().data();
+            });
     }
 
     /**

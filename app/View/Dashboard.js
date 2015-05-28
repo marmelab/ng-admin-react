@@ -34,7 +34,7 @@ class DashboardView extends React.Component {
 
     buildPanels(panels, odd=true) {
         let panelViews = [];
-        let i, label, view, sortDir, sortField, entries;
+        let i, label, view, sortDir, sortField, dataStore;
 
         panels
             .filter((v, k) => (odd && (0 !== k % 2)) || (!odd && (0 === k % 2)))
@@ -43,7 +43,7 @@ class DashboardView extends React.Component {
                 view = panel.get('view');
                 sortDir = panel.get('sortDir');
                 sortField = panel.get('sortField');
-                entries = this.state.data.get('dataStore').getEntries(view.entity.uniqueId);
+                dataStore = this.state.data.get('dataStore');
 
                 panelViews.push((
                     <div className="panel panel-default">
@@ -52,12 +52,12 @@ class DashboardView extends React.Component {
                             configuration={this.props.configuration}
                             label={label}
                             view={view}
-                            entries={entries}
+                            dataStore={dataStore}
                             sortDir={sortDir}
                             sortField={sortField} />
                     </div>
                 ));
-            });
+            }, this);
 
         return panelViews;
     }

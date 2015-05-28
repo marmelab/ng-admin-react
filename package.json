@@ -8,7 +8,7 @@
     "react-router": "0.13.*"
   },
   "devDependencies": {
-    "admin-config": "^0.1.0",
+    "admin-config": "^0.1.1",
     "babel-jest": "^4.0.0",
     "babel-loader": "^5.1.2",
     "babel-runtime": "^5.4.3",
@@ -19,7 +19,8 @@
     "flux": "^2.0.3",
     "immutable": "^3.7.3",
     "inflected": "^1.1.6",
-    "jest-cli": "^0.2.1",
+    "jest-cli": "^0.4.5",
+    "object-assign": "^2.0.0",
     "omniscient": "^3.1.0",
     "pace": "HubSpot/pace",
     "react-hot-loader": "^1.1.7",

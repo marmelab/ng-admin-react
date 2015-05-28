@@ -40,6 +40,7 @@ class ViewActions extends React.Component {
 
 ViewActions.propTypes = {
     view: React.PropTypes.object,
+    entry: React.PropTypes.object,
     buttons: React.PropTypes.array.isRequired
 };
 

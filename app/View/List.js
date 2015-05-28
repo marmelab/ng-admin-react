@@ -59,7 +59,7 @@ class ListView extends React.Component {
         if (this.state.data.get('pending')) return null;
 
         let configuration = this.props.configuration;
-        let entityName = this.context.router.getCurrentParams().entity
+        let entityName = this.context.router.getCurrentParams().entity;
         let view = this.getView(entityName);
         let sortDir = this.state.data.get('sortDir');
         let sortField = this.state.data.get('sortField');

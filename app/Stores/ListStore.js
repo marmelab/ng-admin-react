@@ -8,7 +8,7 @@ import DataStore from 'admin-config/lib/DataStore/DataStore';
 
 import RestWrapper from '../Services/RestWrapper';
 
-class DatagridStore extends EventEmitter {
+class ListStore extends EventEmitter {
     constructor(...args) {
         super(...args);
 
@@ -23,7 +23,7 @@ class DatagridStore extends EventEmitter {
     }
 
     loadData(configuration, view, page) {
-        page = page || this.data.get('page');
+        page = page || 1;
 
         this.data = this.data.update('pending', v => true);
         this.data = this.data.update('page', v => page);
@@ -34,7 +34,7 @@ class DatagridStore extends EventEmitter {
         let entity = view.entity;
 
         readQueries
-            .getAll(view, page, [], this.sortField, this.sortDir)
+            .getAll(view, page, [], this.data.get('sortField'), this.data.get('sortDir'))
             .then((response) => {
                 this.data = this.data.update('entries', (list) => {
                     list = list.clear();
@@ -77,7 +77,7 @@ class DatagridStore extends EventEmitter {
     }
 }
 
-let store = new DatagridStore();
+let store = new ListStore();
 
 AppDispatcher.register((action) => {
   switch(action.actionType) {

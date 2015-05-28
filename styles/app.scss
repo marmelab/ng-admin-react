@@ -128,14 +128,15 @@ a {
     }
 }
 
-
 .pace-activity {
     left: 50%;
 }
+
 .ma-view-actions {
     margin: 25px 0 15px 0;
     float: right;
 }
+
 .pagination-bar {
     text-align: right;
     margin: 20px 0;
@@ -147,5 +148,25 @@ a {
 
     .pagination {
         margin: 0 0 0 20px;
+    }
+}
+
+.dashboard-content {
+    .panel-default {
+
+        /* sb-admin uses the > selector, angular forces us to repeat the definition */
+        .panel-heading {
+            color: #333;
+            background-color: #f5f5f5;
+            border-color: #ddd;
+        }
+
+        table {
+            margin-bottom: 0;
+        }
+    }
+
+    .grid {
+        border: none;
     }
 }

@@ -1,70 +1,38 @@
 import React from 'react';
-import shouldComponentUpdate from 'omniscient/shouldupdate';
 
-import MaDatagridPagination from './MaDatagridPagination';
-import DatagridActions from '../../Actions/DatagridActions';
-import DatagridStore from '../../Stores/DatagridStore';
 import Header from '../../Component/Datagrid/ColumnHeader';
 import ListActions from '../../Component/Datagrid/ListActions';
 
 import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyField, TemplateField } from './Field';
 
 class Datagrid extends React.Component {
-    constructor() {
-        super();
-
-        this.state = DatagridStore.getState();
-        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
-    }
-
-    componentDidMount() {
-        DatagridStore.addChangeListener(this.onChange.bind(this));
-
-        let {page} = this.props.router.getCurrentQuery();
-        this.refreshData(this.props.view, page);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        let {page} = this.props.router.getCurrentQuery();
-        let currentPage = this.state.data.get('page');
-
-        if (nextProps.view !== this.props.view || page !== currentPage) {
-            // Shouldn't switching view prop re-render component directly?
-            this.refreshData(nextProps.view, page);
-        }
-    }
-
-    componentWillUnmount() {
-        DatagridStore.removeChangeListener(this.onChange.bind(this));
-    }
-
-    onChange() {
-        this.setState(DatagridStore.getState());
-    }
-
-    refreshData(view, page) {
-        DatagridActions.loadData(this.props.configuration, view, page);
-    }
-
     buildHeaders() {
         let headers = [];
-        let actions = this.props.view.listActions();
-        let sortDir = this.state.data.get('sortDir');
-        let sortField = this.state.data.get('sortField');
+        let listActions = this.props.view.listActions();
+        let sortDir = this.props.sortDir;
+        let sortField = this.props.sortField;
 
-        for (let fieldName in this.props.fields) {
+        for (let i in this.props.fields) {
+            let fieldName = this.props.fields[i].name();
             let sort = null;
-            if (this.props.view.name() + "." + fieldName === sortField) {
+
+            if (this.props.view.name() + '.' + fieldName === sortField) {
                 sort = sortDir;
             }
 
             headers.push(
-                <Header sort={sort} view={this.props.view} fieldName={fieldName} label={this.props.fields[fieldName].label()} />
+                <Header
+                    configuration={this.props.configuration}
+                    sort={sort}
+                    view={this.props.view}
+                    fieldName={fieldName}
+                    label={this.props.fields[i].label()}
+                    actions={this.props.actions} />
             );
         }
 
         // List actions
-        if (actions && actions.length) {
+        if (listActions && listActions.length) {
             headers.push(<th>Actions</th>);
         }
 
@@ -72,7 +40,7 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        return this.state.data.get('entries').map((r, i) => (
+        return this.props.entries.map((r, i) => (
             <tr key={i}>{this.buildCells(r)}</tr>
         ));
     }
@@ -130,35 +98,30 @@ class Datagrid extends React.Component {
     }
 
     render() {
-        if (this.state.data.get('pending')) return null;
-        let totalItems = this.state.data.get('totalItems');
-        let {page} = this.props.router.getCurrentQuery();
-        let view = this.props.view;
-
         return (
-            <div>
-                <table className="datagrid">
-                    <thead>
-                        <tr>
-                            {this.buildHeaders()}
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.buildRecords()}
-                    </tbody>
-                </table>
-
-                <MaDatagridPagination totalItems={totalItems} entity={view.entity.name()} page={page} perPage={view.perPage()} />
-            </div>
+            <table className="datagrid">
+                <thead>
+                    <tr>
+                        {this.buildHeaders()}
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.buildRecords()}
+                </tbody>
+            </table>
         );
     }
 }
 
 Datagrid.propTypes = {
     configuration: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired,
     view: React.PropTypes.object.isRequired,
-    fields: React.PropTypes.array.isRequired
+    fields: React.PropTypes.array.isRequired,
+    entries: React.PropTypes.object.isRequired,
+    sortDir: React.PropTypes.string.isRequired,
+    sortField: React.PropTypes.string.isRequired
 };
 
 export default Datagrid;

@@ -116,16 +116,6 @@ a {
     .btn-default {
         margin-right: 5px;
     }
-
-    .boolean-true {
-        @extend .glyphicon;
-        @extend .glyphicon-ok;
-    }
-
-    .boolean-false {
-        @extend .glyphicon;
-        @extend .glyphicon-remove;
-    }
 }
 
 .reference-many-column {
@@ -140,6 +130,16 @@ a {
     .form-horizontal label {
         padding-top: 0;
     }
+}
+
+.boolean-true {
+    @extend .glyphicon;
+    @extend .glyphicon-ok;
+}
+
+.boolean-false {
+    @extend .glyphicon;
+    @extend .glyphicon-remove;
 }
 
 .pace-activity {

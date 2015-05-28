@@ -37,7 +37,7 @@ describe('JsonColumn', () => {
 
         expect(jsonColumn.querySelector('table:first-child').getAttribute('class')).toBe('table table-condensed');
         expect(jsonColumn.querySelector('tr:first-child td').innerHTML).toBe('123');
-        
+
         var table2 = jsonColumn.querySelector('table table');
 
         expect(table2.getAttribute('class')).toBe('table table-condensed table-bordered');

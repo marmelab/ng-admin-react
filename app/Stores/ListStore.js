@@ -46,25 +46,19 @@ class ListStore extends EventEmitter {
                 return rawEntries;
             }, this)
             .then((rawEntries) => {
-                console.log('rawEntries', rawEntries);
-
                 return readQueries.getFilteredReferenceData(view.getNonOptimizedReferences(), rawEntries);
             })
             .then((nonOptimizedReference) => {
-                console.log('nonOptimizedReference', nonOptimizedReference);
                 nonOptimizedReferencedData = nonOptimizedReference;
 
                 return readQueries.getOptimizedReferencedData(view.getOptimizedReferences(), rawEntries);
             })
             .then((optimizedReference) => {
-                console.log('optimizedReference', optimizedReference);
                 optimizedReferencedData = optimizedReference;
 
                 var references = view.getReferences(),
                     referencedData = objectAssign(nonOptimizedReferencedData, optimizedReferencedData),
                     referencedEntries;
-
-                console.log('referencedData', referencedData);
 
                 for (var name in referencedData) {
                     referencedEntries = dataStore.mapEntries(
@@ -83,16 +77,14 @@ class ListStore extends EventEmitter {
             .then(() => {
                 this.data = this.data.update('dataStore', v => {
                     let entries = dataStore.mapEntries(entity.name(), view.identifier(), view.getFields(), rawEntries);
-console.log('before', entries);
+
                     // shortcut to diplay collection of entry with included referenced values
                     dataStore.fillReferencesValuesFromCollection(entries, view.getReferences(), true);
-console.log('after', entries);
+
                     dataStore.setEntries(
                         entity.uniqueId,
                         entries
                     );
-
-                    console.log('entries', entries);
 
                     return dataStore;
                 });

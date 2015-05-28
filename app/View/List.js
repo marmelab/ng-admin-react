@@ -81,7 +81,7 @@ class ListView extends React.Component {
                     router={this.context.router}
                     configuration={configuration}
                     actions={ListActions}
-                    listActions={field.listActions()}
+                    listActions={view.listActions()}
                     fields={view.getFields()}
                     entries={entries}
                     sortDir={sortDir}

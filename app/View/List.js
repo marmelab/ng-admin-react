@@ -1,5 +1,5 @@
 import React from 'react';
-import shouldComponentUpdate from 'omniscient/shouldupdate';
+import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
 import Datagrid from '../Component/Datagrid/Datagrid';
 import MaDatagridPagination from '../Component/Datagrid/MaDatagridPagination';

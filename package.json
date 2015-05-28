@@ -19,7 +19,7 @@
     "flux": "^2.0.3",
     "immutable": "^3.7.3",
     "inflected": "^1.1.6",
-    "jest-cli": "^0.2.1",
+    "jest-cli": "^0.4.5",
     "object-assign": "^2.0.0",
     "omniscient": "^3.1.0",
     "pace": "HubSpot/pace",

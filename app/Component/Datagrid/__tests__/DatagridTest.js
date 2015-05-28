@@ -7,13 +7,14 @@ var TestUtils = React.addons.TestUtils;
 var Datagrid = require('../Datagrid');
 var routerWrapper = require('../../../Test/RouterWrapper');
 
-function getDatagrid(fields, view, router, actions, entries, sortDir, sortField) {
-    return routerWrapper(() => <Datagrid fields={fields} view={view} router={router} entries={entries} sortDir={sortDir} sortField={sortField} actions={actions} />);
+function getDatagrid(fields, view, router, actions, dataStore, sortDir, sortField) {
+    return routerWrapper(() => <Datagrid fields={fields} view={view} router={router} dataStore={dataStore} sortDir={sortDir} sortField={sortField} actions={actions} />);
 }
 
 describe('Datagrid', () => {
     var view;
     var router;
+    var dataStore;
 
     beforeEach(() => {
         view = {
@@ -26,9 +27,11 @@ describe('Datagrid', () => {
         };
 
         router = {
-            getCurrentQuery: () => {
-                return 1;
-            }
+            getCurrentQuery: () => 1
+        };
+
+        dataStore = {
+            getEntries: (name) => []
         };
     });
 
@@ -42,7 +45,7 @@ describe('Datagrid', () => {
 
             var ListActions = require('../../../Actions/ListActions');
 
-            var datagrid = getDatagrid(fields, view, router, ListActions, [], null, null);
+            var datagrid = getDatagrid(fields, view, router, ListActions, dataStore, null, null);
             datagrid = React.findDOMNode(datagrid);
 
             var headers = [].slice.call(datagrid.querySelectorAll('thead th')).map(h => h.textContent);
@@ -57,7 +60,7 @@ describe('Datagrid', () => {
 
             var ListActions = require('../../../Actions/ListActions');
 
-            var datagrid = getDatagrid(fields, view, router, ListActions, [], null, null);
+            var datagrid = getDatagrid(fields, view, router, ListActions, dataStore, null, null);
             var datagridNode = React.findDOMNode(datagrid);
             var header = datagridNode.querySelector('thead th a');
             TestUtils.Simulate.click(header);

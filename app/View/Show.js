@@ -65,7 +65,7 @@ class ShowView extends React.Component {
                     <p className="description">{view.description()}</p>
                 </div>
 
-                <div class="row form-horizontal" id="show-view">
+                <div className="row form-horizontal" id="show-view">
                     <ShowFields
                         fields={view.getFields()}
                         dataStore={dataStore}

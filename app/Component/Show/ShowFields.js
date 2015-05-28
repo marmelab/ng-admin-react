@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from '../Column';
+import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn } from '../Column';
 
 class ShowFields extends React.Component {
 
@@ -11,25 +11,30 @@ class ShowFields extends React.Component {
             let field = this.props.fields[i];
             let fieldName = field.name();
             let renderedField;
+            let content = entry.values[fieldName];
             let className = 'show-value react-admin-field-' + field.name() + ' ' +
                 (field.getCssClasses(entry) || 'col-sm-10 col-md-8 col-lg-7');
 
             switch (field.type()) {
                 case 'string':
                 case 'text':
+                    renderedField = content;
+                    break;
+
                 case 'wysiwyg':
-                    renderedField = entry.values[fieldName];
+                    renderedField = <div dangerouslySetInnerHTML={{__html: content}} />;
                     break;
 
                 case 'json':
+                    renderedField = <JsonColumn value={content} />;
                     break;
 
                 case 'boolean':
-                    renderedField = <BooleanColumn value={entry.values[fieldName]} />;
+                    renderedField = <BooleanColumn value={content} />;
                     break;
 
                 case 'date':
-                    renderedField = <DateColumn value={entry.values[fieldName]} format={field.format()} />;
+                    renderedField = <DateColumn value={content} format={field.format()} />;
                     break;
 
                 case 'template':
@@ -37,7 +42,7 @@ class ShowFields extends React.Component {
                     break;
 
                 case 'number':
-                    renderedField = <NumberColumn value={entry.values[fieldName]} />;
+                    renderedField = <NumberColumn value={content} />;
                     break;
 
                 case 'reference':

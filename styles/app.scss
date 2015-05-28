@@ -128,6 +128,20 @@ a {
     }
 }
 
+.reference-many-column {
+    .label {
+        margin-right: 5px;
+        font-weight: 400;
+        font-size: 12px;
+        padding-top: 4px;
+    }
+}
+.show-view {
+    .form-horizontal label {
+        padding-top: 0;
+    }
+}
+
 .pace-activity {
     left: 50%;
 }

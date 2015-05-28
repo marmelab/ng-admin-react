@@ -9,9 +9,9 @@ class ReferenceManyField extends React.Component {
         }
 
         return (
-            <span>
+            <span className="reference-many-column">
                 {values.map((value) => (
-                    <span>{value}</span>
+                    <span className="label label-default">{value}</span>
                 ))}
             </span>
         );

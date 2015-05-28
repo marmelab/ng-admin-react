@@ -4,6 +4,7 @@ import NumberColumn from './NumberColumn';
 import ReferenceColumn from './ReferenceColumn';
 import ReferenceManyColumn from './ReferenceManyColumn';
 import TemplateColumn from './TemplateColumn';
+import JsonColumn from './JsonColumn';
 
 export {
     BooleanColumn,
@@ -11,5 +12,6 @@ export {
     NumberColumn,
     ReferenceColumn,
     ReferenceManyColumn,
-    TemplateColumn
+    TemplateColumn,
+    JsonColumn
 };

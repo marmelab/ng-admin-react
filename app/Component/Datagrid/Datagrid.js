@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '../../Component/Datagrid/ColumnHeader';
 import ListActions from '../../Component/Datagrid/ListActions';
 
-import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyField, TemplateField } from './Field';
+import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from '../Column';
 
 class Datagrid extends React.Component {
     buildHeaders() {
@@ -60,27 +60,27 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'boolean':
-                    renderedField = <BooleanField value={row.values[fieldName]} />;
+                    renderedField = <BooleanColumn value={row.values[fieldName]} />;
                     break;
 
                 case 'date':
-                    renderedField = <DateField value={row.values[fieldName]} format={field.format()} />;
+                    renderedField = <DateColumn value={row.values[fieldName]} format={field.format()} />;
                     break;
 
                 case 'template':
-                    renderedField = <TemplateField template={field.template()} entry={row} />;
+                    renderedField = <TemplateColumn template={field.template()} entry={row} />;
                     break;
 
                 case 'number':
-                    renderedField = <NumberField value={row.values[fieldName]} />;
+                    renderedField = <NumberColumn value={row.values[fieldName]} />;
                     break;
 
                 case 'reference':
-                    renderedField = <ReferenceField value={row.listValues[fieldName]} />;
+                    renderedField = <ReferenceColumn value={row.listValues[fieldName]} />;
                     break;
 
                 case 'reference_many':
-                    renderedField = <ReferenceManyField values={row.listValues[fieldName]} />;
+                    renderedField = <ReferenceManyColumn values={row.listValues[fieldName]} />;
                     break;
 
                 default:

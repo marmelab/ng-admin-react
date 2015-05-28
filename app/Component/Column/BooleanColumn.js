@@ -1,6 +1,6 @@
 import React from 'react';
 
-class BooleanField extends React.Component {
+class BooleanColumn extends React.Component {
     render() {
         let className = !!this.props.value ? 'boolean-true' : 'boolean-false';
         return (
@@ -9,4 +9,4 @@ class BooleanField extends React.Component {
     }
 }
 
-export default BooleanField;
+export default BooleanColumn;

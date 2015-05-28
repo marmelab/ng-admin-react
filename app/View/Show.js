@@ -1,8 +1,9 @@
 import React from 'react';
+import Inflector from 'inflected'
 import shouldComponentUpdate from 'omniscient/shouldupdate';
 
 import ViewActions from '../Component/ViewActions';
-import ListActions from '../Actions/ListActions';
+import ShowActions from '../Actions/ShowActions';
 import ShowStore from '../Stores/ShowStore';
 import ShowFields from '../Component/Show/ShowFields';
 
@@ -27,7 +28,7 @@ class ShowView extends React.Component {
     getView(entityName) {
         entityName = entityName || this.context.router.getCurrentParams().entity;
 
-        return this.props.configuration.getEntity(entityName).views.ListView;
+        return this.props.configuration.getEntity(entityName).views.ShowView;
     }
 
     onChange() {
@@ -35,9 +36,9 @@ class ShowView extends React.Component {
     }
 
     refreshData() {
-        let {id} = this.context.router.getCurrentQuery();
+        let {id} = this.context.router.getCurrentParams();
 
-        ShowStore.loadData(this.props.configuration, this.getView(), id);
+        ShowActions.loadData(this.props.configuration, this.getView(), id);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -60,7 +61,7 @@ class ShowView extends React.Component {
                 <ViewActions view={view} entry={entry} buttons={['list', 'edit', 'delete']} />
 
                 <div className="page-header">
-                    <h1>{view.title() || entityName + " detail"}</h1>
+                    <h1>{view.title() || Inflector.singularize(entityName) + " detail"}</h1>
                     <p className="description">{view.description()}</p>
                 </div>
 

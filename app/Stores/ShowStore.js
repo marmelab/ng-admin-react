@@ -26,19 +26,21 @@ class ShowStore extends EventEmitter {
 
         let dataStore = new DataStore();
         let readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
-        let rawEntry, nonOptimizedReferencedData, optimizedReferencedData;
+        let rawEntry, entry, nonOptimizedReferencedData, optimizedReferencedData;
 
         readQueries
-            .getOne(view, view.type, identifierValue, view.identifier(), view.getUrl())
+            .getOne(view.getEntity(), view.type, identifierValue, view.identifier(), view.getUrl())
             .then((response) => {
-                rawEntry = response.data;
+                rawEntry = response;
 
-                return dataStore.mapEntry(
+                entry = dataStore.mapEntry(
                     view.entity.name(),
                     view.identifier(),
                     view.getFields(),
                     rawEntry
                 );
+
+                return rawEntry;
             }, this)
             .then((rawEntry) => {
                 return readQueries.getFilteredReferenceData(view.getNonOptimizedReferences(), [rawEntry]);
@@ -70,6 +72,12 @@ class ShowStore extends EventEmitter {
                 }
             })
             .then(() => {
+                dataStore.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
+
+                dataStore.addEntry(view.getEntity().uniqueId, entry);
+                return true;
+            })
+            .then(() => {
                 this.data = this.data.update('dataStore', v => dataStore);
                 this.data = this.data.update('pending', v => false);
                 this.emitChange();
@@ -97,7 +105,7 @@ let store = new ShowStore();
 
 AppDispatcher.register((action) => {
     switch(action.actionType) {
-        case 'load_data':
+        case 'load_show_data':
             store.loadData(action.configuration, action.view, action.id);
             break;
     }

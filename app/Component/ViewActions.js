@@ -9,6 +9,7 @@ import MaListButton from './Button/MaListButton';
 class ViewActions extends React.Component {
     render() {
         let view = this.props.view,
+            size = this.props.size,
             entity = view ? view.entity : null,
             buttonNames = this.props.buttons,
             buttons;
@@ -16,17 +17,17 @@ class ViewActions extends React.Component {
         buttons = buttonNames.map(button => {
             switch (button) {
                 case 'create':
-                    return <MaCreateButton entity={entity} />;
+                    return <MaCreateButton entity={entity} size={size} />;
                 case 'show':
-                    return <MaShowButton entity={entity} entry={this.props.entry} />;
+                    return <MaShowButton entity={entity} entry={this.props.entry} size={size} />;
                 case 'back':
-                    return <MaBackButton />;
+                    return <MaBackButton size={size} />;
                 case 'list':
-                    return <MaListButton entity={entity} />;
+                    return <MaListButton entity={entity} size={size} />;
                 case 'edit':
-                    return <MaEditButton entity={entity} entry={this.props.entry} />;
+                    return <MaEditButton entity={entity} entry={this.props.entry} size={size} />;
                 case 'delete':
-                    return <MaDeleteButton entity={entity} entry={this.props.entry} />;
+                    return <MaDeleteButton entity={entity} entry={this.props.entry} size={size} />;
                 default:
                     return React.createElement(button);
             }
@@ -41,7 +42,8 @@ class ViewActions extends React.Component {
 ViewActions.propTypes = {
     view: React.PropTypes.object,
     entry: React.PropTypes.object,
-    buttons: React.PropTypes.array.isRequired
+    buttons: React.PropTypes.array.isRequired,
+    size: React.PropTypes.string
 };
 
 ViewActions.defaultProps = { view: null };

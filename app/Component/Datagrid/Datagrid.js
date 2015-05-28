@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Header from '../../Component/Datagrid/ColumnHeader';
-import ListActions from '../../Component/Datagrid/ListActions';
+import DatagridActions from '../../Component/Datagrid/DatagridActions';
 
 import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from '../Column';
 
@@ -91,7 +91,7 @@ class Datagrid extends React.Component {
         }
 
         if (actions && actions.length) {
-            cells.push(<td><ListActions view={this.props.view} entry={row} /></td>);
+            cells.push(<td><DatagridActions view={this.props.view} entry={row} size={'xs'} /></td>);
         }
 
         return cells;

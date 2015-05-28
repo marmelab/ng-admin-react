@@ -9,7 +9,7 @@ class EditView extends React.Component {
 
         return (
             <div className="view list-view">
-                <ViewActions view={view} buttons={['list'/* @TODO add other links when entry is present*/]} />
+                <ViewActions entityName={view.entity.name()} buttons={['list'/* @TODO add other links when entry is present*/]} />
 
                 <div className="page-header">
                     <h1>{view.title() || "Edit one " +entityName}</h1>

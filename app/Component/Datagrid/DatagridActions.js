@@ -3,22 +3,19 @@ import MaShowButton from '../Button/MaShowButton';
 import MaEditButton from '../Button/MaEditButton';
 import MaDeleteButton from '../Button/MaDeleteButton';
 
-class ListActions extends React.Component {
+class DatagridActions extends React.Component {
     render() {
-        let view = this.props.view,
-            size = this.props.size,
-            entity = view.entity,
-            buttonNames = view.listActions(),
-            buttons;
+        let {size, entityName, listActions} = this.props;
+        let buttons;
 
-        buttons = buttonNames.map(button => {
+        buttons = listActions.map(button => {
             switch (button) {
                 case 'show':
-                    return <MaShowButton entity={entity} entry={this.props.entry} size={size} />;
+                    return <MaShowButton entityName={entityName} entry={this.props.entry} size={size} />;
                 case 'edit':
-                    return <MaEditButton entity={entity} entry={this.props.entry} size={size} />;
+                    return <MaEditButton entityName={entityName} entry={this.props.entry} size={size} />;
                 case 'delete':
-                    return <MaDeleteButton entity={entity} entry={this.props.entry} size={size} />;
+                    return <MaDeleteButton entityName={entityName} entry={this.props.entry} size={size} />;
                 default:
                     return React.createElement(button)
             }
@@ -30,10 +27,11 @@ class ListActions extends React.Component {
     }
 }
 
-ListActions.propTypes = {
-    view: React.PropTypes.object.isRequired,
+DatagridActions.propTypes = {
+    entityName: React.PropTypes.string.isRequired,
+    listActions: React.PropTypes.array.isRequired,
     entry: React.PropTypes.object.isRequired,
-    size: React.PropTypes.string,
+    size: React.PropTypes.string
 };
 
-export default ListActions;
+export default DatagridActions;

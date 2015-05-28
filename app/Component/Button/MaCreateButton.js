@@ -6,7 +6,7 @@ class MaCreateButton extends React.Component {
         let size = !!this.props.size ? 'btn-' + this.props.size : null,
             className = 'btn btn-default ' + size,
             params = {
-                entity: this.props.entity.name()
+                entity: this.props.entityName
             };
 
         return (
@@ -18,7 +18,7 @@ class MaCreateButton extends React.Component {
 }
 
 MaCreateButton.propTypes = {
-    entity: React.PropTypes.object.isRequired,
+    entityName: React.PropTypes.string.isRequired,
     size: React.PropTypes.string,
     label: React.PropTypes.string
 };

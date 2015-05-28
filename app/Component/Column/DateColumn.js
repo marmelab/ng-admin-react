@@ -1,6 +1,6 @@
 import React from 'react';
 
-class DateField extends React.Component {
+class DateColumn extends React.Component {
     render() {
         return (
             <span>{this.props.value}</span>
@@ -8,4 +8,8 @@ class DateField extends React.Component {
     }
 }
 
-export default DateField;
+DateColumn.propTypes = {
+    value: React.PropTypes.string.isRequired
+};
+
+export default DateColumn;

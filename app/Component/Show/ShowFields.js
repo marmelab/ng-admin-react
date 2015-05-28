@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn } from '../Column';
+import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, ReferencedList, TemplateColumn, JsonColumn } from '../Column';
 
 class ShowFields extends React.Component {
 
@@ -50,6 +50,9 @@ class ShowFields extends React.Component {
                     break;
 
                 case 'referenced_list':
+                    let entries = this.props.dataStore.getEntries(field.targetEntity().uniqueId + '_list');
+
+                    renderedField = <ReferencedList entries={entries} entityName={entry.entityName} field={field} />;
                     break;
 
                 case 'reference_many':

@@ -11,7 +11,7 @@ class CreateView extends React.Component {
 
         return (
             <div className="view show-view">
-                <ViewActions view={view} buttons={['list']} />
+                <ViewActions entityName={view.entity.name()} buttons={['list']} />
 
                 <div className="page-header">
                     <h1>{view.title() || "Create new " + Inflector.singularize(entityName)}</h1>

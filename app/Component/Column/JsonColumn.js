@@ -48,4 +48,11 @@ class JsonColumn extends React.Component {
     }
 }
 
+JsonColumn.propTypes = {
+    value: React.PropTypes.oneOfType([
+        React.PropTypes.object,
+        React.PropTypes.array
+    ]).isRequired
+};
+
 export default JsonColumn;

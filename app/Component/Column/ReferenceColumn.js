@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ReferenceField extends React.Component {
+class ReferenceColumn extends React.Component {
     render() {
         var value = this.props.value;
         return (
@@ -9,4 +9,8 @@ class ReferenceField extends React.Component {
     }
 }
 
-export default ReferenceField;
+ReferenceColumn.propTypes = {
+    value: React.PropTypes.string.isRequired
+};
+
+export default ReferenceColumn;

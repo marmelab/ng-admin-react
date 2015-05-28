@@ -1,6 +1,6 @@
 import React from 'react';
 
-class NumberField extends React.Component {
+class NumberColumn extends React.Component {
     render() {
         var value = this.props.value;
         return (
@@ -9,4 +9,8 @@ class NumberField extends React.Component {
     }
 }
 
-export default NumberField;
+NumberColumn.propTypes = {
+    value: React.PropTypes.number.isRequired
+};
+
+export default NumberColumn;

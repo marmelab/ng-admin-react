@@ -10,7 +10,7 @@ class DeleteView extends React.Component {
 
         return (
             <div className="view list-view">
-                <ViewActions view={view} buttons={['back']} />
+                <ViewActions entityName={view.entity.name()} buttons={['back']} />
 
                 <div className="page-header">
                     <h1>{view.title() || "Delete one " + Inflector.singularize(entityName)}</h1>

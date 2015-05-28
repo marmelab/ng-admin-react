@@ -8,15 +8,13 @@ import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceMany
 class Datagrid extends React.Component {
     buildHeaders() {
         let headers = [];
-        let listActions = this.props.view.listActions();
-        let sortDir = this.props.sortDir;
-        let sortField = this.props.sortField;
+        let {name, listActions, sortDir, sortField} = this.props;
 
         for (let i in this.props.fields) {
             let fieldName = this.props.fields[i].name();
             let sort = null;
 
-            if (this.props.view.name() + '.' + fieldName === sortField) {
+            if (name + '.' + fieldName === sortField) {
                 sort = sortDir;
             }
 
@@ -40,14 +38,15 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        return this.props.dataStore.getEntries(this.props.view.entity.uniqueId).map((r, i) => (
+        return this.props.entries.map((r, i) => (
             <tr key={i}>{this.buildCells(r)}</tr>
         ));
     }
 
     buildCells(row) {
         let cells = [];
-        let actions = this.props.view.listActions();
+        let actions = this.props.listActions;
+        let entityName = this.props.entityName;
 
         for (let i in this.props.fields) {
             let field = this.props.fields[i];
@@ -91,7 +90,7 @@ class Datagrid extends React.Component {
         }
 
         if (actions && actions.length) {
-            cells.push(<td><DatagridActions view={this.props.view} entry={row} size={'xs'} /></td>);
+            cells.push(<td><DatagridActions entityName={entityName} listActions={actions} entry={row} size={'xs'} /></td>);
         }
 
         return cells;
@@ -115,11 +114,13 @@ class Datagrid extends React.Component {
 }
 
 Datagrid.propTypes = {
+    name: React.PropTypes.string.isRequired,
+    entityName: React.PropTypes.string.isRequired,
     configuration: React.PropTypes.object.isRequired,
     actions: React.PropTypes.object.isRequired,
-    view: React.PropTypes.object.isRequired,
+    listActions: React.PropTypes.object.isRequired,
     fields: React.PropTypes.array.isRequired,
-    dataStore: React.PropTypes.object.isRequired,
+    entries: React.PropTypes.array.isRequired,
     sortDir: React.PropTypes.string.isRequired,
     sortField: React.PropTypes.string.isRequired
 };

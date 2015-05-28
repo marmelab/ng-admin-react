@@ -5,10 +5,12 @@ import Datagrid from './Datagrid/Datagrid';
 
 class DashboardPanel extends React.Component {
     render() {
-        let params = {
-            entity: this.props.view.entity.name()
-        };
         let view = this.props.view;
+        let entity = view.entity;
+        let entries = this.props.dataStore.getEntries(entity.uniqueId);
+        let params = {
+            entity: entity.name()
+        };
 
         return (
             <div>
@@ -17,11 +19,12 @@ class DashboardPanel extends React.Component {
                 </div>
 
                 <Datagrid
+                    name={view.name()}
+                    entityName={entity.name()}
                     router={this.props.router}
                     configuration={this.props.configuration}
-                    view={view}
                     fields={view.fields()}
-                    dataStore={this.props.dataStore}
+                    entries={entries}
                     sortDir={this.props.sortDir}
                     sortField={this.props.sortField} />
             </div>

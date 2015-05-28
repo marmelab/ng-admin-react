@@ -58,7 +58,7 @@ class ShowView extends React.Component {
 
         return (
             <div className="view show-view">
-                <ViewActions view={view} entry={entry} buttons={['list', 'edit', 'delete']} />
+                <ViewActions entityName={view.entity.name()} entry={entry} buttons={['list', 'edit', 'delete']} />
 
                 <div className="page-header">
                     <h1>{view.title() || Inflector.singularize(entityName) + " detail"}</h1>

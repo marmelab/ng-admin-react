@@ -8,39 +8,36 @@ import MaListButton from './Button/MaListButton';
 
 class ViewActions extends React.Component {
     render() {
-        let view = this.props.view,
-            size = this.props.size,
-            entity = view ? view.entity : null,
-            buttonNames = this.props.buttons,
-            buttons;
+        let {size, entityName, buttons} = this.props;
+        let results;
 
-        buttons = buttonNames.map(button => {
+        results = buttons.map(button => {
             switch (button) {
                 case 'create':
-                    return <MaCreateButton entity={entity} size={size} />;
+                    return <MaCreateButton entityName={entityName} size={size} />;
                 case 'show':
-                    return <MaShowButton entity={entity} entry={this.props.entry} size={size} />;
+                    return <MaShowButton entityName={entityName} entry={this.props.entry} size={size} />;
                 case 'back':
                     return <MaBackButton size={size} />;
                 case 'list':
-                    return <MaListButton entity={entity} size={size} />;
+                    return <MaListButton entityName={entityName} size={size} />;
                 case 'edit':
-                    return <MaEditButton entity={entity} entry={this.props.entry} size={size} />;
+                    return <MaEditButton entityName={entityName} entry={this.props.entry} size={size} />;
                 case 'delete':
-                    return <MaDeleteButton entity={entity} entry={this.props.entry} size={size} />;
+                    return <MaDeleteButton entityName={entityName} entry={this.props.entry} size={size} />;
                 default:
                     return React.createElement(button);
             }
         });
 
         return (
-            <span className="ma-view-actions">{buttons}</span>
+            <span className="ma-view-actions">{results}</span>
         );
     }
 }
 
 ViewActions.propTypes = {
-    view: React.PropTypes.object,
+    entityName: React.PropTypes.string,
     entry: React.PropTypes.object,
     buttons: React.PropTypes.array.isRequired,
     size: React.PropTypes.string

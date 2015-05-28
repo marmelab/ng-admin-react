@@ -72,6 +72,33 @@ class ShowStore extends EventEmitter {
                 }
             })
             .then(() => {
+                var referencedLists = view.getReferencedLists();
+
+                return readQueries.getReferencedListData(referencedLists, '', 'ASC', entry.identifierValue);
+            })
+            .then((referencedListData) => {
+                var referencedLists = view.getReferencedLists();
+                var referencedList;
+                var referencedListEntries;
+
+                for (var i in referencedLists) {
+                    referencedList = referencedLists[i];
+                    referencedListEntries = referencedListData[i];
+
+                    referencedListEntries = dataStore.mapEntries(
+                        referencedList.targetEntity().name(),
+                        referencedList.targetEntity().identifier(),
+                        referencedList.targetFields(),
+                        referencedListEntries
+                    );
+
+                    dataStore.setEntries(
+                        referencedList.targetEntity().uniqueId + '_list',
+                        referencedListEntries
+                    );
+                }
+            })
+            .then(() => {
                 dataStore.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
 
                 dataStore.addEntry(view.getEntity().uniqueId, entry);

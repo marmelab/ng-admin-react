@@ -3,6 +3,7 @@ import DateColumn from './DateColumn';
 import NumberColumn from './NumberColumn';
 import ReferenceColumn from './ReferenceColumn';
 import ReferenceManyColumn from './ReferenceManyColumn';
+import ReferencedList from './ReferencedList';
 import TemplateColumn from './TemplateColumn';
 import JsonColumn from './JsonColumn';
 
@@ -13,5 +14,6 @@ export {
     ReferenceColumn,
     ReferenceManyColumn,
     TemplateColumn,
+    ReferencedList,
     JsonColumn
 };

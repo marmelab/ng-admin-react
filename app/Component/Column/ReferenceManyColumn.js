@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ReferenceManyField extends React.Component {
+class ReferenceManyColumn extends React.Component {
     render() {
         let values = this.props.values;
 
@@ -18,4 +18,8 @@ class ReferenceManyField extends React.Component {
     }
 }
 
-export default ReferenceManyField;
+ReferenceManyColumn.propTypes = {
+    values: React.PropTypes.array.isRequired
+};
+
+export default ReferenceManyColumn;

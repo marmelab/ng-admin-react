@@ -1,6 +1,6 @@
 import React from 'react';
 import Inflector from 'inflected'
-import shouldComponentUpdate from 'omniscient/shouldupdate';
+import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
 import ViewActions from '../Component/ViewActions';
 import ShowActions from '../Actions/ShowActions';
@@ -42,7 +42,7 @@ class ShowView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity || nextProps.query.page !== this.props.query.page) {
+        if (nextProps.params.entity !== this.props.params.entity) {
             this.refreshData();
         }
     }

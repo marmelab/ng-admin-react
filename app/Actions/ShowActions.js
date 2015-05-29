@@ -1,12 +1,14 @@
 import AppDispatcher from '../Services/AppDispatcher';
 
 export default {
-    loadData(configuration, view, id) {
+    loadData(configuration, view, id, sortField, sortDir) {
         AppDispatcher.dispatch({
             actionType: 'load_show_data',
             configuration: configuration,
             view: view,
-            id: id
+            id: id,
+            sortField: sortField,
+            sortDir: sortDir
         });
     }
 };

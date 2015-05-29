@@ -22,10 +22,9 @@ class Datagrid extends React.Component {
                 <Header
                     configuration={this.props.configuration}
                     sort={sort}
-                    view={this.props.view}
+                    name={this.props.name}
                     fieldName={fieldName}
-                    label={this.props.fields[i].label()}
-                    actions={this.props.actions} />
+                    label={this.props.fields[i].label()} />
             );
         }
 
@@ -117,13 +116,15 @@ Datagrid.propTypes = {
     name: React.PropTypes.string.isRequired,
     entityName: React.PropTypes.string.isRequired,
     configuration: React.PropTypes.object.isRequired,
-    actions: React.PropTypes.object.isRequired,
     listActions: React.PropTypes.object.isRequired,
     fields: React.PropTypes.array.isRequired,
     entries: React.PropTypes.array.isRequired,
     sortDir: React.PropTypes.string.isRequired,
-    sortField: React.PropTypes.string.isRequired,
-    view: React.PropTypes.object
+    sortField: React.PropTypes.string.isRequired
+};
+
+Datagrid.contextTypes = {
+    router: React.PropTypes.func.isRequired
 };
 
 export default Datagrid;

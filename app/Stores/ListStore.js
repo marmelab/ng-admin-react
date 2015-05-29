@@ -24,11 +24,14 @@ class ListStore extends EventEmitter {
         });
     }
 
-    loadData(configuration, view, page) {
+    loadData(configuration, view, page, sortField, sortDir) {
         page = page || 1;
 
         this.data = this.data.update('pending', v => true);
         this.data = this.data.update('page', v => page);
+        this.data = this.data.update('sortField', v => sortField);
+        this.data = this.data.update('sortDir', v => sortDir);
+
         this.emitChange();
 
         let dataStore = new DataStore();
@@ -93,13 +96,6 @@ class ListStore extends EventEmitter {
             }, this);
     }
 
-    sort(args) {
-        this.data = this.data.update('sortDir', v => args.sortDir);
-        this.data = this.data.update('sortField', v => args.sortField);
-
-        return this.loadData(args.configuration, args.view, this.data.get('page'));
-    }
-
     getState() {
         return { data: this.data };
     }
@@ -122,10 +118,7 @@ let store = new ListStore();
 AppDispatcher.register((action) => {
   switch(action.actionType) {
     case 'load_data':
-      store.loadData(action.configuration, action.view, action.page);
-      break;
-    case 'sort':
-      store.sort(action.args);
+      store.loadData(action.configuration, action.view, action.page, action.sortField, action.sortDir);
       break;
   }
 });

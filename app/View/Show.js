@@ -37,12 +37,16 @@ class ShowView extends React.Component {
 
     refreshData() {
         let {id} = this.context.router.getCurrentParams();
+        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        ShowActions.loadData(this.props.configuration, this.getView(), id);
+        ShowActions.loadData(this.props.configuration, this.getView(), id, sortField, sortDir);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity) {
+        if (nextProps.params.entity !== this.props.params.entity
+            || nextProps.query.sortField !== this.props.query.sortField
+            || nextProps.query.sortDir !== this.props.query.sortDir) {
+
             this.refreshData();
         }
     }

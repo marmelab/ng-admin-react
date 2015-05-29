@@ -1,29 +1,33 @@
 import React from 'react';
+import {Link} from 'react-router';
 
 class ColumnHeader extends React.Component {
-    handleSort(e) {
-        e.preventDefault();
-
-        this.props.actions.sort({
-            sortField: this.props.view.name() + '.' + this.props.fieldName,
-            sortDir: this.props.sort === 'ASC' ? 'DESC' : 'ASC',
-            configuration: this.props.configuration,
-            view: this.props.view
-        });
-    }
-
     render() {
+        let params = this.context.router.getCurrentParams();
+        let routes = this.context.router.getCurrentRoutes();
+        let currentQuery = this.context.router.getCurrentQuery();
+        let route = routes[routes.length - 1];
         let sort = null;
+
         if (this.props.sort) {
             sort = <span className={'sorted sorted-' + this.props.sort.toLowerCase()}></span>
         }
 
+        let query = {
+            sortField: this.props.name + '.' + this.props.fieldName,
+            sortDir: this.props.sort === 'ASC' ? 'DESC' : 'ASC'
+        };
+
+        if (currentQuery.page) {
+            query.page = currentQuery.page;
+        }
+
         return (
             <th key={this.props.fieldName}>
-                <a href="#" onClick={this.handleSort.bind(this)}>
+                <Link to={route.name} params={params} query={query}>
                     {sort}
                     {this.props.label}
-                </a>
+                </Link>
             </th>
         );
     }
@@ -32,10 +36,14 @@ class ColumnHeader extends React.Component {
 ColumnHeader.propTypes = {
     configuration: React.PropTypes.object.isRequired,
     actions: React.PropTypes.object.isRequired,
-    view: React.PropTypes.object.isRequired,
     fieldName: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired,
-    sort: React.PropTypes.string
+    sort: React.PropTypes.string,
+    name: React.PropTypes.string
+};
+
+ColumnHeader.contextTypes = {
+    router: React.PropTypes.func.isRequired
 };
 
 export default ColumnHeader;

@@ -5,10 +5,13 @@ var MaDatagridPagination = require('../Component/Datagrid/MaDatagridPagination')
 
 // Mock router
 // @see https://github.com/rackt/react-router/blob/master/docs/guides/testing.md
-function RouterStub() { }
+function RouterStub() { };
 RouterStub.makePath = () => { };
 RouterStub.makeHref = () => { };
 RouterStub.isActive = () => { };
+RouterStub.getCurrentParams = () => ({ });
+RouterStub.getCurrentQuery = () => ({ });
+RouterStub.getCurrentRoutes = () => ([{name: 'my-route'}]);
 
 function wrapComponent(cb) {
     var TestWrapper = React.createClass({

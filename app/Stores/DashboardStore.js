@@ -19,7 +19,7 @@ class DashboardStore extends EventEmitter {
         });
     }
 
-    loadPanels(configuration) {
+    loadPanels(configuration, sortField, sortDir) {
         this.data = this.data.update('pending', v => true);
         this.emitChange();
 
@@ -32,11 +32,20 @@ class DashboardStore extends EventEmitter {
             view,
             entity,
             response,
-            entries;
+            entries,
+            dashboardSortField,
+            dashboardSortDir;
 
         for (i in dashboardViews) {
             view = dashboardViews[i];
             entity = view.getEntity();
+            dashboardSortField = null;
+            dashboardSortDir = null;
+
+            if (sortField && sortField.split('.')[0] === view.name()) {
+                dashboardSortField = sortField;
+                dashboardSortDir = sortDir;
+            }
 
             panels = panels.push(Map({
                 label: view.title() || entity.label(),
@@ -46,7 +55,7 @@ class DashboardStore extends EventEmitter {
                 sortField: view.sortField()
             }));
 
-            promises.push(readQueries.getAll(view, 1, [], view.sortField(), view.sortDir()));
+            promises.push(readQueries.getAll(view, 1, [], dashboardSortField, dashboardSortDir));
         }
 
         PromisesResolver.allEvenFailed(promises)
@@ -78,15 +87,10 @@ class DashboardStore extends EventEmitter {
                 this.data = this.data.update('panels', v => panels);
                 this.data = this.data.update('dataStore', v => dataStore);
                 this.data = this.data.update('pending', v => false);
+                this.data = this.data.update('sortDir', v => sortDir);
+                this.data = this.data.update('sortField', v => sortField);
                 this.emitChange();
             }, this);
-    }
-
-    sort(args) {
-        this.data = this.data.update('sortDir', v => args.sortDir);
-        this.data = this.data.update('sortField', v => args.sortField);
-
-        return this.loadData(args.configuration, args.view, this.data.get('page'));
     }
 
     getState() {
@@ -111,10 +115,7 @@ let store = new DashboardStore();
 AppDispatcher.register((action) => {
   switch(action.actionType) {
     case 'load_panels':
-      store.loadPanels(action.configuration);
-      break;
-    case 'sort_panel':
-      store.sort(action.args);
+      store.loadPanels(action.configuration, action.sortField, action.sortDir);
       break;
   }
 });

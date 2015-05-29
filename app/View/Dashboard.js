@@ -28,8 +28,18 @@ class DashboardView extends React.Component {
         this.setState(DashboardStore.getState());
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.query.sortField !== this.props.query.sortField
+            || nextProps.query.sortDir !== this.props.query.sortDir) {
+
+            this.refreshData();
+        }
+    }
+
     refreshData() {
-        DashboardActions.loadPanels(this.props.configuration);
+        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+
+        DashboardActions.loadPanels(this.props.configuration, sortField, sortDir);
     }
 
     buildPanels(panels, odd=true) {
@@ -41,8 +51,8 @@ class DashboardView extends React.Component {
             .forEach((panel, key) => {
                 label = panel.get('label');
                 view = panel.get('view');
-                sortDir = panel.get('sortDir');
-                sortField = panel.get('sortField');
+                sortDir = this.state.data.get('sortDir');
+                sortField = this.state.data.get('sortField');
                 dataStore = this.state.data.get('dataStore');
 
                 panelViews.push((
@@ -90,11 +100,11 @@ class DashboardView extends React.Component {
     }
 }
 
-DashboardView.contextTypes = {
-    router: React.PropTypes.func.isRequired
-};
 DashboardView.propTypes = {
     configuration: React.PropTypes.object.isRequired
+};
+DashboardView.contextTypes = {
+    router: React.PropTypes.func.isRequired
 };
 
 export default DashboardView;

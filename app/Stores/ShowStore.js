@@ -20,7 +20,7 @@ class ShowStore extends EventEmitter {
         });
     }
 
-    loadData(configuration, view, identifierValue) {
+    loadData(configuration, view, identifierValue, sortField, sortDir) {
         this.data = this.data.update('pending', v => true);
         this.emitChange();
 
@@ -74,7 +74,7 @@ class ShowStore extends EventEmitter {
             .then(() => {
                 var referencedLists = view.getReferencedLists();
 
-                return readQueries.getReferencedListData(referencedLists, '', 'ASC', entry.identifierValue);
+                return readQueries.getReferencedListData(referencedLists, sortField, sortDir, entry.identifierValue);
             })
             .then((referencedListData) => {
                 var referencedLists = view.getReferencedLists();
@@ -133,7 +133,7 @@ let store = new ShowStore();
 AppDispatcher.register((action) => {
     switch(action.actionType) {
         case 'load_show_data':
-            store.loadData(action.configuration, action.view, action.id);
+            store.loadData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
     }
 });

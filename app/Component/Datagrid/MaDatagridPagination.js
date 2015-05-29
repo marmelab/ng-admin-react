@@ -85,7 +85,7 @@ class MaDatagridPagination extends React.Component {
             }
 
             if (page != this.state.nbPages) {
-                next = <li><Link className="next"  to="list" params={{entity: entity}} query={{page: page + 1}}>Next »</Link></li>
+                next = <li><Link className="next" to="list" params={{entity: entity}} query={{page: page + 1}}>Next »</Link></li>
             }
 
             this.range(page).map(i => {

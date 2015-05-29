@@ -27,7 +27,11 @@ class ListView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity || nextProps.query.page !== this.props.query.page) {
+        if (nextProps.params.entity !== this.props.params.entity
+            || nextProps.query.page !== this.props.query.page
+            || nextProps.query.sortField !== this.props.query.sortField
+            || nextProps.query.sortDir !== this.props.query.sortDir) {
+
             this.refreshData();
         }
     }
@@ -50,7 +54,7 @@ class ListView extends React.Component {
 
     buildPagination(view) {
         let totalItems = this.state.data.get('totalItems');
-        let {page} = this.context.router.getCurrentQuery();
+        let page = this.state.data.get('page');
 
         return <MaDatagridPagination totalItems={totalItems} entity={view.entity.name()} page={page} perPage={view.perPage()} />;
     }
@@ -78,7 +82,6 @@ class ListView extends React.Component {
                 <Datagrid
                     name={view.name()}
                     entityName={view.entity.name()}
-                    router={this.context.router}
                     configuration={configuration}
                     actions={ListActions}
                     listActions={view.listActions()}
@@ -86,7 +89,6 @@ class ListView extends React.Component {
                     entries={entries}
                     sortDir={sortDir}
                     sortField={sortField}
-                    view={view}
                     />
 
                 {this.buildPagination(view)}

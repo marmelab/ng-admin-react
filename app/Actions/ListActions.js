@@ -8,12 +8,5 @@ export default {
             view: view,
             page: page
         });
-    },
-
-    sort(args) {
-        AppDispatcher.dispatch({
-            actionType: 'sort',
-            args: args
-        });
     }
 };

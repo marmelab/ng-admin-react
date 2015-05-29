@@ -2,6 +2,8 @@ import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import objectAssign from 'object-assign';
 
+import PathUtils from 'react-router/lib/PathUtils'
+
 import AppDispatcher from '../Services/AppDispatcher';
 
 import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
@@ -24,11 +26,22 @@ class ListStore extends EventEmitter {
         });
     }
 
-    loadData(configuration, view, page) {
-        page = page || 1;
+    updateParams() {
+        let {sortDir, sortField, page} = PathUtils.extractQuery(window.location.hash) || {};
+
+        this.data = this.data.update('sortDir', v => sortDir);
+        this.data = this.data.update('sortField', v => sortField);
+        this.data = this.data.update('page', v => page);
+    }
+
+    loadData(configuration, view) {
+        this.updateParams();
+
+        let page = this.data.get('page') || 1;
 
         this.data = this.data.update('pending', v => true);
         this.data = this.data.update('page', v => page);
+
         this.emitChange();
 
         let dataStore = new DataStore();
@@ -93,13 +106,6 @@ class ListStore extends EventEmitter {
             }, this);
     }
 
-    sort(args) {
-        this.data = this.data.update('sortDir', v => args.sortDir);
-        this.data = this.data.update('sortField', v => args.sortField);
-
-        return this.loadData(args.configuration, args.view, this.data.get('page'));
-    }
-
     getState() {
         return { data: this.data };
     }
@@ -123,9 +129,6 @@ AppDispatcher.register((action) => {
   switch(action.actionType) {
     case 'load_data':
       store.loadData(action.configuration, action.view, action.page);
-      break;
-    case 'sort':
-      store.sort(action.args);
       break;
   }
 });

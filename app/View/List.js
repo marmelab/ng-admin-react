@@ -59,15 +59,16 @@ class ListView extends React.Component {
         if (this.state.data.get('pending')) return null;
 
         let configuration = this.props.configuration;
-        let entityName = this.context.router.getCurrentParams().entity
+        let entityName = this.context.router.getCurrentParams().entity;
         let view = this.getView(entityName);
         let sortDir = this.state.data.get('sortDir');
         let sortField = this.state.data.get('sortField');
         let dataStore = this.state.data.get('dataStore');
+        let entries = dataStore.getEntries(view.entity.uniqueId);
 
         return (
             <div className="view list-view">
-                <ViewActions view={view} buttons={['create']} />
+                <ViewActions entityName={view.entity.name()} buttons={['create']} />
 
                 <div className="page-header">
                     <h1>{view.title() || entityName + " list"}</h1>
@@ -75,14 +76,18 @@ class ListView extends React.Component {
                 </div>
 
                 <Datagrid
+                    name={view.name()}
+                    entityName={view.entity.name()}
                     router={this.context.router}
                     configuration={configuration}
                     actions={ListActions}
-                    view={view}
+                    listActions={view.listActions()}
                     fields={view.getFields()}
-                    dataStore={dataStore}
+                    entries={entries}
                     sortDir={sortDir}
-                    sortField={sortField} />
+                    sortField={sortField}
+                    view={view}
+                    />
 
                 {this.buildPagination(view)}
             </div>

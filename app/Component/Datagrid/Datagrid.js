@@ -1,22 +1,20 @@
 import React from 'react';
 
 import Header from '../../Component/Datagrid/ColumnHeader';
-import ListActions from '../../Component/Datagrid/ListActions';
+import DatagridActions from '../../Component/Datagrid/DatagridActions';
 
-import { BooleanField, DateField, NumberField, ReferenceField, ReferenceManyField, TemplateField } from './Field';
+import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from '../Column';
 
 class Datagrid extends React.Component {
     buildHeaders() {
         let headers = [];
-        let listActions = this.props.view.listActions();
-        let sortDir = this.props.sortDir;
-        let sortField = this.props.sortField;
+        let {name, listActions, sortDir, sortField} = this.props;
 
         for (let i in this.props.fields) {
             let fieldName = this.props.fields[i].name();
             let sort = null;
 
-            if (this.props.view.name() + '.' + fieldName === sortField) {
+            if (name + '.' + fieldName === sortField) {
                 sort = sortDir;
             }
 
@@ -40,14 +38,15 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        return this.props.dataStore.getEntries(this.props.view.entity.uniqueId).map((r, i) => (
+        return this.props.entries.map((r, i) => (
             <tr key={i}>{this.buildCells(r)}</tr>
         ));
     }
 
     buildCells(row) {
         let cells = [];
-        let actions = this.props.view.listActions();
+        let actions = this.props.listActions;
+        let entityName = this.props.entityName;
 
         for (let i in this.props.fields) {
             let field = this.props.fields[i];
@@ -60,27 +59,27 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'boolean':
-                    renderedField = <BooleanField value={row.values[fieldName]} />;
+                    renderedField = <BooleanColumn value={row.values[fieldName]} />;
                     break;
 
                 case 'date':
-                    renderedField = <DateField value={row.values[fieldName]} format={field.format()} />;
+                    renderedField = <DateColumn value={row.values[fieldName]} format={field.format()} />;
                     break;
 
                 case 'template':
-                    renderedField = <TemplateField template={field.template()} entry={row} />;
+                    renderedField = <TemplateColumn template={field.template()} entry={row} />;
                     break;
 
                 case 'number':
-                    renderedField = <NumberField value={row.values[fieldName]} />;
+                    renderedField = <NumberColumn value={row.values[fieldName]} />;
                     break;
 
                 case 'reference':
-                    renderedField = <ReferenceField value={row.listValues[fieldName]} />;
+                    renderedField = <ReferenceColumn value={row.listValues[fieldName]} />;
                     break;
 
                 case 'reference_many':
-                    renderedField = <ReferenceManyField values={row.listValues[fieldName]} />;
+                    renderedField = <ReferenceManyColumn values={row.listValues[fieldName]} />;
                     break;
 
                 default:
@@ -91,7 +90,7 @@ class Datagrid extends React.Component {
         }
 
         if (actions && actions.length) {
-            cells.push(<td><ListActions view={this.props.view} entry={row} /></td>);
+            cells.push(<td><DatagridActions entityName={entityName} listActions={actions} entry={row} size={'xs'} /></td>);
         }
 
         return cells;
@@ -115,13 +114,16 @@ class Datagrid extends React.Component {
 }
 
 Datagrid.propTypes = {
+    name: React.PropTypes.string.isRequired,
+    entityName: React.PropTypes.string.isRequired,
     configuration: React.PropTypes.object.isRequired,
     actions: React.PropTypes.object.isRequired,
-    view: React.PropTypes.object.isRequired,
+    listActions: React.PropTypes.object.isRequired,
     fields: React.PropTypes.array.isRequired,
-    dataStore: React.PropTypes.object.isRequired,
+    entries: React.PropTypes.array.isRequired,
     sortDir: React.PropTypes.string.isRequired,
-    sortField: React.PropTypes.string.isRequired
+    sortField: React.PropTypes.string.isRequired,
+    view: React.PropTypes.object
 };
 
 export default Datagrid;

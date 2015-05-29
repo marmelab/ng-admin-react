@@ -116,16 +116,30 @@ a {
     .btn-default {
         margin-right: 5px;
     }
+}
 
-    .boolean-true {
-        @extend .glyphicon;
-        @extend .glyphicon-ok;
+.reference-many-column {
+    .label {
+        margin-right: 5px;
+        font-weight: 400;
+        font-size: 12px;
+        padding-top: 4px;
     }
+}
+.show-view {
+    .form-horizontal label {
+        padding-top: 0;
+    }
+}
 
-    .boolean-false {
-        @extend .glyphicon;
-        @extend .glyphicon-remove;
-    }
+.boolean-true {
+    @extend .glyphicon;
+    @extend .glyphicon-ok;
+}
+
+.boolean-false {
+    @extend .glyphicon;
+    @extend .glyphicon-remove;
 }
 
 .pace-activity {

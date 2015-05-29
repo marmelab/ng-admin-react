@@ -1,18 +1,18 @@
-jest.dontMock('../BooleanField');
+jest.dontMock('../BooleanColumn');
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-describe('BooleanField', () => {
-    var BooleanField;
+describe('BooleanColumn', () => {
+    var BooleanColumn;
 
     beforeEach(() => {
-        BooleanField = require('../BooleanField');
+        BooleanColumn = require('../BooleanColumn');
     });
 
-    it('should get a span with correct class depending of field value', () => {
+    it('should get a span with correct class depending of Column value', () => {
         [true, false].forEach((booleanValue) => {
-            var boolean = TestUtils.renderIntoDocument(<BooleanField value={booleanValue}/>);
+            var boolean = TestUtils.renderIntoDocument(<BooleanColumn value={booleanValue}/>);
                 boolean = React.findDOMNode(boolean);
 
             expect(boolean.getAttribute('class')).toBe(`boolean-${booleanValue}`);

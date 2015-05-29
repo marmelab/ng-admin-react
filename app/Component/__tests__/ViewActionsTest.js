@@ -7,7 +7,7 @@ var ViewActions = require('../ViewActions');
 var routerWrapper = require('../../Test/RouterWrapper');
 
 function getActions(buttons, entry, view) {
-    return routerWrapper(() => <ViewActions buttons={buttons} entry={entry} view={view} />);
+    return routerWrapper(() => <ViewActions buttons={buttons} entry={entry} entityName={view.entity.name()} />);
 }
 
 describe('ViewActions', () => {

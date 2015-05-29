@@ -3,10 +3,10 @@ import {Link} from 'react-router';
 
 class MaListButton extends React.Component {
     render() {
-        let size = 'btn-' + (this.props.size ? this.props.size : 'xs'),
+        let size = !!this.props.size ? 'btn-' + this.props.size : null,
             className = 'btn btn-default ' + size,
             params = {
-                entity: this.props.entity.name()
+                entity: this.props.entityName
             };
 
         return (
@@ -18,7 +18,7 @@ class MaListButton extends React.Component {
 }
 
 MaListButton.propTypes = {
-    entity: React.PropTypes.object.isRequired,
+    entityName: React.PropTypes.string.isRequired,
     size: React.PropTypes.string,
     label: React.PropTypes.string
 };

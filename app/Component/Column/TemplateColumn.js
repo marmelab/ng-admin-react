@@ -1,6 +1,6 @@
 import React from 'react';
 
-class TemplateField extends React.Component {
+class TemplateColumn extends React.Component {
     render() {
         var template = this.props.template;
 
@@ -17,4 +17,11 @@ class TemplateField extends React.Component {
     }
 }
 
-export default TemplateField;
+TemplateColumn.propTypes = {
+    template: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.func
+    ]).isRequired
+};
+
+export default TemplateColumn;

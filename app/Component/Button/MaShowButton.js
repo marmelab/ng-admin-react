@@ -3,10 +3,10 @@ import {Link} from 'react-router';
 
 class MaShowButton extends React.Component {
     render() {
-        let size = 'btn-' + (this.props.size ? this.props.size : 'xs'),
+        let size = !!this.props.size ? 'btn-' + this.props.size : null,
             className = 'btn btn-default ' + size,
             params = {
-                entity: this.props.entity.name(),
+                entity: this.props.entityName,
                 id: this.props.entry.identifierValue
             };
 
@@ -19,7 +19,7 @@ class MaShowButton extends React.Component {
 }
 
 MaShowButton.propTypes = {
-    entity: React.PropTypes.object.isRequired,
+    entityName: React.PropTypes.string.isRequired,
     entry: React.PropTypes.object.isRequired,
     size: React.PropTypes.string,
     label: React.PropTypes.string

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import objectAssign from 'object-assign';
 
 class MaDatagridPagination extends React.Component {
     componentDidMount() {
@@ -64,6 +65,7 @@ class MaDatagridPagination extends React.Component {
         let page = +this.state.page;
         let itemCount = null;
         let pagination = null;
+        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         if (totalItems > 0) {
             itemCount = <div className="total">
@@ -79,15 +81,14 @@ class MaDatagridPagination extends React.Component {
             let prev = null;
             let next = null;
             let items = [];
-            let query = {
-            };
+            let query = this.context.router.getCurrentQuery() || {};
 
             if (page != 1) {
-                prev = <li><Link className="prev" to="list" params={{entity: entity}} query={{page: page - 1}}>« Prev</Link></li>
+                prev = <li><Link className="prev" to="list" params={{entity: entity}} query={{page: page - 1, sortField:sortField, sortDir: sortDir}}>« Prev</Link></li>
             }
 
             if (page != this.state.nbPages) {
-                next = <li><Link className="next" to="list" params={{entity: entity}} query={{page: page + 1}}>Next »</Link></li>
+                next = <li><Link className="next" to="list" params={{entity: entity}} query={{page: page + 1, sortField:sortField, sortDir: sortDir}}>Next »</Link></li>
             }
 
             this.range(page).map(i => {
@@ -96,7 +97,7 @@ class MaDatagridPagination extends React.Component {
                 if (i == '.') {
                     items.push(<li key={i} className={className}><span>&hellip;</span></li>)
                 } else {
-                    items.push(<li key={i} className={className}><Link to="list" params={{entity: entity}} query={{page: i}}>{i}</Link></li>)
+                    items.push(<li key={i} className={className}><Link to="list" params={{entity: entity}} query={{page: i, sortField:sortField, sortDir: sortDir}}>{i}</Link></li>)
                 }
             });
 
@@ -120,6 +121,10 @@ class MaDatagridPagination extends React.Component {
 MaDatagridPagination.propTypes = {
     totalItems: React.PropTypes.number.isRequired,
     perPage: React.PropTypes.number.isRequired
+};
+
+MaDatagridPagination.contextTypes = {
+    router: React.PropTypes.func.isRequired
 };
 
 export default MaDatagridPagination;

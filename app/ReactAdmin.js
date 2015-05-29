@@ -44,7 +44,7 @@ class ReactAdmin extends React.Component {
         Pace.stop();
     }
 
-    componentWillMount() {
+    componentWillReceiveProps() {
         Router.run(routes, this.handleNavigation.bind(this));
     }
     handleNavigation(Handler) {

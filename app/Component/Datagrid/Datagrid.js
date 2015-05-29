@@ -101,7 +101,6 @@ class Datagrid extends React.Component {
                 <thead>
                     <tr>
                         {this.buildHeaders()}
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

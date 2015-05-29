@@ -79,6 +79,8 @@ class MaDatagridPagination extends React.Component {
             let prev = null;
             let next = null;
             let items = [];
+            let query = {
+            };
 
             if (page != 1) {
                 prev = <li><Link className="prev" to="list" params={{entity: entity}} query={{page: page - 1}}>« Prev</Link></li>

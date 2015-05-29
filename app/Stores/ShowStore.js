@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import objectAssign from 'object-assign';
+import PathUtils from 'react-router/lib/PathUtils';
 
 import AppDispatcher from '../Services/AppDispatcher';
 
@@ -27,6 +28,7 @@ class ShowStore extends EventEmitter {
         let dataStore = new DataStore();
         let readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
         let rawEntry, entry, nonOptimizedReferencedData, optimizedReferencedData;
+        let {sortDir, sortField} = PathUtils.extractQuery(window.location.hash) || {};
 
         readQueries
             .getOne(view.getEntity(), view.type, identifierValue, view.identifier(), view.getUrl())
@@ -74,7 +76,7 @@ class ShowStore extends EventEmitter {
             .then(() => {
                 var referencedLists = view.getReferencedLists();
 
-                return readQueries.getReferencedListData(referencedLists, '', 'ASC', entry.identifierValue);
+                return readQueries.getReferencedListData(referencedLists, sortField, sortDir, entry.identifierValue);
             })
             .then((referencedListData) => {
                 var referencedLists = view.getReferencedLists();

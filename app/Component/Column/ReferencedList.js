@@ -1,9 +1,11 @@
 import React from 'react';
 import Datagrid from '../Datagrid/Datagrid';
+import PathUtils from 'react-router/lib/PathUtils';
 
 class ReferencedList extends React.Component {
     render() {
         let {entries, field, entityName} = this.props;
+        let {sortDir, sortField} = PathUtils.extractQuery(window.location.hash) || {};
 
         return (
             <Datagrid
@@ -12,7 +14,10 @@ class ReferencedList extends React.Component {
                 actions={null}
                 listActions={[]}
                 fields={field.targetFields()}
-                entries={entries} />
+                entries={entries}
+                sortDir={sortDir}
+                sortField={sortField}
+                />
         );
     }
 }

@@ -28,6 +28,15 @@ class DashboardView extends React.Component {
         this.setState(DashboardStore.getState());
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.query.page !== this.props.query.page
+            || nextProps.query.sortField !== this.props.query.sortField
+            || nextProps.query.sortDir !== this.props.query.sortDir) {
+
+            this.refreshData();
+        }
+    }
+
     refreshData() {
         DashboardActions.loadPanels(this.props.configuration);
     }
@@ -41,8 +50,8 @@ class DashboardView extends React.Component {
             .forEach((panel, key) => {
                 label = panel.get('label');
                 view = panel.get('view');
-                sortDir = panel.get('sortDir');
-                sortField = panel.get('sortField');
+                sortDir = this.state.data.get('sortDir');
+                sortField = this.state.data.get('sortField');
                 dataStore = this.state.data.get('dataStore');
 
                 panelViews.push((

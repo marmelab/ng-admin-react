@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import AppDispatcher from '../Services/AppDispatcher';
+import PathUtils from 'react-router/lib/PathUtils'
 
 import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
@@ -23,6 +24,7 @@ class DashboardStore extends EventEmitter {
         this.data = this.data.update('pending', v => true);
         this.emitChange();
 
+        let {sortDir, sortField} = PathUtils.extractQuery(window.location.hash) || {};
         let dataStore = new DataStore();
         let dashboardViews = configuration.getViewsOfType('DashboardView');
         let panels = List();
@@ -32,11 +34,20 @@ class DashboardStore extends EventEmitter {
             view,
             entity,
             response,
-            entries;
+            entries,
+            dashboardSortField,
+            dashboardSortDir;
 
         for (i in dashboardViews) {
             view = dashboardViews[i];
             entity = view.getEntity();
+            dashboardSortField = null;
+            dashboardSortDir = null;
+
+            if (sortField && sortField.split('.')[0] === view.name()) {
+                dashboardSortField = sortField;
+                dashboardSortDir = sortDir;
+            }
 
             panels = panels.push(Map({
                 label: view.title() || entity.label(),
@@ -46,7 +57,9 @@ class DashboardStore extends EventEmitter {
                 sortField: view.sortField()
             }));
 
-            promises.push(readQueries.getAll(view, 1, [], view.sortField(), view.sortDir()));
+            console.log(dashboardSortField, dashboardSortDir);
+
+            promises.push(readQueries.getAll(view, 1, [], dashboardSortField, dashboardSortDir));
         }
 
         PromisesResolver.allEvenFailed(promises)
@@ -78,15 +91,10 @@ class DashboardStore extends EventEmitter {
                 this.data = this.data.update('panels', v => panels);
                 this.data = this.data.update('dataStore', v => dataStore);
                 this.data = this.data.update('pending', v => false);
+                this.data = this.data.update('sortDir', v => sortDir);
+                this.data = this.data.update('sortField', v => sortField);
                 this.emitChange();
             }, this);
-    }
-
-    sort(args) {
-        this.data = this.data.update('sortDir', v => args.sortDir);
-        this.data = this.data.update('sortField', v => args.sortField);
-
-        return this.loadData(args.configuration, args.view, this.data.get('page'));
     }
 
     getState() {
@@ -112,9 +120,6 @@ AppDispatcher.register((action) => {
   switch(action.actionType) {
     case 'load_panels':
       store.loadPanels(action.configuration);
-      break;
-    case 'sort_panel':
-      store.sort(action.args);
       break;
   }
 });

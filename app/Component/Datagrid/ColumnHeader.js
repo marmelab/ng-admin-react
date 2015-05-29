@@ -5,7 +5,7 @@ class ColumnHeader extends React.Component {
     render() {
         let params = this.context.router.getCurrentParams();
         let routes = this.context.router.getCurrentRoutes();
-        let query = this.context.router.getCurrentQuery();
+        let currentQuery = this.context.router.getCurrentQuery();
         let route = routes[routes.length - 1];
         let sort = null;
 
@@ -13,10 +13,14 @@ class ColumnHeader extends React.Component {
             sort = <span className={'sorted sorted-' + this.props.sort.toLowerCase()}></span>
         }
 
-        let query = Object.assign(query, {
+        let query = {
             sortField: this.props.name + '.' + this.props.fieldName,
             sortDir: this.props.sort === 'ASC' ? 'DESC' : 'ASC'
-        });
+        };
+
+        if (currentQuery.page) {
+            query.page = currentQuery.page;
+        }
 
         return (
             <th key={this.props.fieldName}>

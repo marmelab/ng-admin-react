@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import objectAssign from 'object-assign';
-import PathUtils from 'react-router/lib/PathUtils';
 
 import AppDispatcher from '../Services/AppDispatcher';
 
@@ -21,14 +20,13 @@ class ShowStore extends EventEmitter {
         });
     }
 
-    loadData(configuration, view, identifierValue) {
+    loadData(configuration, view, identifierValue, sortField, sortDir) {
         this.data = this.data.update('pending', v => true);
         this.emitChange();
 
         let dataStore = new DataStore();
         let readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
         let rawEntry, entry, nonOptimizedReferencedData, optimizedReferencedData;
-        let {sortDir, sortField} = PathUtils.extractQuery(window.location.hash) || {};
 
         readQueries
             .getOne(view.getEntity(), view.type, identifierValue, view.identifier(), view.getUrl())
@@ -135,7 +133,7 @@ let store = new ShowStore();
 AppDispatcher.register((action) => {
     switch(action.actionType) {
         case 'load_show_data':
-            store.loadData(action.configuration, action.view, action.id);
+            store.loadData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
     }
 });

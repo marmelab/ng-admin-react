@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import AppDispatcher from '../Services/AppDispatcher';
-import PathUtils from 'react-router/lib/PathUtils'
 
 import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
@@ -20,11 +19,10 @@ class DashboardStore extends EventEmitter {
         });
     }
 
-    loadPanels(configuration) {
+    loadPanels(configuration, sortField, sortDir) {
         this.data = this.data.update('pending', v => true);
         this.emitChange();
 
-        let {sortDir, sortField} = PathUtils.extractQuery(window.location.hash) || {};
         let dataStore = new DataStore();
         let dashboardViews = configuration.getViewsOfType('DashboardView');
         let panels = List();
@@ -56,8 +54,6 @@ class DashboardStore extends EventEmitter {
                 sortDir: view.sortDir(),
                 sortField: view.sortField()
             }));
-
-            console.log(dashboardSortField, dashboardSortDir);
 
             promises.push(readQueries.getAll(view, 1, [], dashboardSortField, dashboardSortDir));
         }
@@ -119,7 +115,7 @@ let store = new DashboardStore();
 AppDispatcher.register((action) => {
   switch(action.actionType) {
     case 'load_panels':
-      store.loadPanels(action.configuration);
+      store.loadPanels(action.configuration, action.sortField, action.sortDir);
       break;
   }
 });

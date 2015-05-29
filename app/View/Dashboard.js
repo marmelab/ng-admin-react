@@ -38,7 +38,9 @@ class DashboardView extends React.Component {
     }
 
     refreshData() {
-        DashboardActions.loadPanels(this.props.configuration);
+        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+
+        DashboardActions.loadPanels(this.props.configuration, sortField, sortDir);
     }
 
     buildPanels(panels, odd=true) {

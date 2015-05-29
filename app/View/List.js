@@ -47,9 +47,9 @@ class ListView extends React.Component {
     }
 
     refreshData() {
-        let {page} = this.context.router.getCurrentQuery();
+        let {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        ListActions.loadData(this.props.configuration, this.getView(), page);
+        ListActions.loadData(this.props.configuration, this.getView(), page, sortField, sortDir);
     }
 
     buildPagination(view) {

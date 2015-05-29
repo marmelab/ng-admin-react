@@ -1,10 +1,12 @@
 import AppDispatcher from '../Services/AppDispatcher';
 
 export default {
-    loadPanels(configuration) {
+    loadPanels(configuration, sortField, sortDir) {
         AppDispatcher.dispatch({
             actionType: 'load_panels',
-            configuration: configuration
+            configuration: configuration,
+            sortField: sortField,
+            sortDir: sortDir
         });
     }
 };

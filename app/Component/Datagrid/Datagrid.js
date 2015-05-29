@@ -116,7 +116,6 @@ Datagrid.propTypes = {
     name: React.PropTypes.string.isRequired,
     entityName: React.PropTypes.string.isRequired,
     configuration: React.PropTypes.object.isRequired,
-    actions: React.PropTypes.object.isRequired,
     listActions: React.PropTypes.object.isRequired,
     fields: React.PropTypes.array.isRequired,
     entries: React.PropTypes.array.isRequired,

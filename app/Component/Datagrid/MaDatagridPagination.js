@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from 'react-router';
-import objectAssign from 'object-assign';
 
 class MaDatagridPagination extends React.Component {
     componentDidMount() {

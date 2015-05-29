@@ -69,10 +69,11 @@ class ListView extends React.Component {
         let sortField = this.state.data.get('sortField');
         let dataStore = this.state.data.get('dataStore');
         let entries = dataStore.getEntries(view.entity.uniqueId);
+        let actions = view.actions() || ['create'];
 
         return (
             <div className="view list-view">
-                <ViewActions entityName={view.entity.name()} buttons={['create']} />
+                <ViewActions entityName={view.entity.name()} buttons={actions} />
 
                 <div className="page-header">
                     <h1>{view.title() || entityName + " list"}</h1>

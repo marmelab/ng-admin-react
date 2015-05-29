@@ -39,7 +39,7 @@ describe('Datagrid', () => {
     });
 
     describe('Column headers', () => {
-        it('should set header with correct label for each field, plus an empty header for actions', () => {
+        it('should set header with correct label for each field', () => {
             var fields = {
                 'id': { label: () => '#', name: () => 'id' },
                 'title': { label: () => 'Title', name: () => 'title' },
@@ -50,7 +50,7 @@ describe('Datagrid', () => {
             datagrid = React.findDOMNode(datagrid);
 
             var headers = [].slice.call(datagrid.querySelectorAll('thead th')).map(h => h.textContent);
-            expect(headers).toEqual(['#', 'Title', 'Creation date', '']);
+            expect(headers).toEqual(['#', 'Title', 'Creation date']);
         });
 
         it('should send `sort` event to datagrid when clicking on header', () => {

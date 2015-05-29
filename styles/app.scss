@@ -19,8 +19,17 @@ a {
     margin: 0;
 
     h1 {
+        font-weight: normal;
         margin: 0;
         @extend .navbar-brand;
+
+        a {
+            color: #777;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
     }
 }
 
@@ -66,6 +75,10 @@ a {
         a {
             padding-left: 37px;
         }
+    }
+
+    .sidebar-nav {
+        padding: 0;
     }
 }
 
@@ -149,6 +162,10 @@ a {
 .ma-view-actions {
     margin: 25px 0 15px 0;
     float: right;
+
+    a {
+        margin-left: 5px;
+    }
 }
 
 .pagination-bar {

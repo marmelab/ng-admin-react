@@ -5,7 +5,7 @@ import PathUtils from 'react-router/lib/PathUtils';
 class ReferencedList extends React.Component {
     render() {
         let {entries, field, entityName} = this.props;
-        let {sortDir, sortField} = PathUtils.extractQuery(window.location.hash) || {};
+        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         return (
             <Datagrid
@@ -26,6 +26,10 @@ ReferencedList.propTypes = {
     entityName: React.PropTypes.string.isRequired,
     entries: React.PropTypes.array.isRequired,
     field: React.PropTypes.object.isRequired
+};
+
+ReferencedList.contextTypes = {
+    router: React.PropTypes.func.isRequired
 };
 
 export default ReferencedList;

@@ -95,4 +95,8 @@ ShowFields.propTypes = {
     dataStore: React.PropTypes.object.isRequired
 };
 
+ShowFields.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
+
 export default ShowFields;

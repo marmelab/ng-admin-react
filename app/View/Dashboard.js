@@ -29,8 +29,7 @@ class DashboardView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.query.page !== this.props.query.page
-            || nextProps.query.sortField !== this.props.query.sortField
+        if (nextProps.query.sortField !== this.props.query.sortField
             || nextProps.query.sortDir !== this.props.query.sortDir) {
 
             this.refreshData();
@@ -101,11 +100,11 @@ class DashboardView extends React.Component {
     }
 }
 
-DashboardView.contextTypes = {
-    router: React.PropTypes.func.isRequired
-};
 DashboardView.propTypes = {
     configuration: React.PropTypes.object.isRequired
+};
+DashboardView.contextTypes = {
+    router: React.PropTypes.func.isRequired
 };
 
 export default DashboardView;

@@ -111,17 +111,14 @@
                 .title('Comments')
                 .perPage(10) // limit the number of elements displayed per page. Default is 30.
                 .fields([
-                    nga.field('created_at', 'date')
-                        .label('Posted')
-                        .order(1),
-                    nga.field('body').map(truncate).order(3),
+                    nga.field('created_at', 'date').label('Posted'),
+                    nga.field('body').map(truncate),
                     nga.field('post_id', 'reference')
                         .label('Post')
                         .map(truncate)
                         .targetEntity(post)
-                        .targetField(nga.field('title').map(truncate))
-                        .order(4),
-                    nga.field('author').order(2)
+                        .targetField(nga.field('title').map(truncate)),
+                    nga.field('author')
                 ])
                 .filters([
                     nga.field('q', 'string').label('').attributes({'placeholder': 'Global Search'}),

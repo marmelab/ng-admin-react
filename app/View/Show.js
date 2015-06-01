@@ -52,8 +52,6 @@ class ShowView extends React.Component {
     }
 
     render() {
-        if (this.state.data.get('pending')) return null;
-
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity,
             view = this.getView(),

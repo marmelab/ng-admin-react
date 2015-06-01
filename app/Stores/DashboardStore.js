@@ -13,14 +13,12 @@ class DashboardStore extends EventEmitter {
         super(...args);
 
         this.data = Map({
-            pending: true,
             panels: null,
-            dataStore: null
+            dataStore: new DataStore()
         });
     }
 
     loadPanels(configuration, sortField, sortDir) {
-        this.data = this.data.update('pending', v => true);
         this.emitChange();
 
         let dataStore = new DataStore();
@@ -86,7 +84,6 @@ class DashboardStore extends EventEmitter {
 
                 this.data = this.data.update('panels', v => panels);
                 this.data = this.data.update('dataStore', v => dataStore);
-                this.data = this.data.update('pending', v => false);
                 this.data = this.data.update('sortDir', v => sortDir);
                 this.data = this.data.update('sortField', v => sortField);
                 this.emitChange();

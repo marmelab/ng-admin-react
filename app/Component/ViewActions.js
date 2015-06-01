@@ -8,23 +8,35 @@ import MaListButton from './Button/MaListButton';
 
 class ViewActions extends React.Component {
     render() {
-        let {size, entityName, buttons} = this.props;
+        let {size, entityName, buttons, entry} = this.props;
         let results;
+        let i = 0;
 
         results = buttons.map(button => {
             switch (button) {
                 case 'create':
-                    return <MaCreateButton entityName={entityName} size={size} />;
+                    return <MaCreateButton key={i++} entityName={entityName} size={size} />;
                 case 'show':
-                    return <MaShowButton entityName={entityName} entry={this.props.entry} size={size} />;
+                    if (!entry) {
+                        return <div key={i++} />;
+                    }
+
+                    return <MaShowButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 case 'back':
-                    return <MaBackButton size={size} />;
+                    return <MaBackButton key={i++} size={size} />;
                 case 'list':
-                    return <MaListButton entityName={entityName} size={size} />;
+                    return <MaListButton key={i++} entityName={entityName} size={size} />;
                 case 'edit':
-                    return <MaEditButton entityName={entityName} entry={this.props.entry} size={size} />;
+                    if (!entry) {
+                        return <div key={i++} />;
+                    }
+                    return <MaEditButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 case 'delete':
-                    return <MaDeleteButton entityName={entityName} entry={this.props.entry} size={size} />;
+                    if (!entry) {
+                        return <div key={i++} />;
+                    }
+
+                    return <MaDeleteButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 default:
                     return React.createElement(button);
             }

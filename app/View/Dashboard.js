@@ -56,9 +56,8 @@ class DashboardView extends React.Component {
                 dataStore = this.state.data.get('dataStore');
 
                 panelViews.push((
-                    <div className="panel panel-default">
+                    <div key={key} className="panel panel-default">
                         <DashboardPanel
-                            router={this.context.router}
                             configuration={this.props.configuration}
                             label={label}
                             view={view}
@@ -73,9 +72,7 @@ class DashboardView extends React.Component {
     }
 
     render() {
-        if (this.state.data.get('pending')) return null;
-
-        let panels = this.state.data.get('panels');
+        let panels = this.state.data.get('panels') || [];
 
         return (
             <div className="view dashboard-view">

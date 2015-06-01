@@ -61,9 +61,11 @@ class MenuItem extends React.Component {
             let containerClass = 'nav nav-second-level collapsible ' + (!this.isOpen(menu) ? 'collapsed' : '');
             let children = menu.children();
             let childrenElements = [];
+            let child;
 
             for (let i in children) {
-                childrenElements.push(<MenuItem menu={children[i]} />);
+                child = children[i];
+                childrenElements.push(<MenuItem key={child.uuid} menu={child} />);
             }
 
             childrenContainer = <ul className={containerClass}>

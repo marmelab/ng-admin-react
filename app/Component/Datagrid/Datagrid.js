@@ -20,6 +20,7 @@ class Datagrid extends React.Component {
 
             headers.push(
                 <Header
+                    key={i}
                     configuration={this.props.configuration}
                     sort={sort}
                     name={this.props.name}
@@ -30,7 +31,7 @@ class Datagrid extends React.Component {
 
         // List actions
         if (listActions && listActions.length) {
-            headers.push(<th>Actions</th>);
+            headers.push(<th key={'actions'}>Actions</th>);
         }
 
         return headers;
@@ -58,7 +59,7 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'boolean':
-                    renderedField = <BooleanColumn value={row.values[fieldName]} />;
+                    renderedField = <BooleanColumn  value={row.values[fieldName]} />;
                     break;
 
                 case 'date':
@@ -89,7 +90,9 @@ class Datagrid extends React.Component {
         }
 
         if (actions && actions.length) {
-            cells.push(<td><DatagridActions entityName={entityName} listActions={actions} entry={row} size={'xs'} /></td>);
+            cells.push(<td key={'datagrid-actions'}>
+                <DatagridActions entityName={entityName} listActions={actions} entry={row} size={'xs'} />
+            </td>);
         }
 
         return cells;
@@ -115,11 +118,11 @@ Datagrid.propTypes = {
     name: React.PropTypes.string.isRequired,
     entityName: React.PropTypes.string.isRequired,
     configuration: React.PropTypes.object.isRequired,
-    listActions: React.PropTypes.object.isRequired,
+    listActions: React.PropTypes.array.isRequired,
     fields: React.PropTypes.array.isRequired,
     entries: React.PropTypes.array.isRequired,
-    sortDir: React.PropTypes.string.isRequired,
-    sortField: React.PropTypes.string.isRequired
+    sortDir: React.PropTypes.string,
+    sortField: React.PropTypes.string
 };
 
 Datagrid.contextTypes = {

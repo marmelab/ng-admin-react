@@ -7,15 +7,16 @@ class DatagridActions extends React.Component {
     render() {
         let {size, entityName, listActions} = this.props;
         let buttons;
+        let i = 0;
 
         buttons = listActions.map(button => {
             switch (button) {
                 case 'show':
-                    return <MaShowButton entityName={entityName} entry={this.props.entry} size={size} />;
+                    return <MaShowButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
                 case 'edit':
-                    return <MaEditButton entityName={entityName} entry={this.props.entry} size={size} />;
+                    return <MaEditButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
                 case 'delete':
-                    return <MaDeleteButton entityName={entityName} entry={this.props.entry} size={size} />;
+                    return <MaDeleteButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
                 default:
                     return React.createElement(button)
             }

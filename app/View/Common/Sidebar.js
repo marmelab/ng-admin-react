@@ -4,7 +4,7 @@ import MenuItem from './MenuItem.js';
 class Sidebar extends React.Component {
     render() {
         var menuViews = this.props.menuViews.children()
-            .map(menu => <MenuItem menu={menu} />);
+            .map((menu, i) => <MenuItem key={i} menu={menu} />);
 
         return (
             <div className="navbar-default sidebar" role="navigation">

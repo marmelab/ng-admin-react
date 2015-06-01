@@ -44,7 +44,7 @@ class ListStore extends EventEmitter {
             .then((response) => {
                 rawEntries = response.data;
 
-                this.data = this.data.update('totalItems', v => response.totalItems);
+                this.data = this.data.update('totalItems', v => +response.totalItems);
 
                 return rawEntries;
             }, this)

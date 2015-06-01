@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 import Inflector from 'inflected'
 import Datagrid from '../Component/Datagrid/Datagrid';

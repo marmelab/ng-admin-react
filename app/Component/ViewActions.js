@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 import MaBackButton from './Button/MaBackButton';
 import MaCreateButton from './Button/MaCreateButton';
@@ -11,6 +13,13 @@ class ViewActions extends React.Component {
         let {size, entityName, buttons, entry} = this.props;
         let results;
         let i = 0;
+
+        let templateParams = {entityName: entityName, entry: entry, factory: 'createElement'};
+
+        // Direct template
+        if (typeof (listActions) === 'string') {
+            return eval(jsx.fromString(buttons, templateParams));
+        }
 
         results = buttons.map(button => {
             switch (button) {
@@ -38,7 +47,7 @@ class ViewActions extends React.Component {
 
                     return <MaDeleteButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 default:
-                    return React.createElement(button);
+                    return eval(jsx.fromString(button, templateParams));
             }
         });
 

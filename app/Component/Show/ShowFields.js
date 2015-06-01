@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 
 import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, ReferencedList, TemplateColumn, JsonColumn } from '../Column';

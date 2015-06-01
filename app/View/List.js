@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 

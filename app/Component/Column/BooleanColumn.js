@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 
 class BooleanColumn extends React.Component {

@@ -1,3 +1,5 @@
+'use strict';
+
 import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import AppDispatcher from '../Services/AppDispatcher';

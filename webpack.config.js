@@ -17,8 +17,8 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.js?$/, loaders: ['react-hot', 'babel?stage=1&optional[]=runtime'], exclude: /node_modules/ },
-            { test: /\.js$/, loader: 'babel?stage=1&optional[]=runtime', exclude: /node_modules\/(?!admin-config)/ },
+            { test: /\.js?$/, loaders: ['react-hot', 'babel?stage=1&optional[]=runtime&blacklist=useStrict'], exclude: /node_modules/ },
+            { test: /\.js$/, loader: 'babel?stage=1&optional[]=runtime&blacklist=useStrict', exclude: /node_modules\/(?!admin-config)/ },
             { test: /react-router\/.*\.js$/, loader: 'babel'},
             {
                 test: /\.scss|\.css$/,
@@ -30,5 +30,8 @@ module.exports = {
     },
     plugins: [
         new webpack.NoErrorsPlugin()
-    ]
+    ],
+    node: {
+        fs: "empty"
+    }
 };

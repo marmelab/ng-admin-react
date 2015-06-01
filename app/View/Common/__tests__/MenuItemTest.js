@@ -15,8 +15,10 @@ function getMenuItem(menu) {
 
 function getMenu(title, link, children, icon, isActive, isChildActive) {
     children = children || [];
+    let uuid =  Math.random();
 
     return {
+        uuid: uuid,
         title: () => title,
         isActive: () => isActive,
         isChildActive: () => isChildActive,

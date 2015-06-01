@@ -40,11 +40,11 @@ describe('Datagrid', () => {
 
     describe('Column headers', () => {
         it('should set header with correct label for each field', () => {
-            var fields = {
-                'id': { label: () => '#', name: () => 'id' },
-                'title': { label: () => 'Title', name: () => 'title' },
-                'created_at': { label: () => 'Creation date', name: () => 'created_at' }
-            };
+            var fields = [
+                { label: () => '#', name: () => 'id' },
+                { label: () => 'Title', name: () => 'title' },
+                { label: () => 'Creation date', name: () => 'created_at' }
+            ];
 
             var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
             datagrid = React.findDOMNode(datagrid);
@@ -54,9 +54,7 @@ describe('Datagrid', () => {
         });
 
         it('should send `sort` event to datagrid when clicking on header', () => {
-            var fields = {
-                'id': { label: () => '#', name: () => 'id' }
-            };
+            var fields = [{ label: () => '#', name: () => 'id' }];
 
             var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
             var datagridNode = React.findDOMNode(datagrid);

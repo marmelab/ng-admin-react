@@ -1,12 +1,17 @@
+/* global jest,describe,it,beforeEach,expect */
+
 jest.autoMockOff();
-jest.setMock('../../../Actions/ListActions', require('../../../Actions/__mocks__/ListActions'));
 jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Datagrid = require('../Datagrid');
 var routerWrapper = require('../../../Test/RouterWrapper');
+var ListView = require('admin-config/lib/View/ListView');
 var Entry = require('admin-config/lib/Entry');
+var NumberField = require('admin-config/lib/Field/NumberField');
+var Field = require('admin-config/lib/Field/Field');
+var DateField = require('admin-config/lib/Field/DateField');
 
 function getDatagrid(name, entityName, fields, view, router, entries, sortDir, sortField) {
     return routerWrapper(() => <Datagrid
@@ -18,34 +23,31 @@ function getDatagrid(name, entityName, fields, view, router, entries, sortDir, s
         entries={entries}
         sortDir={sortDir}
         sortField={sortField}
-        listActions={[]}/>
+        listActions={view.listActions()}/>
     );
 }
 
 describe('Datagrid', () => {
     var view;
     var router;
+    var fields;
 
     beforeEach(() => {
-        view = {
-            listActions: () => [],
-            perPage: () => 10,
-            name: () => 'myView'
-        };
+        view = new ListView('myView');
 
         router = {
             getCurrentQuery: () => 1
         };
+
+        fields = [
+            new NumberField('id').label('#'),
+            new Field('title').label('Title'),
+            new DateField('created_at').label('Creation date')
+        ];
     });
 
     describe('Column headers', () => {
         it('should set header with correct label for each field', () => {
-            var fields = [
-                { label: () => '#', name: () => 'id' },
-                { label: () => 'Title', name: () => 'title' },
-                { label: () => 'Creation date', name: () => 'created_at' }
-            ];
-
             var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
             datagrid = React.findDOMNode(datagrid);
 
@@ -54,8 +56,6 @@ describe('Datagrid', () => {
         });
 
         it('should send `sort` event to datagrid when clicking on header', () => {
-            var fields = [{ label: () => '#', name: () => 'id' }];
-
             var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
             var datagridNode = React.findDOMNode(datagrid);
             var header = datagridNode.querySelector('thead th a');
@@ -66,23 +66,42 @@ describe('Datagrid', () => {
     });
 
     describe('Datagrid entries', () => {
-        it('should set rows with correct value for each field, plus action buttons', () => {
-            var fields = [
-                { label: () => '#', name: () => 'id' },
-                { label: () => 'Title', name: () => 'title' },
-                { label: () => 'Creation date', name: () => 'created_at' }
-            ];
-
+        it('should set rows with correct values for each field', () => {
             var entries = [
                 new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1),
                 new Entry('posts', { 'id': 2, 'title': 'Second Post', 'created_at': '2015-05-28' }, 2),
                 new Entry('posts', { 'id': 3, 'title': 'Third Post', 'created_at': '2015-05-29' }, 3)
             ];
 
-            var ListActions = require('../../../Actions/ListActions');
-
             var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries);
-            datagrid = React.findDOMNode(datagrid);
+            var datagridNode = React.findDOMNode(datagrid);
+            var rows = datagridNode.querySelectorAll('tbody tr');
+
+            expect(rows.length).toEqual(3);
+            expect(rows[0].childNodes.length).toEqual(3);
+            expect(rows[0].childNodes[1].textContent).toEqual('First Post');
+            expect(rows[2].childNodes[2].textContent).toEqual('2015-05-29');
+        });
+
+         it('should set rows with correct values, plus action buttons', () => {
+            var entries = [
+                new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1)
+            ];
+
+            var viewWithActions = new ListView('myView');
+            viewWithActions.listActions(['edit']);
+
+            var datagrid = getDatagrid('myView', 'myEntity', fields, viewWithActions, router, entries);
+            var datagridNode = React.findDOMNode(datagrid);
+            var cells = datagridNode.querySelectorAll('tbody tr td');
+
+            expect(cells.length).toEqual(4);
+            expect(cells[3].textContent).toContain('Edit');
+
+            var edit = cells[3].querySelector('a');
+            TestUtils.Simulate.click(edit);
+
+            expect(edit.attributes['data-click-to'].value).toEqual('edit');
         });
     });
 });

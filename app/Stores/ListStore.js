@@ -77,17 +77,17 @@ class ListStore extends EventEmitter {
             })
             .then(() => {
                 this.data = this.data.update('dataStore', v => {
-                    let entries = dataStore.mapEntries(entity.name(), view.identifier(), view.getFields(), rawEntries);
+                    let entries = v.mapEntries(entity.name(), view.identifier(), view.getFields(), rawEntries);
 
                     // shortcut to diplay collection of entry with included referenced values
-                    dataStore.fillReferencesValuesFromCollection(entries, view.getReferences(), true);
+                    v.fillReferencesValuesFromCollection(entries, view.getReferences(), true);
 
-                    dataStore.setEntries(
+                    v.setEntries(
                         entity.uniqueId,
                         entries
                     );
 
-                    return dataStore;
+                    return v;
                 });
                 this.emitChange();
             }, this);

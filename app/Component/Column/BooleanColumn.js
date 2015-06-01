@@ -10,7 +10,7 @@ class BooleanColumn extends React.Component {
 }
 
 BooleanColumn.propTypes = {
-    value: React.PropTypes.string.isRequired
+    value: React.PropTypes.bool.isRequired
 };
 
 export default BooleanColumn;

@@ -10,8 +10,8 @@ class ReferenceManyColumn extends React.Component {
 
         return (
             <span className="reference-many-column">
-                {values.map((value) => (
-                    <span className="label label-default">{value}</span>
+                {values.map((value, i) => (
+                    <span key={i} className="label label-default">{value}</span>
                 ))}
             </span>
         );

@@ -26,7 +26,7 @@ class ShowFields extends React.Component {
                     break;
 
                 case 'json':
-                    renderedField = <JsonColumn value={content} />;
+                    renderedField = <JsonColumn value={content || {}} />;
                     break;
 
                 case 'boolean':
@@ -78,12 +78,15 @@ class ShowFields extends React.Component {
 
     render() {
         let view = this.props.view,
-            entry = this.props.dataStore.getFirstEntry(view.getEntity().uniqueId),
-            showFields = this.buildFields(entry);
+            entry = this.props.dataStore.getFirstEntry(view.getEntity().uniqueId);
+
+        if (!entry) {
+            return <div />;
+        }
 
         return (
             <div>
-                {showFields}
+                {this.buildFields(entry)}
             </div>
         );
     }

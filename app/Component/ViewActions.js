@@ -8,7 +8,7 @@ import MaListButton from './Button/MaListButton';
 
 class ViewActions extends React.Component {
     render() {
-        let {size, entityName, buttons} = this.props;
+        let {size, entityName, buttons, entry} = this.props;
         let results;
         let i = 0;
 
@@ -17,15 +17,26 @@ class ViewActions extends React.Component {
                 case 'create':
                     return <MaCreateButton key={i++} entityName={entityName} size={size} />;
                 case 'show':
-                    return <MaShowButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
+                    if (!entry) {
+                        return <div key={i++} />;
+                    }
+
+                    return <MaShowButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 case 'back':
                     return <MaBackButton key={i++} size={size} />;
                 case 'list':
                     return <MaListButton key={i++} entityName={entityName} size={size} />;
                 case 'edit':
-                    return <MaEditButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
+                    if (!entry) {
+                        return <div key={i++} />;
+                    }
+                    return <MaEditButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 case 'delete':
-                    return <MaDeleteButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
+                    if (!entry) {
+                        return <div key={i++} />;
+                    }
+
+                    return <MaDeleteButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 default:
                     return React.createElement(button);
             }

@@ -59,7 +59,7 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'boolean':
-                    renderedField = <BooleanColumn  value={row.values[fieldName]} />;
+                    renderedField = <BooleanColumn value={!!row.values[fieldName]} />;
                     break;
 
                 case 'date':
@@ -117,7 +117,7 @@ class Datagrid extends React.Component {
 Datagrid.propTypes = {
     name: React.PropTypes.string.isRequired,
     entityName: React.PropTypes.string.isRequired,
-    configuration: React.PropTypes.object.isRequired,
+    configuration: React.PropTypes.object,
     listActions: React.PropTypes.array.isRequired,
     fields: React.PropTypes.array.isRequired,
     entries: React.PropTypes.array.isRequired,

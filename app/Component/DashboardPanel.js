@@ -26,6 +26,7 @@ class DashboardPanel extends React.Component {
                     entries={entries}
                     sortDir={this.props.sortDir}
                     sortField={this.props.sortField}
+                    listActions={[]}
                     />
             </div>
         );
@@ -33,13 +34,12 @@ class DashboardPanel extends React.Component {
 }
 
 DashboardPanel.propTypes = {
-    router: React.PropTypes.object.isRequired,
     configuration: React.PropTypes.object.isRequired,
     view: React.PropTypes.object.isRequired,
     label: React.PropTypes.string.isRequired,
     dataStore: React.PropTypes.object.isRequired,
-    sortDir: React.PropTypes.string.isRequired,
-    sortField: React.PropTypes.string.isRequired
+    sortDir: React.PropTypes.string,
+    sortField: React.PropTypes.string
 };
 
 export default DashboardPanel;

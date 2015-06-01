@@ -15,13 +15,11 @@ class ShowStore extends EventEmitter {
         super(...args);
 
         this.data = Map({
-            pending: true,
-            dataStore: List()
+            dataStore: new DataStore()
         });
     }
 
     loadData(configuration, view, identifierValue, sortField, sortDir) {
-        this.data = this.data.update('pending', v => true);
         this.emitChange();
 
         let dataStore = new DataStore();
@@ -106,7 +104,6 @@ class ShowStore extends EventEmitter {
             })
             .then(() => {
                 this.data = this.data.update('dataStore', v => dataStore);
-                this.data = this.data.update('pending', v => false);
                 this.emitChange();
             }, this);
     }

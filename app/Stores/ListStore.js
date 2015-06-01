@@ -15,10 +15,9 @@ class ListStore extends EventEmitter {
         super(...args);
 
         this.data = Map({
-            pending: true,
             totalItems: 0,
             page: 1,
-            dataStore: List(),
+            dataStore: new DataStore(),
             sortDir: null,
             sortField: null
         });
@@ -27,7 +26,6 @@ class ListStore extends EventEmitter {
     loadData(configuration, view, page, sortField, sortDir) {
         page = page || 1;
 
-        this.data = this.data.update('pending', v => true);
         this.data = this.data.update('page', v => page);
         this.data = this.data.update('sortField', v => sortField);
         this.data = this.data.update('sortDir', v => sortDir);
@@ -91,7 +89,6 @@ class ListStore extends EventEmitter {
 
                     return dataStore;
                 });
-                this.data = this.data.update('pending', v => false);
                 this.emitChange();
             }, this);
     }

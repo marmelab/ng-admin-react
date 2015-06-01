@@ -62,8 +62,6 @@ class ListView extends React.Component {
     }
 
     render() {
-        if (this.state.data.get('pending')) return null;
-
         let configuration = this.props.configuration;
         let entityName = this.context.router.getCurrentParams().entity;
         let view = this.getView(entityName);

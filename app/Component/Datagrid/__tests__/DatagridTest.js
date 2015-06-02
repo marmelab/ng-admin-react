@@ -7,6 +7,7 @@ var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Datagrid = require('../Datagrid');
 var routerWrapper = require('../../../Test/RouterWrapper');
+
 var ListView = require('admin-config/lib/View/ListView');
 var Entry = require('admin-config/lib/Entry');
 var NumberField = require('admin-config/lib/Field/NumberField');
@@ -88,20 +89,14 @@ describe('Datagrid', () => {
                 new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1)
             ];
 
-            var viewWithActions = new ListView('myView');
-            viewWithActions.listActions(['edit']);
+            view = view.listActions(['edit']);
 
-            var datagrid = getDatagrid('myView', 'myEntity', fields, viewWithActions, router, entries);
+            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries);
             var datagridNode = React.findDOMNode(datagrid);
             var cells = datagridNode.querySelectorAll('tbody tr td');
 
             expect(cells.length).toEqual(4);
             expect(cells[3].textContent).toContain('Edit');
-
-            var edit = cells[3].querySelector('a');
-            TestUtils.Simulate.click(edit);
-
-            expect(edit.attributes['data-click-to'].value).toEqual('edit');
         });
     });
 });

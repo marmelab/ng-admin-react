@@ -57,7 +57,7 @@ class MenuItem extends React.Component {
         let arrow = hasChild ? <span className={arrowClass}></span> : null;
 
         // Children
-        if (menu.hasChild()) {
+        if (hasChild) {
             let containerClass = 'nav nav-second-level collapsible ' + (!this.isOpen(menu) ? 'collapsed' : '');
             let children = menu.children();
             let childrenElements = [];

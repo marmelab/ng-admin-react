@@ -34,7 +34,7 @@ class DashboardPanel extends React.Component {
 }
 
 DashboardPanel.propTypes = {
-    configuration: React.PropTypes.object.isRequired,
+    configuration: React.PropTypes.object,
     view: React.PropTypes.object.isRequired,
     label: React.PropTypes.string.isRequired,
     dataStore: React.PropTypes.object.isRequired,

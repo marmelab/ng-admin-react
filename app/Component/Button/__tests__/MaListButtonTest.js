@@ -12,12 +12,19 @@ describe('MaListButton', () => {
     });
 
     describe('With good props', () => {
-        it('Should display label and size', () => {
+        it('Should display label', () => {
+            var listButton = TestUtils.renderIntoDocument(<MaListButton entityName={'MyEntity'} label={'Hello'} />);
+            listButton = React.findDOMNode(listButton);
+
+            expect(listButton.className).toContain('btn btn-default');
+            expect(listButton.innerHTML).toContain('Hello');
+        });
+
+        it('Should display size', () => {
             var listButton = TestUtils.renderIntoDocument(<MaListButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
             listButton = React.findDOMNode(listButton);
 
-            expect(listButton.className).toContain('btn btn-default btn-xs');
-            expect(listButton.innerHTML).toContain('Hello');
+            expect(listButton.className).toEqual('btn btn-default btn-xs');
         });
 
         it('Should redirect to the create route', () => {

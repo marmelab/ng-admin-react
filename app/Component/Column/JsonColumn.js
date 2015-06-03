@@ -25,19 +25,18 @@ class JsonColumn extends React.Component {
     render() {
         let value = this.props.value;
         let type = this.guessType(value);
-        let getSubContent = this.getSubContent.bind(this);
         let result = null;
         let rows;
 
         switch (type) {
             case 'Array':
-                rows = value.map((subValue) => getSubContent(subValue));
+                rows = value.map((subValue) => this.getSubContent(subValue));
 
                 result = <table className="table table-condensed"><tbody>{rows}</tbody></table>;
                 break;
 
             case 'Object':
-                rows = Object.keys(value).map((key) => getSubContent(value[key], key));
+                rows = Object.keys(value).map((key) => this.getSubContent(value[key], key));
 
                 result = <table className="table table-condensed table-bordered"><tbody>{rows}</tbody></table>;
                 break;

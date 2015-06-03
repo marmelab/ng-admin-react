@@ -17,11 +17,11 @@ describe('MaShowButton', () => {
     });
 
     describe('With good props', () => {
-        it('Should display label and size', () => {
+        it('Should display label and default size', () => {
             var showButton = TestUtils.renderIntoDocument(<MaShowButton entityName={'MyEntity'} entry={entry} label={'Show'} size={'xs'} />);
             showButton = React.findDOMNode(showButton);
 
-            expect(showButton.className).toContain('btn btn-default btn-xs');
+            expect(showButton.className).toEqual('btn btn-default btn-xs');
             expect(showButton.innerHTML).toContain('Show');
         });
 

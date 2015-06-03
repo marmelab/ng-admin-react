@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import Inflector from 'inflected'
 import ViewActions from '../Component/ViewActions';

@@ -1,5 +1,3 @@
-'use strict';
-
 import Restful from 'restful.js';
 
 class RestWrapper {

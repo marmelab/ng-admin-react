@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import Compile from '../Compile';
 import MaShowButton from '../Button/MaShowButton';

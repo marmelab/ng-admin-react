@@ -1,5 +1,3 @@
-'use strict';
-
 import AppDispatcher from '../Services/AppDispatcher';
 
 export default {

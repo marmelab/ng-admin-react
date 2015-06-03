@@ -1,5 +1,3 @@
-'use strict';
-
 import BooleanColumn from './BooleanColumn';
 import DateColumn from './DateColumn';
 import NumberColumn from './NumberColumn';

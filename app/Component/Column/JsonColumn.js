@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 
 class JsonColumn extends React.Component {

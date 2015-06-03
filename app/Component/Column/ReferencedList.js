@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import Datagrid from '../Datagrid/Datagrid';
 import PathUtils from 'react-router/lib/PathUtils';

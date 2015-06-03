@@ -1,5 +1,3 @@
-'use strict';
-
 import { EventEmitter } from 'events';
 import { fromJS, Map, List } from 'immutable';
 import objectAssign from 'object-assign';

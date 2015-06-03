@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import MaBackButton from './Button/MaBackButton';
 import MaCreateButton from './Button/MaCreateButton';

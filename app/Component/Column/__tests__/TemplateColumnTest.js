@@ -1,3 +1,4 @@
+jest.autoMockOff();
 jest.dontMock('../TemplateColumn');
 
 var React = require('react/addons');

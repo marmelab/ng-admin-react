@@ -19,7 +19,6 @@
     "immutable": "^3.7.3",
     "inflected": "^1.1.6",
     "jest-cli": "^0.4.5",
-    "memory-fs": "^0.2.0",
     "jsx-transform": "^2.1.2",
     "object-assign": "^2.0.0",
     "pace": "HubSpot/pace",

@@ -1,3 +1,5 @@
+jest.autoMockOff();
+jest.dontMock('../Compile');
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
@@ -5,7 +7,7 @@ var Compile = require('../Compile');
 
 describe('Compile', () => {
     describe('changePropsScope', () => {
-       it('Should replace simple react braces', () => {
+        it('Should replace simple react braces', () => {
             let compile = new Compile();
             let result = compile.changePropsScope('<p>{entry.id}</p>');
 
@@ -17,6 +19,27 @@ describe('Compile', () => {
             let result = compile.changePropsScope('<p>{this.entry.id}</p>');
 
             expect(result).toEqual('<p>{this.entry.id}</p>');
+        });
+
+        it('Should not replace single brace', () => {
+            let compile = new Compile();
+            let result = compile.changePropsScope('<p>test {</p>');
+
+            expect(result).toEqual('<p>test {</p>');
+        });
+
+        it('Should not replace escaped braces', () => {
+            let compile = new Compile();
+            let result = compile.changePropsScope('<p>test \\{escaped\\}</p>');
+
+            expect(result).toEqual('<p>test {escaped}</p>');
+        });
+
+        it('Should not replace multipe braces', () => {
+            let compile = new Compile();
+            let result = compile.changePropsScope('<p>test {entry.id} \\{not me\\} {me}</p>');
+
+            expect(result).toEqual('<p>test {this.entry.id} {not me} {this.me}</p>');
         });
     });
 

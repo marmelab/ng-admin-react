@@ -77,8 +77,8 @@ class MaDatagridPagination extends React.Component {
         }
 
         if (this.state.displayPagination) {
-            let prev = null;
-            let next = null;
+            let prev = <li></li>;
+            let next = <li></li>;
             let items = [];
             let query = this.context.router.getCurrentQuery() || {};
 

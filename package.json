@@ -22,6 +22,7 @@
     "jsx-transform": "^2.1.2",
     "object-assign": "^2.0.0",
     "pace": "HubSpot/pace",
+    "protractor": "^2.1.0",
     "react-hot-loader": "^1.1.7",
     "react-immutable-render-mixin": "^0.8.1",
     "restful.js": "marmelab/restful.js#master",

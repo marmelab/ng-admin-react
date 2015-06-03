@@ -2,6 +2,7 @@ import React from 'react';
 import Inflector from 'inflected'
 import Datagrid from '../Component/Datagrid/Datagrid';
 import ViewActions from '../Component/ViewActions';
+import Compile from '../Component/Compile';
 
 class CreateView extends React.Component {
     render() {
@@ -14,8 +15,8 @@ class CreateView extends React.Component {
                 <ViewActions entityName={view.entity.name()} buttons={['list']} />
 
                 <div className="page-header">
-                    <h1>{view.title() || "Create new " + Inflector.singularize(entityName)}</h1>
-                    <p className="description">{view.description()}</p>
+                    <h1><Compile>{view.title() || "Create new " + Inflector.singularize(entityName)}</Compile></h1>
+                    <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
             </div>
         )

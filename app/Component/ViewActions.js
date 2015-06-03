@@ -1,4 +1,5 @@
 import React from 'react';
+import Compile from './Compile';
 import MaBackButton from './Button/MaBackButton';
 import MaCreateButton from './Button/MaCreateButton';
 import MaShowButton from './Button/MaShowButton';
@@ -12,11 +13,9 @@ class ViewActions extends React.Component {
         let results;
         let i = 0;
 
-        let templateParams = {entityName: entityName, entry: entry, factory: 'createElement'};
-
         // Direct template
         if (typeof (listActions) === 'string') {
-            return eval(jsx.fromString(buttons, templateParams));
+            return <Compile entityName={entityName} entry={entry}>listActions</Compile>;
         }
 
         results = buttons.map(button => {
@@ -45,7 +44,7 @@ class ViewActions extends React.Component {
 
                     return <MaDeleteButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 default:
-                    return eval(jsx.fromString(button, templateParams));
+                    return <Compile entityName={entityName} entry={entry}>button</Compile>;
             }
         });
 

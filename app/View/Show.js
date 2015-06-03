@@ -6,6 +6,7 @@ import ViewActions from '../Component/ViewActions';
 import ShowActions from '../Actions/ShowActions';
 import ShowStore from '../Stores/ShowStore';
 import ShowFields from '../Component/Show/ShowFields';
+import Compile from '../Component/Compile';
 
 class ShowView extends React.Component {
     constructor() {
@@ -64,8 +65,8 @@ class ShowView extends React.Component {
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
 
                 <div className="page-header">
-                    <h1>{view.title() || Inflector.singularize(entityName) + " detail"}</h1>
-                    <p className="description">{view.description()}</p>
+                    <h1><Compile>{view.title()|| Inflector.singularize(entityName) + " detail"}</Compile></h1>
+                    <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
                 <div className="row form-horizontal" id="show-view">

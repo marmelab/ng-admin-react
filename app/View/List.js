@@ -4,6 +4,7 @@ import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 import Datagrid from '../Component/Datagrid/Datagrid';
 import MaDatagridPagination from '../Component/Datagrid/MaDatagridPagination';
 import ViewActions from '../Component/ViewActions';
+import Compile from '../Component/Compile';
 
 import ListActions from '../Actions/ListActions';
 import ListStore from '../Stores/ListStore';
@@ -74,8 +75,8 @@ class ListView extends React.Component {
                 <ViewActions entityName={view.entity.name()} buttons={actions} />
 
                 <div className="page-header">
-                    <h1>{view.title() || entityName + " list"}</h1>
-                    <p className="description">{view.description()}</p>
+                    <h1><Compile>{view.title() || entityName + " list"}</Compile></h1>
+                    <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
                 <Datagrid

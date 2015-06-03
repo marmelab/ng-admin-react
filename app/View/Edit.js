@@ -1,5 +1,6 @@
 import React from 'react';
 import ViewActions from '../Component/ViewActions';
+import Compile from '../Component/Compile';
 
 class EditView extends React.Component {
     render() {
@@ -12,8 +13,8 @@ class EditView extends React.Component {
                 <ViewActions entityName={view.entity.name()} buttons={['list'/* @TODO add other links when entry is present*/]} />
 
                 <div className="page-header">
-                    <h1>{view.title() || "Edit one " +entityName}</h1>
-                    <p className="description">{view.description()}</p>
+                    <h1><Compile>{view.title() || "Edit one " +entityName}</Compile></h1>
+                    <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
             </div>
         )

@@ -6,8 +6,9 @@ class Compile extends React.Component {
         /*jshint evil:true*/
         return eval(jsx.fromString(template, context));
     }
-    // Replace {someting} by {this.something}
-    // Avoid to replace {this.someting} by {this.this.something}
+    // Replace {something} by {this.something}
+    // Avoid to replace {this.something} by {this.this.something}
+    // Allows to escape like \{something\}
     changePropsScope(element) {
         // Real regexp should be /(?<!\\){(\s*(?!this\.)[^}]+)(?<!\\)}/
         // But JS doesn't handle negative lookbehind
@@ -20,7 +21,7 @@ class Compile extends React.Component {
         props.factory = 'this.createElement';
         props.createElement = React.createElement;
 
-        if (!this.props || this.props.children) {
+        if (!this.props || !this.props.children) {
             return null;
         }
 

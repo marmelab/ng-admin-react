@@ -20,14 +20,16 @@ class Compile extends React.Component {
         props.factory = 'this.createElement';
         props.createElement = React.createElement;
 
+        if (!this.props || this.props.children) {
+            return null;
+        }
+
         // Avoid string without root element
         let children = this.props.children;
 
         if (Array.isArray(children)) {
             children = children.join('');
         }
-
-        console.log('type', typeof(children));
 
         if (typeof(children) === 'string') {
             // Wrap element without root tag

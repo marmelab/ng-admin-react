@@ -16,7 +16,7 @@ describe('MaListButton', () => {
             var listButton = TestUtils.renderIntoDocument(<MaListButton entityName={'MyEntity'} label={'Hello'} />);
             listButton = React.findDOMNode(listButton);
 
-            expect(listButton.className).toContain('btn btn-default');
+            expect(listButton.className).toContain('btn btn-list btn-default');
             expect(listButton.innerHTML).toContain('Hello');
         });
 
@@ -24,7 +24,7 @@ describe('MaListButton', () => {
             var listButton = TestUtils.renderIntoDocument(<MaListButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
             listButton = React.findDOMNode(listButton);
 
-            expect(listButton.className).toEqual('btn btn-default btn-xs');
+            expect(listButton.className).toEqual('btn btn-list btn-default btn-xs');
         });
 
         it('Should redirect to the create route', () => {

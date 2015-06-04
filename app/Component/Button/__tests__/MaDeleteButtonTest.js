@@ -21,7 +21,7 @@ describe('MaDeleteButton', () => {
             var deleteButton = TestUtils.renderIntoDocument(<MaDeleteButton entityName={'MyEntity'} entry={entry} label={'Delete'} size={'xs'} />);
             deleteButton = React.findDOMNode(deleteButton);
 
-            expect(deleteButton.className).toContain('btn btn-default btn-xs');
+            expect(deleteButton.className).toContain('btn btn-delete btn-default btn-xs');
             expect(deleteButton.innerHTML).toContain('Delete');
         });
 

@@ -2,10 +2,18 @@ import React from 'react';
 import {Link} from 'react-router';
 
 class MaDatagridPagination extends React.Component {
+    componentDidMount() {
+        this.computePagination(this.props);
+    }
+
     componentWillReceiveProps(nextProps) {
-        let totalItems = nextProps.totalItems;
-        let page = nextProps.page || 1;
-        let perPage = nextProps.perPage || 1;
+        this.computePagination(nextProps);
+    }
+
+    computePagination(props) {
+        let totalItems = props.totalItems;
+        let page = props.page || 1;
+        let perPage = props.perPage || 1;
         let nbPages =  Math.ceil(totalItems / perPage) || 1;
         let offsetEnd = Math.min(page * perPage, totalItems);
         let offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);

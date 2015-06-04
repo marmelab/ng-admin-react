@@ -21,7 +21,7 @@ describe('MaEditButton', () => {
             var editButton = TestUtils.renderIntoDocument(<MaEditButton entityName={'MyEntity'} entry={entry} label={'Delete'} size={'xs'} />);
             editButton = React.findDOMNode(editButton);
 
-            expect(editButton.className).toContain('btn btn-default btn-xs');
+            expect(editButton.className).toContain('btn btn-edit btn-default btn-xs');
             expect(editButton.innerHTML).toContain('Delete');
         });
 

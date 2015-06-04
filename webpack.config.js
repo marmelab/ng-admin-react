@@ -1,12 +1,19 @@
 var path = require('path');
 var webpack = require('webpack');
 
+function getEntrySources() {
+    var sources = ['./app/ReactAdmin.js'];
+
+    if (process.env.NODE_ENV !== 'production') { // for live reload
+        sources.push('webpack-dev-server/client?http://0.0.0.0:8080');
+        sources.push('webpack/hot/dev-server');
+    }
+
+    return sources;
+}
+
 module.exports = {
-    entry: [
-        'webpack-dev-server/client?http://0.0.0.0:8080',
-        'webpack/hot/dev-server',
-        "./app/ReactAdmin.js"
-    ],
+    entry: getEntrySources(),
     output: {
         path: __dirname + '/build',
         filename: "react-admin-standalone.min.js",

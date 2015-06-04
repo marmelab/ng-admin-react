@@ -15,10 +15,20 @@ install-blog:
 run-blog:
 	@./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --hot --content-base examples/blog
 
+start-test-server: test-server.PID
+
+test-server.PID:
+	@cd ./examples/blog && { python -m SimpleHTTPServer 8080 >/dev/null 2>&1 & echo $$! > ../../$@; } && cd ../..
+
+stop-test-server: test-server.PID
+	@kill `cat $<` && rm $<
+
+run-test-e2e: start-test-server test-e2e stop-test-server
+
 test-unit:
 	@./node_modules/jest-cli/bin/jest.js
 
 test-e2e:
 	@./node_modules/protractor/bin/protractor protractor.conf.js
 
-test: test-unit test-e2e
+test: test-unit test-e2e run-test-e2e

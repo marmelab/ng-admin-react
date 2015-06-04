@@ -44,7 +44,7 @@ class DashboardView extends React.Component {
 
     buildPanels(panels, odd=true) {
         let panelViews = [];
-        let i, label, view, sortDir, sortField, dataStore;
+        let label, view, sortDir, sortField, dataStore;
 
         panels
             .filter((v, k) => (odd && (0 !== k % 2)) || (!odd && (0 === k % 2)))

@@ -11,10 +11,7 @@ exports.config = {
         }
     ],
     specs: ['e2e/*.js'],
-    baseUrl: 'http://localhost:8080',
-    capabilities: {
-        browserName: 'chrome'
-    },
+    baseUrl: 'http://' + (process.env.CI ? 'ngadmin' : 'localhost') + ':8080/test.html',
     jasmineNodeOpts: {
         onComplete: null,
         isVerbose: true,

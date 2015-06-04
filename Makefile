@@ -3,6 +3,7 @@
 install:
 	@npm install
 	@./node_modules/protractor/bin/webdriver-manager update
+	mkdir -p examples/blog/build/
 
 build:
 	@NODE_ENV=production ./node_modules/webpack/bin/webpack.js -p --optimize-minimize --optimize-occurence-order --optimize-dedupe --progress
@@ -18,7 +19,7 @@ run-blog:
 start-test-server: test-server.PID
 
 test-server.PID:
-	@cd ./examples/blog && { python -m SimpleHTTPServer 8080 >/dev/null 2>&1 & echo $$! > ../../$@; } && cd ../..
+	cd ./examples/blog && { python -m SimpleHTTPServer 8080 & echo $$! > ../../$@; } && cd ../..
 
 stop-test-server: test-server.PID
 	@kill `cat $<` && rm $<
@@ -31,4 +32,4 @@ test-unit:
 test-e2e:
 	@./node_modules/protractor/bin/protractor protractor.conf.js
 
-test: test-unit test-e2e run-test-e2e
+test: test-unit run-test-e2e

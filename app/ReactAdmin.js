@@ -22,7 +22,7 @@ let routes = (
         <Router.Route name="create" path="/:entity/create" handler={CreateView}/>
         <Router.Route name="edit" path="/:entity/edit/:id" handler={EditView}/>
         <Router.Route name="delete" path="/:entity/delete/:id" handler={DeleteView}/>
-        <Router.Route name="show" path="/:entity/:id" handler={ShowView}/>
+        <Router.Route name="show" path="/:entity/show/:id" handler={ShowView}/>
     </Router.Route>
 );
 

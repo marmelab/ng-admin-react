@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 class MaEditButton extends React.Component {
     render() {
         let size = !!this.props.size ? ' btn-' + this.props.size : '',
-            className = 'btn btn-default' + size,
+            className = 'btn btn-edit btn-default' + size,
             params = {
                 entity: this.props.entityName,
                 id: this.props.entry.identifierValue

@@ -6,7 +6,7 @@ class MaBackButton extends React.Component {
     }
     render() {
         let size = !!this.props.size ? ' btn-' + this.props.size : '',
-            className = 'btn btn-default' + size;
+            className = 'btn btn-back btn-default' + size;
 
         return (
             <a className={className} onClick={this.back}>

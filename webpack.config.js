@@ -30,5 +30,8 @@ module.exports = {
     },
     plugins: [
         new webpack.NoErrorsPlugin()
-    ]
+    ],
+    node: {
+        fs: "empty"
+    }
 };

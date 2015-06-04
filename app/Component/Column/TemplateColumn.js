@@ -1,4 +1,5 @@
 import React from 'react';
+import Compile from '../Compile';
 
 class TemplateColumn extends React.Component {
     render() {
@@ -9,10 +10,8 @@ class TemplateColumn extends React.Component {
             computedTemplate = template(this.props.entry);
         }
 
-        // @TODO: deal with string template
-
         return (
-            <span>{computedTemplate}</span>
+            <Compile entry={this.props.entry}>{computedTemplate}</Compile>
         );
     }
 }

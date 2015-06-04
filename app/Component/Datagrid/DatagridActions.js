@@ -1,24 +1,30 @@
 import React from 'react';
+import Compile from '../Compile';
 import MaShowButton from '../Button/MaShowButton';
 import MaEditButton from '../Button/MaEditButton';
 import MaDeleteButton from '../Button/MaDeleteButton';
 
 class DatagridActions extends React.Component {
     render() {
-        let {size, entityName, listActions} = this.props;
+        let {size, entityName, listActions, entry} = this.props;
         let buttons;
         let i = 0;
+
+        // Direct template
+        if (typeof (listActions) === 'string') {
+            return <Compile entityName={entityName} entry={entry}>{listActions}</Compile>;
+        }
 
         buttons = listActions.map(button => {
             switch (button) {
                 case 'show':
-                    return <MaShowButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
+                    return <MaShowButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 case 'edit':
-                    return <MaEditButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
+                    return <MaEditButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 case 'delete':
-                    return <MaDeleteButton key={i++} entityName={entityName} entry={this.props.entry} size={size} />;
+                    return <MaDeleteButton key={i++} entityName={entityName} entry={entry} size={size} />;
                 default:
-                    return React.createElement(button)
+                    return <Compile key={i++} entityName={entityName} entry={entry}>{button}</Compile>;
             }
         });
 

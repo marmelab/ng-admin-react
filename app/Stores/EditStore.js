@@ -5,17 +5,20 @@ import objectAssign from 'object-assign';
 import AppDispatcher from '../Services/AppDispatcher';
 
 import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
+import WriteQueries from 'admin-config/lib/Queries/WriteQueries';
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
 import RestWrapper from '../Services/RestWrapper';
 
-class ShowStore extends EventEmitter {
+class EditStore extends EventEmitter {
     constructor(...args) {
         super(...args);
 
         this.data = Map({
-            dataStore: new DataStore()
+            originEntityId: null,
+            dataStore: new DataStore(),
+            values: Map()
         });
     }
 
@@ -95,16 +98,65 @@ class ShowStore extends EventEmitter {
                 }
             })
             .then(() => {
+                return readQueries.getAllReferencedData(view.getReferences());
+            })
+            .then((filterData) => {
+                var choices = view.getReferences();
+                var choiceEntries;
+
+                for (var name in filterData) {
+                    choiceEntries = dataStore.mapEntries(
+                        choices[name].targetEntity().name(),
+                        choices[name].targetEntity().identifier(),
+                        [choices[name].targetField()],
+                        filterData[name]
+                    );
+
+                    dataStore.setEntries(
+                        choices[name].targetEntity().uniqueId + '_choices',
+                        choiceEntries
+                    );
+                }
+            })
+            .then(() => {
                 dataStore.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
 
                 dataStore.addEntry(view.getEntity().uniqueId, entry);
 
-                return true;
+                return entry;
             })
-            .then(() => {
+            .then((entry) => {
+                this.data = this.data.update('originEntityId', v => identifierValue);
                 this.data = this.data.update('dataStore', v => dataStore);
+                this.data = this.data.update('values', v => {
+                    v = v.clear();
+
+                    for (let fieldName in entry.values) {
+                        v = v.set(fieldName, entry.values[fieldName]);
+                    }
+
+                    return v;
+                });
                 this.emitChange();
             });
+    }
+
+    updateData(fieldName, value) {
+        this.data = this.data.update('values', v => v.update(fieldName, val => value));
+        this.emitChange();
+    }
+
+    saveData(configuration, view) {
+        let rawEntity = {};
+        let values = this.data.get('values');
+        let id = this.data.get('originEntityId');
+
+        for (let [name, value] of values) {
+            rawEntity[name] = value;
+        }
+
+        let writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
+        writeQueries.updateOne(view, rawEntity, id);
     }
 
     getState() {
@@ -112,24 +164,30 @@ class ShowStore extends EventEmitter {
     }
 
     emitChange() {
-        this.emit('show_load');
+        this.emit('edit_load');
     }
 
     addChangeListener(callback) {
-        this.on('show_load', callback);
+        this.on('edit_load', callback);
     }
 
     removeChangeListener(callback) {
-        this.removeListener('show_load', callback);
+        this.removeListener('edit_load', callback);
     }
 }
 
-let store = new ShowStore();
+let store = new EditStore();
 
 AppDispatcher.register((action) => {
     switch(action.actionType) {
-        case 'load_show_data':
+        case 'load_edit_data':
             store.loadData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
+            break;
+        case 'update_edit_data':
+            store.updateData(action.fieldName, action.value);
+            break;
+        case 'save_edit_data':
+            store.saveData(action.configuration, action.view);
             break;
     }
 });

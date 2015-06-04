@@ -29,7 +29,7 @@ class ShowView extends React.Component {
     getView(entityName) {
         entityName = entityName || this.context.router.getCurrentParams().entity;
 
-        return this.props.configuration.getEntity(entityName).views.ShowView;
+        return this.props.configuration.getEntity(entityName).showView();
     }
 
     onChange() {

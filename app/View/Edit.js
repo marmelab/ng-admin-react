@@ -6,15 +6,13 @@ import Compile from '../Component/Compile';
 import ViewActions from '../Component/ViewActions';
 import EditActions from '../Actions/EditActions';
 import EditStore from '../Stores/EditStore';
-import FormFields from '../Component/Form/FormFields';
+import Field from '../Component/Field/Field';
 
 class EditView extends React.Component {
     constructor() {
         super();
 
-        this.state = EditStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
-        this.save = this.save.bind(this);
     }
 
     componentWillMount() {
@@ -63,32 +61,46 @@ class EditView extends React.Component {
         EditActions.saveData(this.props.configuration, this.getView());
     }
 
+    buildFields(view, entry, dataStore) {
+        let fields = [];
+
+        for (let field of view.getFields()) {
+            let value = this.state.data.getIn(['values', field.name()]);
+
+            fields.push(
+                <div className="form-field form-group" key={field.order()}>
+                    <Field field={field} value={value} entity={view.entity} entry={entry} dataStore={dataStore} updateField={this.updateField} />
+                </div>
+            );
+        }
+
+        return fields;
+    }
+
     render() {
-        let params = this.context.router.getCurrentParams(),
-            entityName = params.entity,
-            view = this.getView(entityName),
-            dataStore = this.state.data.get('dataStore'),
-            values = this.state.data.get('values'),
-            entry = dataStore.getFirstEntry(view.getEntity().uniqueId),
-            actions = view.actions() || ['list', 'delete'];
+        if (!this.state) {
+            return <div />;
+        }
+
+        let entityName = this.context.router.getCurrentParams().entity;
+        let view = this.getView(entityName);
+        let dataStore = this.state.data.get('dataStore').first();
+        let entry = dataStore.getFirstEntry(view.entity.uniqueId);
+        let actions = view.actions() || ['list', 'delete'];
 
         return (
             <div className="view edit-view">
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
 
                 <div className="page-header">
-                    <h1><Compile>{view.title() || "Edit one " +entityName}</Compile></h1>
+                    <h1><Compile entry={entry}>{view.title() || "Edit one " +entityName}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
                 <div className="row form-horizontal" id="edit-view">
-                    <form className="col-lg-12 form-horizontal" onSubmit={this.save}>
-                        <FormFields
-                        fields={view.getFields()}
-                        dataStore={dataStore}
-                        values={values}
-                        view={view}
-                        updateField={this.updateField} />
+                    <form className="col-lg-12 form-horizontal" onSubmit={this.save.bind(this)}>
+
+                        {this.buildFields(view, entry, dataStore)}
 
                         <div className="form-group">
                             <div className="col-sm-offset-2 col-sm-10">

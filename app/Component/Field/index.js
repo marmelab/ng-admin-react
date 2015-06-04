@@ -1,5 +1,7 @@
 import InputField from './InputField';
+import CheckboxField from './CheckboxField';
 
 export {
-    InputField
+    InputField,
+    CheckboxField
 };

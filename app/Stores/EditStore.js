@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import objectAssign from 'object-assign';
 
 import AppDispatcher from '../Services/AppDispatcher';
@@ -17,7 +17,10 @@ class EditStore extends EventEmitter {
 
         this.data = Map({
             originEntityId: null,
-            dataStore: new DataStore(),
+            dataStore: Map({
+                object: new DataStore(),
+                version: 0
+            }),
             values: Map()
         });
     }
@@ -127,7 +130,8 @@ class EditStore extends EventEmitter {
             })
             .then((entry) => {
                 this.data = this.data.update('originEntityId', v => identifierValue);
-                this.data = this.data.update('dataStore', v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
                 this.data = this.data.update('values', v => {
                     v = v.clear();
 
@@ -142,21 +146,38 @@ class EditStore extends EventEmitter {
     }
 
     updateData(fieldName, value) {
-        this.data = this.data.update('values', v => v.update(fieldName, val => value));
+        this.data = this.data.updateIn(['values', fieldName], v => value);
         this.emitChange();
     }
 
     saveData(configuration, view) {
-        let rawEntity = {};
+        let rawEntry = {};
         let values = this.data.get('values');
         let id = this.data.get('originEntityId');
 
         for (let [name, value] of values) {
-            rawEntity[name] = value;
+            rawEntry[name] = value;
         }
 
         let writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
-        writeQueries.updateOne(view, rawEntity, id);
+        writeQueries.updateOne(view, rawEntry, id);
+
+        this.data = this.data.updateIn(['dataStore', 'object'], v => {
+            let entry = v.mapEntry(
+                view.entity.name(),
+                view.identifier(),
+                view.getFields(),
+                rawEntry
+            );
+
+            v.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
+
+            v.setEntries(view.getEntity().uniqueId, [entry]);
+
+            return v;
+        });
+        this.data = this.data.updateIn(['dataStore', 'version'], v => v + 1);
+        this.emitChange();
     }
 
     getState() {

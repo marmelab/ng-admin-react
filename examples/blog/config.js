@@ -73,7 +73,7 @@
             ];
 
             post.views['EditView']
-                .title('Edit post "{{ entry.values.title }}"') // title() accepts a template string, which has access to the entry
+                .title('Edit post "{ entry.values.title }"') // title() accepts a template string, which has access to the entry
                 .actions(['list', 'show', 'delete']) // choose which buttons appear in the top action bar. Show is disabled by default
                 .fields([
                     post.views['CreateView'].fields(), // fields() without arguments returns the list of fields. That way you can reuse fields from another view to avoid repetition
@@ -108,10 +108,10 @@
             post.views['ShowView'] // a showView displays one entry in full page - allows to display more data than in a a list
                 .fields([
                     nga.field('id'),
-                    post.views['EditView'].fields(), // reuse fields from another view in another order
-                    nga.field('custom_action', 'template')
-                        .label('')
-                        .template('<send-email post="entry"></send-email>')
+                    post.views['EditView'].fields() // reuse fields from another view in another order
+                    // nga.field('custom_action', 'template')
+                    //     .label('')
+                    //     .template('<send-email post="entry"></send-email>')
                 ]);
 
             comment.views['DashboardView']
@@ -120,10 +120,11 @@
                 .perPage(5)
                 .fields([
                     nga.field('id'),
-                    nga.field('body').label('Comment').map(truncate),
-                    //nga.field(null, 'template') // template fields don't need a name in dashboard view
-                    //    .label('')
-                    //    .template('<Link entry="entry"></Link>') // you can use custom directives, too
+                    nga.field('body').label('Comment').map(truncate)
+                    // ,
+                    // nga.field(null, 'template') // template fields don't need a name in dashboard view
+                    //     .label('')
+                    //     .template('<Link entry="entry"></Link>') // you can use custom directives, too
                 ]);
 
             comment.views['ListView']
@@ -179,10 +180,10 @@
 
             comment.views['EditView']
                 .fields(comment.views['CreateView'].fields())
-                .fields([nga.field(null, 'template')
-                    .label('')
-                    .template('<post-link entry="entry"></post-link>') // template() can take a function or a string
-                ]);
+                // .fields([nga.field(null, 'template')
+                //     .label('')
+                //     .template('<post-link entry="entry"></post-link>') // template() can take a function or a string
+                // ]);
 
             comment.views['DeleteView']
                 .title('Deletion confirmation'); // customize the deletion confirmation message
@@ -214,9 +215,15 @@
                             return entity.values.name.toUpperCase();
                         })
                 ])
-                .listActions(['show']);
+                .listActions(['show', 'edit']);
 
             tag.views['ShowView']
+                .fields([
+                    nga.field('name'),
+                    nga.field('published', 'boolean')
+                ]);
+
+            tag.views['EditView']
                 .fields([
                     nga.field('name'),
                     nga.field('published', 'boolean')

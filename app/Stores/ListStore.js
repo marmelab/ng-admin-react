@@ -29,7 +29,7 @@ class ListStore extends EventEmitter {
         this.data = this.data.update('sortDir', v => sortDir);
         this.emitChange();
 
-        entryRequester.getEntries(view, page, {
+        entryRequester.getEntries(new DataStore(), view, page, {
             references: true,
             sortField,
             sortDir

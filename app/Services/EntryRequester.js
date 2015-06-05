@@ -11,7 +11,7 @@ class EntryRequester {
         this.readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
     }
 
-    getEntries(view, page=1, options={}) {
+    getEntries(dataStore, view, page=1, options={}) {
         options = objectAssign({
             references: false,
             choices: false,
@@ -20,7 +20,6 @@ class EntryRequester {
             filters: []
         }, options);
 
-        let dataStore = new DataStore();
         let totalItems, rawEntries, entries;
 
         let promise = this.readQueries

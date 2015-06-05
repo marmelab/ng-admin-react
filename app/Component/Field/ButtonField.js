@@ -5,18 +5,18 @@ class ButtonField extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state.value = !!this.props.value;
+        this.value = !!props.value;
     }
 
     isActive() {
-        return !!this.state.value;
+        return !!this.value;
     }
 
-    onClick() {
-        this.state.value = !this.state.value;
-        this.refs[this.props.name].getDOMNode().value = this.state.value;
+    toggle() {
+        this.value = !this.value;
+        this.refs[this.props.name].getDOMNode().value = this.value;
 
-        this.props.updateField(this.props.name, this.state.value ? 1 : 0);
+        this.props.updateField(this.props.name, this.value ? 1 : 0);
     }
 
     render() {

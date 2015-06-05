@@ -14,6 +14,10 @@ class EntityStore extends EventEmitter {
     constructor(...args) {
         super(...args);
 
+        this.initData();
+    }
+
+    initData() {
         this.data = Map({
             panels: List(),
             originEntityId: null,
@@ -30,6 +34,9 @@ class EntityStore extends EventEmitter {
     }
 
     loadDashbordPanels(configuration, sortField, sortDir) {
+        this.initData();
+        this.emitChange();
+
         let entryRequester = new EntryRequester(configuration);
         let dashboardViews = configuration.getViewsOfType('DashboardView');
         let panels = List();
@@ -79,10 +86,13 @@ class EntityStore extends EventEmitter {
                 this.data = this.data.update('sortDir', v => sortDir);
                 this.data = this.data.update('sortField', v => sortField);
                 this.emitChange();
-            }, this);
+            });
     }
 
     loadListData(configuration, view, page, sortField, sortDir) {
+        this.initData();
+        this.emitChange();
+
         page = page || 1;
 
         this.data = this.data.update('page', v => page);
@@ -103,6 +113,9 @@ class EntityStore extends EventEmitter {
     }
 
     loadShowData(configuration, view, identifierValue, sortField, sortDir) {
+        this.initData();
+        this.emitChange();
+
         let entryRequester = new EntryRequester(configuration);
 
         entryRequester.getEntry(view, identifierValue, { references: true, referencesList: true, sortField, sortDir })
@@ -113,6 +126,9 @@ class EntityStore extends EventEmitter {
     }
 
     loadEditData(configuration, view, identifierValue, sortField, sortDir) {
+        this.initData();
+        this.emitChange();
+
         let entryRequester = new EntryRequester(configuration);
 
         entryRequester.getEntry(view, identifierValue, { references: true, referencesList: true, choices: true, sortField, sortDir })

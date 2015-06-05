@@ -2,12 +2,14 @@ var path = require('path');
 var webpack = require('webpack');
 
 function getEntrySources() {
-    var sources = ['./app/ReactAdmin.js'];
+    var sources = [];
 
     if (process.env.NODE_ENV !== 'production') { // for live reload
         sources.push('webpack-dev-server/client?http://0.0.0.0:8080');
         sources.push('webpack/hot/dev-server');
     }
+
+    sources.push('./app/ReactAdmin.js');
 
     return sources;
 }

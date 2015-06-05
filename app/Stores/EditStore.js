@@ -1,15 +1,13 @@
 import { EventEmitter } from 'events';
-import { fromJS, Map, List } from 'immutable';
-import objectAssign from 'object-assign';
+import { Map } from 'immutable';
 
 import AppDispatcher from '../Services/AppDispatcher';
 
-import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
 import WriteQueries from 'admin-config/lib/Queries/WriteQueries';
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
-import RestWrapper from '../Services/RestWrapper';
+import EntryRequester from '../Services/EntryRequester';
 
 class EditStore extends EventEmitter {
     constructor(...args) {
@@ -26,114 +24,17 @@ class EditStore extends EventEmitter {
     }
 
     loadData(configuration, view, identifierValue, sortField, sortDir) {
-        let dataStore = new DataStore();
-        let readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
-        let rawEntry, entry, nonOptimizedReferencedData, optimizedReferencedData;
+        let entryRequester = new EntryRequester(configuration);
 
-        readQueries
-            .getOne(view.getEntity(), view.type, identifierValue, view.identifier(), view.getUrl())
-            .then((response) => {
-                rawEntry = response;
-
-                entry = dataStore.mapEntry(
-                    view.entity.name(),
-                    view.identifier(),
-                    view.getFields(),
-                    rawEntry
-                );
-
-                return rawEntry;
-            }, this)
-            .then((rawEntry) => {
-                return readQueries.getFilteredReferenceData(view.getNonOptimizedReferences(), [rawEntry]);
-            })
-            .then((nonOptimizedReference) => {
-                nonOptimizedReferencedData = nonOptimizedReference;
-
-                return readQueries.getOptimizedReferencedData(view.getOptimizedReferences(), [rawEntry]);
-            })
-            .then((optimizedReference) => {
-                optimizedReferencedData = optimizedReference;
-
-                var references = view.getReferences(),
-                    referencedData = objectAssign(nonOptimizedReferencedData, optimizedReferencedData),
-                    referencedEntries;
-
-                for (var name in referencedData) {
-                    referencedEntries = dataStore.mapEntries(
-                        references[name].targetEntity().name(),
-                        references[name].targetEntity().identifier(),
-                        [references[name].targetField()],
-                        referencedData[name]
-                    );
-
-                    dataStore.setEntries(
-                        references[name].targetEntity().uniqueId + '_values',
-                        referencedEntries
-                    );
-                }
-            })
-            .then(() => {
-                var referencedLists = view.getReferencedLists();
-
-                return readQueries.getReferencedListData(referencedLists, sortField, sortDir, entry.identifierValue);
-            })
-            .then((referencedListData) => {
-                var referencedLists = view.getReferencedLists();
-                var referencedList;
-                var referencedListEntries;
-
-                for (var i in referencedLists) {
-                    referencedList = referencedLists[i];
-                    referencedListEntries = referencedListData[i];
-
-                    referencedListEntries = dataStore.mapEntries(
-                        referencedList.targetEntity().name(),
-                        referencedList.targetEntity().identifier(),
-                        referencedList.targetFields(),
-                        referencedListEntries
-                    );
-
-                    dataStore.setEntries(
-                        referencedList.targetEntity().uniqueId + '_list',
-                        referencedListEntries
-                    );
-                }
-            })
-            .then(() => {
-                return readQueries.getAllReferencedData(view.getReferences());
-            })
-            .then((filterData) => {
-                var choices = view.getReferences();
-                var choiceEntries;
-
-                for (var name in filterData) {
-                    choiceEntries = dataStore.mapEntries(
-                        choices[name].targetEntity().name(),
-                        choices[name].targetEntity().identifier(),
-                        [choices[name].targetField()],
-                        filterData[name]
-                    );
-
-                    dataStore.setEntries(
-                        choices[name].targetEntity().uniqueId + '_choices',
-                        choiceEntries
-                    );
-                }
-            })
-            .then(() => {
-                dataStore.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
-
-                dataStore.addEntry(view.getEntity().uniqueId, entry);
-
-                return entry;
-            })
-            .then((entry) => {
+        entryRequester.getEntry(view, identifierValue, { references: true, referencesList: true, choices: true, sortField, sortDir })
+            .then((dataStore) => {
                 this.data = this.data.update('originEntityId', v => identifierValue);
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
                 this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
                 this.data = this.data.update('values', v => {
                     v = v.clear();
+
+                    let entry = dataStore.getFirstEntry(view.entity.uniqueId);
 
                     for (let fieldName in entry.values) {
                         v = v.set(fieldName, entry.values[fieldName]);

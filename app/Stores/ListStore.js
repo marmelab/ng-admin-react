@@ -1,14 +1,10 @@
 import { EventEmitter } from 'events';
-import { fromJS, Map, List } from 'immutable';
-import objectAssign from 'object-assign';
+import { Map } from 'immutable';
 
-import AppDispatcher from '../Services/AppDispatcher';
-
-import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
-import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
-import RestWrapper from '../Services/RestWrapper';
+import EntryRequester from '../Services/EntryRequester';
+import AppDispatcher from '../Services/AppDispatcher';
 
 class ListStore extends EventEmitter {
     constructor(...args) {
@@ -26,69 +22,22 @@ class ListStore extends EventEmitter {
     loadData(configuration, view, page, sortField, sortDir) {
         page = page || 1;
 
+        let entryRequester = new EntryRequester(configuration);
+
         this.data = this.data.update('page', v => page);
         this.data = this.data.update('sortField', v => sortField);
         this.data = this.data.update('sortDir', v => sortDir);
-
         this.emitChange();
 
-        let dataStore = new DataStore();
-        let readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
-        let entity = view.entity;
-        let rawEntries, nonOptimizedReferencedData, optimizedReferencedData;
-
-        readQueries
-            .getAll(view, page, [], this.data.get('sortField'), this.data.get('sortDir'))
-            .then((response) => {
-                rawEntries = response.data;
-
-                this.data = this.data.update('totalItems', v => +response.totalItems);
-
-                return rawEntries;
-            }, this)
-            .then((rawEntries) => {
-                return readQueries.getFilteredReferenceData(view.getNonOptimizedReferences(), rawEntries);
-            })
-            .then((nonOptimizedReference) => {
-                nonOptimizedReferencedData = nonOptimizedReference;
-
-                return readQueries.getOptimizedReferencedData(view.getOptimizedReferences(), rawEntries);
-            })
-            .then((optimizedReference) => {
-                optimizedReferencedData = optimizedReference;
-
-                var references = view.getReferences(),
-                    referencedData = objectAssign(nonOptimizedReferencedData, optimizedReferencedData),
-                    referencedEntries;
-
-                for (var name in referencedData) {
-                    referencedEntries = dataStore.mapEntries(
-                        references[name].targetEntity().name(),
-                        references[name].targetEntity().identifier(),
-                        [references[name].targetField()],
-                        referencedData[name]
-                    );
-
-                    dataStore.setEntries(
-                        references[name].targetEntity().uniqueId + '_values',
-                        referencedEntries
-                    );
-                }
-            })
-            .then(() => {
-                let entries = dataStore.mapEntries(entity.name(), view.identifier(), view.getFields(), rawEntries);
-
-                // shortcut to diplay collection of entry with included referenced values
-                dataStore.fillReferencesValuesFromCollection(entries, view.getReferences(), true);
-
-                dataStore.setEntries(
-                    entity.uniqueId,
-                    entries
-                );
-
-                this.data = this.data.update('dataStore', v => dataStore);
-                this.emitChange();
-            }, this);
+        entryRequester.getEntries(view, page, {
+            references: true,
+            sortField,
+            sortDir
+        }).then((collection) => {
+            this.data = this.data.update('dataStore', v => collection.dataStore);
+            this.data = this.data.update('totalItems', v => collection.totalItems);
+            this.emitChange();
+        });
     }
 
     getState() {

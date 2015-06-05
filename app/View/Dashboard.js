@@ -3,29 +3,29 @@ import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
 import DashboardPanel from '../Component/DashboardPanel';
 
-import DashboardActions from '../Actions/DashboardActions';
-import DashboardStore from '../Stores/DashboardStore';
+import EntityActions from '../Actions/EntityActions';
+import EntityStore from '../Stores/EntityStore';
 
 class DashboardView extends React.Component {
     constructor() {
         super();
 
-        this.state = DashboardStore.getState();
+        this.state = EntityStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
-    componentWillMount() {
-        DashboardStore.addChangeListener(this.onChange.bind(this));
+    componentDidMount() {
+        EntityStore.addChangeListener(this.onChange.bind(this));
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        DashboardStore.removeChangeListener(this.onChange.bind(this));
+        EntityStore.removeChangeListener(this.onChange.bind(this));
     }
 
     onChange() {
-        this.setState(DashboardStore.getState());
+        this.setState(EntityStore.getState());
     }
 
     componentWillReceiveProps(nextProps) {
@@ -39,21 +39,21 @@ class DashboardView extends React.Component {
     refreshData() {
         let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        DashboardActions.loadPanels(this.props.configuration, sortField, sortDir);
+        EntityActions.loadDashboardPanels(this.props.configuration, sortField, sortDir);
     }
 
     buildPanels(panels, odd=true) {
+        let sortDir = this.state.data.get('sortDir');
+        let sortField = this.state.data.get('sortField');
+        let dataStore = this.state.data.getIn(['dataStore', 'object']);
         let panelViews = [];
-        let label, view, sortDir, sortField, dataStore;
+        let label, view;
 
         panels
             .filter((v, k) => (odd && (0 !== k % 2)) || (!odd && (0 === k % 2)))
             .forEach((panel, key) => {
                 label = panel.get('label');
                 view = panel.get('view');
-                sortDir = this.state.data.get('sortDir');
-                sortField = this.state.data.get('sortField');
-                dataStore = this.state.data.get('dataStore');
 
                 panelViews.push((
                     <div key={key} className="panel panel-default">
@@ -66,7 +66,7 @@ class DashboardView extends React.Component {
                             sortField={sortField} />
                     </div>
                 ));
-            }, this);
+            });
 
         return panelViews;
     }

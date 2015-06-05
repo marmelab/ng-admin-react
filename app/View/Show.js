@@ -3,8 +3,8 @@ import Inflector from 'inflected'
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
 import ViewActions from '../Component/ViewActions';
-import ShowActions from '../Actions/ShowActions';
-import ShowStore from '../Stores/ShowStore';
+import EntityActions from '../Actions/EntityActions';
+import EntityStore from '../Stores/EntityStore';
 import ShowFields from '../Component/Show/ShowFields';
 import Compile from '../Component/Compile';
 
@@ -12,18 +12,18 @@ class ShowView extends React.Component {
     constructor() {
         super();
 
-        this.state = ShowStore.getState();
+        this.state = EntityStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
-    componentWillMount() {
-        ShowStore.addChangeListener(this.onChange.bind(this));
+    componentDidMount() {
+        EntityStore.addChangeListener(this.onChange.bind(this));
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        ShowStore.removeChangeListener(this.onChange.bind(this));
+        EntityStore.removeChangeListener();
     }
 
     getView(entityName) {
@@ -33,14 +33,14 @@ class ShowView extends React.Component {
     }
 
     onChange() {
-        this.setState(ShowStore.getState());
+        this.setState(EntityStore.getState());
     }
 
     refreshData() {
         let {id} = this.context.router.getCurrentParams();
         let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        ShowActions.loadData(this.props.configuration, this.getView(), id, sortField, sortDir);
+        EntityActions.loadShowData(this.props.configuration, this.getView(), id, sortField, sortDir);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -56,7 +56,7 @@ class ShowView extends React.Component {
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity,
             view = this.getView(),
-            dataStore = this.state.data.get('dataStore'),
+            dataStore = this.state.data.getIn(['dataStore', 'object']),
             entry = dataStore.getFirstEntry(view.getEntity().uniqueId),
             actions = view.actions() || ['list', 'edit', 'delete'];
 
@@ -65,7 +65,7 @@ class ShowView extends React.Component {
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
 
                 <div className="page-header">
-                    <h1><Compile>{view.title()|| Inflector.singularize(entityName) + " detail"}</Compile></h1>
+                    <h1><Compile>{view.title() || Inflector.singularize(entityName) + " detail"}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 

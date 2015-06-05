@@ -4,8 +4,8 @@ import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 import Compile from '../Component/Compile';
 
 import ViewActions from '../Component/ViewActions';
-import EditActions from '../Actions/EditActions';
-import EditStore from '../Stores/EditStore';
+import EntityActions from '../Actions/EntityActions';
+import EntityStore from '../Stores/EntityStore';
 import Field from '../Component/Field/Field';
 
 class EditView extends React.Component {
@@ -15,14 +15,14 @@ class EditView extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
-    componentWillMount() {
-        EditStore.addChangeListener(this.onChange.bind(this));
+    componentDidMount() {
+        EntityStore.addChangeListener(this.onChange.bind(this));
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        EditStore.removeChangeListener(this.onChange.bind(this));
+        EntityStore.removeChangeListener(this.onChange.bind(this));
     }
 
     getView(entityName) {
@@ -32,14 +32,14 @@ class EditView extends React.Component {
     }
 
     onChange() {
-        this.setState(EditStore.getState());
+        this.setState(EntityStore.getState());
     }
 
     refreshData() {
         let {id} = this.context.router.getCurrentParams();
         let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EditActions.loadData(this.props.configuration, this.getView(), id, sortField, sortDir);
+        EntityActions.loadEditData(this.props.configuration, this.getView(), id, sortField, sortDir);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -52,13 +52,13 @@ class EditView extends React.Component {
     }
 
     updateField(name, value) {
-        EditActions.updateData(name, value);
+        EntityActions.updateData(name, value);
     }
 
     save(e) {
         e.preventDefault();
 
-        EditActions.saveData(this.props.configuration, this.getView());
+        EntityActions.saveData(this.props.configuration, this.getView());
     }
 
     buildFields(view, entry, dataStore) {
@@ -93,7 +93,7 @@ class EditView extends React.Component {
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
 
                 <div className="page-header">
-                    <h1><Compile entry={entry}>{view.title() || "Edit one " +entityName}</Compile></h1>
+                    <h1><Compile entry={entry}>{view.title() || "Edit one " + Inflector.singularize(entityName)}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 

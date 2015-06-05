@@ -27,6 +27,8 @@ describe('Pagination', function () {
     describe('page change', function () {
         it('should allow page navigation', function () {
             $$('.pagination-bar li:nth-child(3) a').click();
+            browser.sleep(100);
+
             $$('.pagination-bar .total').then(function (totalElements) {
                 expect(totalElements[0].getText()).toBe('11 - 11 on 11');
             });

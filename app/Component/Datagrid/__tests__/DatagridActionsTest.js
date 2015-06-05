@@ -42,14 +42,14 @@ describe('DatagridActions', () => {
             expect(actions.childNodes.length).toEqual(2);
             expect(actions.childNodes[0].textContent).toContain('Edit');
             expect(actions.childNodes[1].textContent).toContain('Delete');
-            expect(actions.childNodes[0].className).toEqual('btn btn-default');
+            expect(actions.childNodes[0].className).toEqual('btn btn-edit btn-default');
         });
 
         it('Should display list of buttons with specified', () => {
             var actions = getActions('MyEntity', ['edit', 'delete'], myEntry, 'xs');
             actions = React.findDOMNode(actions);
 
-            expect(actions.childNodes[0].className).toEqual('btn btn-default btn-xs');
+            expect(actions.childNodes[0].className).toEqual('btn btn-edit btn-default btn-xs');
         });
 
         it('Should display clickable button', () => {

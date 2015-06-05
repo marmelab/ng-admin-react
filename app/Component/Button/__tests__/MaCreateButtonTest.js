@@ -16,7 +16,7 @@ describe('MaCreateButton', () => {
             var createButton = TestUtils.renderIntoDocument(<MaCreateButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
             createButton = React.findDOMNode(createButton);
 
-            expect(createButton.className).toContain('btn btn-default btn-xs');
+            expect(createButton.className).toContain('btn btn-create btn-default btn-xs');
             expect(createButton.innerHTML).toContain('Hello');
         });
 

@@ -7,15 +7,15 @@ class ColumnHeader extends React.Component {
         let routes = this.context.router.getCurrentRoutes();
         let currentQuery = this.context.router.getCurrentQuery();
         let route = routes[routes.length - 1];
-        let sort = null;
+        let {sort, fieldName, name, label} = this.props;
 
-        if (this.props.sort) {
-            sort = <span className={'sorted sorted-' + this.props.sort.toLowerCase()}></span>
+        if (sort) {
+            sort = <span className={'sorted sorted-' + sort.toLowerCase()}></span>
         }
 
         let query = {
-            sortField: this.props.name + '.' + this.props.fieldName,
-            sortDir: this.props.sort === 'ASC' ? 'DESC' : 'ASC'
+            sortField: name + '.' + fieldName,
+            sortDir: sort === 'ASC' ? 'DESC' : 'ASC'
         };
 
         if (currentQuery.page) {
@@ -23,10 +23,10 @@ class ColumnHeader extends React.Component {
         }
 
         return (
-            <th key={this.props.fieldName}>
+            <th className={'react-admin-column-' + fieldName} key={fieldName}>
                 <Link to={route.name} params={params} query={query}>
                     {sort}
-                    {this.props.label}
+                    {label}
                 </Link>
             </th>
         );

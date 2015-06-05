@@ -93,3 +93,22 @@ make run-blog
 ```
 
 The application is now available at `http://localhost:8080/`.
+
+## Rebuilding the Compiled JS and CSS Files
+
+Concatenate and minify the app with:
+
+```sh
+make build
+```
+
+All build files will then be updated and minified, ready for production.
+
+## Testing
+
+react-admin has unit tests (powered by jest) and end to end tests (powered by protractor). 
+Launch the entire tests suite by calling:
+
+```sh
+make test
+```

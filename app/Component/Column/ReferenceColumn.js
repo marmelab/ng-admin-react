@@ -10,7 +10,7 @@ class ReferenceColumn extends React.Component {
 }
 
 ReferenceColumn.propTypes = {
-    value: React.PropTypes.string.isRequired
+    value: React.PropTypes.string
 };
 
 export default ReferenceColumn;

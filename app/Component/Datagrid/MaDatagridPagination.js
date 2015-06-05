@@ -3,9 +3,17 @@ import {Link} from 'react-router';
 
 class MaDatagridPagination extends React.Component {
     componentDidMount() {
-        let totalItems = this.props.totalItems;
-        let page = this.props.page || 1;
-        let perPage = this.props.perPage || 1;
+        this.computePagination(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.computePagination(nextProps);
+    }
+
+    computePagination(props) {
+        let totalItems = props.totalItems;
+        let page = props.page || 1;
+        let perPage = props.perPage || 1;
         let nbPages =  Math.ceil(totalItems / perPage) || 1;
         let offsetEnd = Math.min(page * perPage, totalItems);
         let offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
@@ -77,8 +85,8 @@ class MaDatagridPagination extends React.Component {
         }
 
         if (this.state.displayPagination) {
-            let prev = null;
-            let next = null;
+            let prev = <li></li>;
+            let next = <li></li>;
             let items = [];
             let query = this.context.router.getCurrentQuery() || {};
 

@@ -83,7 +83,7 @@ class MenuItem extends React.Component {
         } else {
             content = <Link to={link}>
                 { icon }
-                &nbsp;{ menu.title() }
+                { menu.title() }
                 {arrow}
             </Link>
         }

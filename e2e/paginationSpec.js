@@ -4,6 +4,7 @@ describe('Pagination', function () {
 
     beforeEach(function() {
         browser.get(browser.baseUrl + '#/comments/list');
+        browser.sleep(1000);
     });
 
     describe('informations', function() {
@@ -26,6 +27,7 @@ describe('Pagination', function () {
 
     describe('page change', function () {
         it('should allow page navigation', function () {
+            browser.executeScript('window.scrollTo(0, 800);');
             $$('.pagination-bar li:nth-child(3) a').click();
             browser.sleep(1000);
 

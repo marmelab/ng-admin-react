@@ -16,7 +16,7 @@ testMethod('ListView', function () {
         });
 
         // @TODO : uncomment when edition form is implemented
-        xdescribe('Edition link', function () {
+        describe('Edition link', function () {
             it('should allow edition of an entity', function () {
                 // Retrieve first edit button
                 $('table tr:nth-child(1) a.btn-edit').click();
@@ -97,18 +97,15 @@ testMethod('ListView', function () {
     describe('Comment list', function () {
 
         beforeEach(function () {
-            //browser.get(browser.baseUrl + '#/comments/list');
             $('#side-menu .entities-repeat:nth-child(2) a').click();
-
-            browser.driver.wait(function () {
-                return browser.driver.isElementPresent(by.css('table'));
-            }, 10000); // wait 10000ms
+            browser.sleep(500);
         });
 
         describe('Reference link', function () {
             it('should redirect to comment edition form', function () {
                 // Retrieve first reference link
                 $('table tr:nth-child(1) a.reference-column').click();
+                browser.sleep(500);
 
                 // Check browser URL
                 expect(browser.getCurrentUrl()).toContain('/posts/edit/1');

@@ -88,6 +88,10 @@ class EditView extends React.Component {
         let entry = dataStore.getFirstEntry(view.entity.uniqueId);
         let actions = view.actions() || ['list', 'delete'];
 
+        if (!entry) {
+            return <div />;
+        }
+
         return (
             <div className="view edit-view">
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />

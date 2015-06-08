@@ -57,5 +57,14 @@ export default {
             configuration,
             view
         });
+    },
+
+    deleteData(configuration, id, view) {
+        AppDispatcher.dispatch({
+            actionType: 'delete_data',
+            configuration,
+            id,
+            view
+        });
     }
 };

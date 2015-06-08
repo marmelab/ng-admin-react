@@ -187,6 +187,17 @@ class EntityStore extends EventEmitter {
         this.emitChange();
     }
 
+    deleteData(configuration, id, view) {
+        let emitDelete = this.emitDelete.bind(this);
+
+        // TODO: move this one into ApiRequester
+        let writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
+        writeQueries.deleteOne(view, id)
+            .then(() => {
+                emitDelete();
+            });
+    }
+
     getState() {
         return { data: this.data };
     }
@@ -195,8 +206,16 @@ class EntityStore extends EventEmitter {
         this.emit('entries_loaded');
     }
 
+    emitDelete() {
+        this.emit('entries_deleted');
+    }
+
     addChangeListener(callback) {
         this.on('entries_loaded', callback);
+    }
+
+    addDeleteListener(callback) {
+        this.on('entries_deleted', callback);
     }
 
     removeChangeListener() {
@@ -222,6 +241,9 @@ AppDispatcher.register((action) => {
             break;
         case 'update_data':
             store.updateData(action.fieldName, action.value);
+            break;
+        case 'delete_data':
+            store.deleteData(action.configuration, action.id, action.view);
             break;
         case 'save_data':
             store.saveData(action.configuration, action.view);

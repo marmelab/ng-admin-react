@@ -6,25 +6,25 @@ import MaDatagridPagination from '../Component/Datagrid/MaDatagridPagination';
 import ViewActions from '../Component/ViewActions';
 import Compile from '../Component/Compile';
 
-import ListActions from '../Actions/ListActions';
-import ListStore from '../Stores/ListStore';
+import EntityActions from '../Actions/EntityActions';
+import EntityStore from '../Stores/EntityStore';
 
 class ListView extends React.Component {
     constructor() {
         super();
 
-        this.state = ListStore.getState();
+        this.state = EntityStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
-    componentWillMount() {
-        ListStore.addChangeListener(this.onChange.bind(this));
+    componentDidMount() {
+        EntityStore.addChangeListener(this.onChange.bind(this));
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        ListStore.removeChangeListener(this.onChange.bind(this));
+        EntityStore.removeChangeListener(this.onChange.bind(this));
     }
 
     componentWillReceiveProps(nextProps) {
@@ -44,13 +44,13 @@ class ListView extends React.Component {
     }
 
     onChange() {
-        this.setState(ListStore.getState());
+        this.setState(EntityStore.getState());
     }
 
     refreshData() {
         let {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        ListActions.loadData(this.props.configuration, this.getView(), page, sortField, sortDir);
+        EntityActions.loadListData(this.props.configuration, this.getView(), page, sortField, sortDir);
     }
 
     buildPagination(view) {
@@ -66,7 +66,7 @@ class ListView extends React.Component {
         let view = this.getView(entityName);
         let sortDir = this.state.data.get('sortDir');
         let sortField = this.state.data.get('sortField');
-        let dataStore = this.state.data.get('dataStore');
+        let dataStore = this.state.data.getIn(['dataStore', 'object']);
         let entries = dataStore.getEntries(view.entity.uniqueId);
         let actions = view.actions() || ['create'];
 
@@ -83,7 +83,6 @@ class ListView extends React.Component {
                     name={view.name()}
                     entityName={view.entity.name()}
                     configuration={configuration}
-                    actions={ListActions}
                     listActions={view.listActions()}
                     fields={view.getFields()}
                     entries={entries}

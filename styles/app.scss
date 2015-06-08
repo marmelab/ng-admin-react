@@ -201,3 +201,71 @@ a {
         border: none;
     }
 }
+
+/**
+ * Edition form
+ */
+.form-horizontal {
+
+    textarea {
+        height: 150px;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+        max-width: 16px;
+        box-shadow: none;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .border-around {
+        margin-top: 2px;
+        background-color: #FFF;
+        background-image: none;
+        border: 1px solid #CCC;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        width: 100%;
+    }
+
+    .ta-toolbar button {
+        font-size: 12px;
+        padding: 5px 8px;
+
+        &.active {
+            z-index: 1;
+        }
+    }
+
+    &#show-view {
+        .label-default {
+            margin-right: 5px;
+            font-weight: normal;
+            font-size: 12px;
+            padding-top: 4px;
+        }
+
+        .control-label {
+            padding-top: 0;
+        }
+
+        .show-value {
+            .table {
+                margin: 0;
+
+                td {
+                    border-top: 0;
+                }
+            }
+        }
+    }
+
+    .CodeMirror {
+        border: 1px solid #CCC;
+        border-radius: 4px;
+    }
+}

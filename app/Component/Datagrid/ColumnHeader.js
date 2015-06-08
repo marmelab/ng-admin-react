@@ -9,10 +9,6 @@ class ColumnHeader extends React.Component {
         let route = routes[routes.length - 1];
         let {sort, fieldName, name, label} = this.props;
 
-        if (sort) {
-            sort = <span className={'sorted sorted-' + sort.toLowerCase()}></span>
-        }
-
         let query = {
             sortField: name + '.' + fieldName,
             sortDir: sort === 'ASC' ? 'DESC' : 'ASC'
@@ -20,6 +16,10 @@ class ColumnHeader extends React.Component {
 
         if (currentQuery.page) {
             query.page = currentQuery.page;
+        }
+
+        if (sort) {
+            sort = <span className={'sorted sorted-' + sort.toLowerCase()}></span>
         }
 
         return (

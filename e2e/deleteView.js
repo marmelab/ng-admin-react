@@ -23,7 +23,7 @@ testMethod('DeleteView', function () {
 
                 // Check title
                 $$('.view-wrapper h1').then(function (h1Element) {
-                    expect(h1Element[0].getText()).toBe('Delete one post');
+                    expect(h1Element[0].getText()).toBe('Delete post "Qui tempore rerum et voluptates"');
                 });
 
                 // Delete it
@@ -49,7 +49,7 @@ testMethod('DeleteView', function () {
 
                 // Check title
                 $$('.view-wrapper h1').then(function (h1Element) {
-                    expect(h1Element[0].getText()).toBe('Delete one post');
+                    expect(h1Element[0].getText()).toBe('Delete post "Qui tempore rerum et voluptates"');
                 });
 
                 // Cancel it

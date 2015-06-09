@@ -151,6 +151,32 @@ class EntityStore extends EventEmitter {
             });
     }
 
+    loadDeleteData(configuration, view, identifierValue) {
+        this.initData();
+        this.emitChange();
+
+        let entryRequester = new EntryRequester(configuration);
+
+        entryRequester.getEntry(view, identifierValue, { references: false, referencesList: false, choices: false })
+            .then((dataStore) => {
+                this.data = this.data.update('originEntityId', v => identifierValue);
+                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
+                this.data = this.data.update('values', v => {
+                    v = v.clear();
+
+                    let entry = dataStore.getFirstEntry(view.entity.uniqueId);
+
+                    for (let fieldName in entry.values) {
+                        v = v.set(fieldName, entry.values[fieldName]);
+                    }
+
+                    return v;
+                });
+                this.emitChange();
+            });
+    }
+
     updateData(fieldName, value) {
         this.data = this.data.updateIn(['values', fieldName], v => value);
         this.emitChange();
@@ -236,6 +262,9 @@ AppDispatcher.register((action) => {
             break;
         case 'load_edit_data':
             store.loadEditData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
+            break;
+        case 'load_delete_data':
+            store.loadDeleteData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
         case 'update_data':
             store.updateData(action.fieldName, action.value);

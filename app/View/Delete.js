@@ -23,7 +23,7 @@ class DeleteView extends React.Component {
     }
 
     componentWillUnmount() {
-        EntityStore.removeChangeListener(this.onDelete.bind(this));
+        EntityStore.removeAllListeners(this.onDelete.bind(this));
     }
 
     onChange() {
@@ -33,7 +33,7 @@ class DeleteView extends React.Component {
     refreshData() {
         let {id} = this.context.router.getCurrentParams();
 
-        EntityActions.loadEditData(this.props.configuration, this.getView(), id);
+        EntityActions.loadDeleteData(this.props.configuration, this.getView(), id);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -68,7 +68,7 @@ class DeleteView extends React.Component {
 
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity,
-            view = this.props.configuration.getEntity(entityName).views["DeleteView"],
+            view = this.props.configuration.getEntity(entityName).deletionView(),
             dataStore = this.state.data.get('dataStore').first(),
             entry = dataStore.getFirstEntry(view.entity.uniqueId),
             backParams = {

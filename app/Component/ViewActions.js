@@ -1,11 +1,7 @@
 import React from 'react';
 import Compile from './Compile';
-import MaBackButton from './Button/MaBackButton';
-import MaCreateButton from './Button/MaCreateButton';
-import MaShowButton from './Button/MaShowButton';
-import MaEditButton from './Button/MaEditButton';
-import MaDeleteButton from './Button/MaDeleteButton';
-import MaListButton from './Button/MaListButton';
+
+import { MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton } from './Button';
 
 class ViewActions extends React.Component {
     render() {

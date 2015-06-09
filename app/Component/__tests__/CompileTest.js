@@ -1,9 +1,17 @@
 jest.autoMockOff();
 jest.dontMock('../Compile');
+jest.setMock('react-router', {Link : require('../Button/__mocks__/Link')});
+
+import {Link} from 'react-router';
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Compile = require('../Compile');
+var routerWrapper = require('../../Test/RouterWrapper');
+
+function getCompiledLink(to, params) {
+    return routerWrapper(() => <Compile>{'<Link to={to} params={params} />'}</Compile>);
+}
 
 describe('Compile', () => {
     describe('changePropsScope', () => {
@@ -90,6 +98,19 @@ describe('Compile', () => {
 
             expect(compiled.childNodes[0].innerHTML).toEqual('I\'m entry ');
             expect(compiled.childNodes[1].innerHTML).toEqual('42');
+        });
+    });
+
+    describe('With external component', () => {
+        it('Should be able to use another component', () => {
+            var compiled = getCompiledLink('create', {entity: 'posts'});
+            compiled = React.findDOMNode(compiled);
+
+            TestUtils.Simulate.click(compiled);
+            
+            expect(compiled.attributes['data-click-to'].value).toEqual('create');
+            var params = JSON.parse(compiled.attributes['data-params'].value);
+            expect(params.entity).toEqual('myEntity');
         });
     });
 });

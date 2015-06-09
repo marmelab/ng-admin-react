@@ -193,9 +193,7 @@ class EntityStore extends EventEmitter {
         // TODO: move this one into ApiRequester
         let writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
         writeQueries.deleteOne(view, id)
-            .then(() => {
-                emitDelete();
-            });
+            .then(emitDelete);
     }
 
     getState() {

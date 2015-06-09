@@ -264,7 +264,7 @@ AppDispatcher.register((action) => {
             store.loadEditData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
         case 'load_delete_data':
-            store.loadDeleteData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
+            store.loadDeleteData(action.configuration, action.view, action.id);
             break;
         case 'update_data':
             store.updateData(action.fieldName, action.value);

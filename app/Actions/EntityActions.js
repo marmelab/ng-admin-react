@@ -43,14 +43,12 @@ export default {
         });
     },
 
-    loadDeleteData(configuration, view, id, sortField, sortDir) {
+    loadDeleteData(configuration, view, id) {
         AppDispatcher.dispatch({
             actionType: 'load_delete_data',
             configuration,
             view,
-            id,
-            sortField,
-            sortDir
+            id
         });
     },
 

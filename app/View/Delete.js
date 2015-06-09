@@ -23,7 +23,7 @@ class DeleteView extends React.Component {
     }
 
     componentWillUnmount() {
-        EntityStore.removeAllListeners(this.onDelete.bind(this));
+        EntityStore.removeAllListeners();
     }
 
     onChange() {

@@ -114,6 +114,9 @@
                     //     .template('<send-email post="entry"></send-email>')
                 ]);
 
+            post.views['DeleteView']
+                .title('Delete post "{ entry.values.title }"');
+
             comment.views['DashboardView']
                 .title('Last comments')
                 .order(2) // display the comment panel second in the dashboard
@@ -146,7 +149,7 @@
                         .label('Posted')
                         .attributes({'placeholder': 'Filter by date'})
                         .format('yyyy-MM-dd'),
-                    nga.field('today', 'boolean').map(function() {
+                    nga.field('today', 'boolean').map(function () {
                         var now = new Date(),
                             year = now.getFullYear(),
                             month = now.getMonth() + 1,

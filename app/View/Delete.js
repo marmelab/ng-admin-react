@@ -1,19 +1,45 @@
 import React from 'react';
 import Inflector from 'inflected';
 import {Link} from 'react-router';
+import {shouldComponentUpdate} from 'react-immutable-render-mixin';
+
 import ViewActions from '../Component/ViewActions';
 import Compile from '../Component/Compile';
-
 import EntityActions from '../Actions/EntityActions';
 import EntityStore from '../Stores/EntityStore';
 
 class DeleteView extends React.Component {
+    constructor() {
+        super();
+
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+    }
+
     componentDidMount() {
         EntityStore.addDeleteListener(this.onDelete.bind(this));
+        EntityStore.addChangeListener(this.onChange.bind(this));
+
+        this.refreshData();
     }
 
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.onDelete.bind(this));
+    }
+
+    onChange() {
+        this.setState(EntityStore.getState());
+    }
+
+    refreshData() {
+        let {id} = this.context.router.getCurrentParams();
+
+        EntityActions.loadEditData(this.props.configuration, this.getView(), id);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.params.entity !== this.props.params.entity) {
+            this.refreshData();
+        }
     }
 
     deleteEntry() {
@@ -25,7 +51,7 @@ class DeleteView extends React.Component {
     getView(entityName) {
         entityName = entityName || this.context.router.getCurrentParams().entity;
 
-        return this.props.configuration.getEntity(entityName).editionView();
+        return this.props.configuration.getEntity(entityName).deletionView();
     }
 
     onDelete() {
@@ -36,14 +62,23 @@ class DeleteView extends React.Component {
     }
 
     render() {
+        if (!this.state) {
+            return <div />;
+        }
+
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity,
             view = this.props.configuration.getEntity(entityName).views["DeleteView"],
-            {id} = this.context.router.getCurrentParams(),
+            dataStore = this.state.data.get('dataStore').first(),
+            entry = dataStore.getFirstEntry(view.entity.uniqueId),
             backParams = {
                 entity: entityName,
-                id: id
+                id: params.id
             };
+
+        if (!entry) {
+            return <div />;
+        }
 
         return (
             <div>
@@ -52,8 +87,8 @@ class DeleteView extends React.Component {
                         <ViewActions entityName={view.entity.name()} buttons={['back']} />
 
                         <div className="page-header">
-                            <h1><Compile>{view.title()|| "Delete one " + Inflector.singularize(entityName)}</Compile> </h1>
-                            <p className="description"><Compile>{view.description()}</Compile></p>
+                            <h1><Compile entry={entry}>{view.title()|| "Delete one " + Inflector.singularize(entityName)}</Compile></h1>
+                            <p className="description"><Compile entry={entry}>{view.description()}</Compile></p>
                         </div>
                     </div>
                 </div>

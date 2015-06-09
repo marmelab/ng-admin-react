@@ -56,7 +56,7 @@ class ShowFields extends React.Component {
                     break;
 
                 case 'reference_many':
-                    renderedField = <ReferenceManyColumn values={entry.listValues[fieldName]} />;
+                    renderedField = <ReferenceManyColumn values={entry.listValues[fieldName]} field={field} entry={entry} />;
                     break;
 
                 default:

@@ -32,4 +32,4 @@ test-unit:
 test-e2e:
 	@./node_modules/protractor/bin/protractor protractor.conf.js
 
-test: test-unit run-test-e2e
+test: test-unit build run-test-e2e

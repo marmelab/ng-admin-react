@@ -75,11 +75,11 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'reference':
-                    renderedField = <ReferenceColumn value={row.listValues[fieldName]} />;
+                    renderedField = <ReferenceColumn value={row.listValues[fieldName]} field={field} entry={row} />;
                     break;
 
                 case 'reference_many':
-                    renderedField = <ReferenceManyColumn values={row.listValues[fieldName]} />;
+                    renderedField = <ReferenceManyColumn values={row.listValues[fieldName]} field={field} entry={row} />;
                     break;
 
                 default:

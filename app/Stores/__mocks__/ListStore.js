@@ -10,5 +10,5 @@ module.exports = {
         };
     },
     addChangeListener: jest.genMockFunction(),
-    removeChangeListener: jest.genMockFunction()
+    removeAllListeners: jest.genMockFunction()
 };

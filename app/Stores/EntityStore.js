@@ -157,22 +157,12 @@ class EntityStore extends EventEmitter {
 
         let entryRequester = new EntryRequester(configuration);
 
-        entryRequester.getEntry(view, identifierValue, { references: false, referencesList: false, choices: false })
+        entryRequester.getEntry(view, identifierValue, { references: true, referencesList: false, choices: false })
             .then((dataStore) => {
                 this.data = this.data.update('originEntityId', v => identifierValue);
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
                 this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
-                this.data = this.data.update('values', v => {
-                    v = v.clear();
 
-                    let entry = dataStore.getFirstEntry(view.entity.uniqueId);
-
-                    for (let fieldName in entry.values) {
-                        v = v.set(fieldName, entry.values[fieldName]);
-                    }
-
-                    return v;
-                });
                 this.emitChange();
             });
     }
@@ -240,10 +230,6 @@ class EntityStore extends EventEmitter {
 
     addDeleteListener(callback) {
         this.on('entries_deleted', callback);
-    }
-
-    removeChangeListener() {
-        this.removeAllListeners();
     }
 }
 

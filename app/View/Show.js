@@ -23,7 +23,7 @@ class ShowView extends React.Component {
     }
 
     componentWillUnmount() {
-        EntityStore.removeChangeListener();
+        EntityStore.removeAllListeners();
     }
 
     getView(entityName) {

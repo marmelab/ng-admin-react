@@ -24,7 +24,7 @@ class ListView extends React.Component {
     }
 
     componentWillUnmount() {
-        EntityStore.removeChangeListener(this.onChange.bind(this));
+        EntityStore.removeAllListeners();
     }
 
     componentWillReceiveProps(nextProps) {

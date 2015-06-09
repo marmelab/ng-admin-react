@@ -22,5 +22,8 @@ exports.config = {
     framework: 'jasmine',
     onPrepare: function () {
         browser.ignoreSynchronization = true;
+
+        // Refresh Fakerest data
+        browser.get(browser.baseUrl);
     }
 };

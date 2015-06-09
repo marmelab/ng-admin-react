@@ -43,6 +43,15 @@ export default {
         });
     },
 
+    loadDeleteData(configuration, view, id) {
+        AppDispatcher.dispatch({
+            actionType: 'load_delete_data',
+            configuration,
+            view,
+            id
+        });
+    },
+
     updateData(fieldName, value) {
         AppDispatcher.dispatch({
             actionType: 'update_data',
@@ -55,6 +64,15 @@ export default {
         AppDispatcher.dispatch({
             actionType: 'save_data',
             configuration,
+            view
+        });
+    },
+
+    deleteData(configuration, id, view) {
+        AppDispatcher.dispatch({
+            actionType: 'delete_data',
+            configuration,
+            id,
             view
         });
     }

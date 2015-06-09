@@ -21,7 +21,7 @@ class DashboardView extends React.Component {
     }
 
     componentWillUnmount() {
-        EntityStore.removeChangeListener(this.onChange.bind(this));
+        EntityStore.removeAllListeners();
     }
 
     onChange() {

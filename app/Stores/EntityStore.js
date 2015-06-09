@@ -151,6 +151,22 @@ class EntityStore extends EventEmitter {
             });
     }
 
+    loadDeleteData(configuration, view, identifierValue) {
+        this.initData();
+        this.emitChange();
+
+        let entryRequester = new EntryRequester(configuration);
+
+        entryRequester.getEntry(view, identifierValue, { references: true, referencesList: false, choices: false })
+            .then((dataStore) => {
+                this.data = this.data.update('originEntityId', v => identifierValue);
+                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
+
+                this.emitChange();
+            });
+    }
+
     updateData(fieldName, value) {
         this.data = this.data.updateIn(['values', fieldName], v => value);
         this.emitChange();
@@ -187,6 +203,15 @@ class EntityStore extends EventEmitter {
         this.emitChange();
     }
 
+    deleteData(configuration, id, view) {
+        let emitDelete = this.emitDelete.bind(this);
+
+        // TODO: move this one into ApiRequester
+        let writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
+        writeQueries.deleteOne(view, id)
+            .then(emitDelete);
+    }
+
     getState() {
         return { data: this.data };
     }
@@ -195,12 +220,16 @@ class EntityStore extends EventEmitter {
         this.emit('entries_loaded');
     }
 
+    emitDelete() {
+        this.emit('entries_deleted');
+    }
+
     addChangeListener(callback) {
         this.on('entries_loaded', callback);
     }
 
-    removeChangeListener() {
-        this.removeAllListeners();
+    addDeleteListener(callback) {
+        this.on('entries_deleted', callback);
     }
 }
 
@@ -220,8 +249,14 @@ AppDispatcher.register((action) => {
         case 'load_edit_data':
             store.loadEditData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
+        case 'load_delete_data':
+            store.loadDeleteData(action.configuration, action.view, action.id);
+            break;
         case 'update_data':
             store.updateData(action.fieldName, action.value);
+            break;
+        case 'delete_data':
+            store.deleteData(action.configuration, action.id, action.view);
             break;
         case 'save_data':
             store.saveData(action.configuration, action.view);

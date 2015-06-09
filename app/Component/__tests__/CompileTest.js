@@ -1,48 +1,23 @@
 jest.autoMockOff();
 jest.dontMock('../Compile');
 
+var Link = require('../Button/__mocks__/Link');
+jest.setMock('react-router', {Link : Link});
+
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Compile = require('../Compile');
+var routerWrapper = require('../../Test/RouterWrapper');
+
+function getCompiledLinkFromString(strElement) {
+    return routerWrapper(() => <Compile>{strElement}</Compile>);
+}
+
+function getCompiledLink(to, params) {
+    return routerWrapper(() => <Compile><Link to={to} params={params}></Link></Compile>);
+}
 
 describe('Compile', () => {
-    describe('changePropsScope', () => {
-        it('Should replace simple react braces', () => {
-            let compile = new Compile();
-            let result = compile.changePropsScope('<p>{entry.id}</p>');
-
-            expect(result).toEqual('<p>{this.entry.id}</p>');
-        });
-
-        it('Should not replace simple react braces when this is present', () => {
-            let compile = new Compile();
-            let result = compile.changePropsScope('<p>{this.entry.id}</p>');
-
-            expect(result).toEqual('<p>{this.entry.id}</p>');
-        });
-
-        it('Should not replace single brace', () => {
-            let compile = new Compile();
-            let result = compile.changePropsScope('<p>test {</p>');
-
-            expect(result).toEqual('<p>test {</p>');
-        });
-
-        it('Should not replace escaped braces', () => {
-            let compile = new Compile();
-            let result = compile.changePropsScope('<p>test \\{escaped\\}</p>');
-
-            expect(result).toEqual('<p>test {escaped}</p>');
-        });
-
-        it('Should not replace multipe braces', () => {
-            let compile = new Compile();
-            let result = compile.changePropsScope('<p>test {entry.id} \\{not me\\} {me}</p>');
-
-            expect(result).toEqual('<p>test {this.entry.id} {not me} {this.me}</p>');
-        });
-    });
-
     describe('With simple string', () => {
         it('Should wrap text inside a span', () => {
             var compiled = TestUtils.renderIntoDocument(<Compile>Hello</Compile>);
@@ -90,6 +65,41 @@ describe('Compile', () => {
 
             expect(compiled.childNodes[0].innerHTML).toEqual('I\'m entry ');
             expect(compiled.childNodes[1].innerHTML).toEqual('42');
+        });
+    });
+
+    describe('With external component', () => {
+        it('Should be able to use Link component from string', () => {
+            var compiled = getCompiledLinkFromString('<Link to={"create"} params={{entity: "posts"}} />');
+            compiled = React.findDOMNode(compiled);
+
+            TestUtils.Simulate.click(compiled);
+
+            expect(compiled.attributes['data-click-to'].value).toEqual('create');
+            var params = JSON.parse(compiled.attributes['data-params'].value);
+            expect(params.entity).toEqual('posts');
+        });
+
+        it('Should be able to use another component from string', () => {
+            var compiled = getCompiledLinkFromString('<MaCreateButton entityName={"tags"} />');
+            compiled = React.findDOMNode(compiled);
+
+            TestUtils.Simulate.click(compiled);
+
+            expect(compiled.attributes['data-click-to'].value).toEqual('create');
+            var params = JSON.parse(compiled.attributes['data-params'].value);
+            expect(params.entity).toEqual('tags');
+        });
+
+        it('Should be able to use another component from jsx', () => {
+            var compiled = getCompiledLink('create', {entity: 'posts'});
+            compiled = React.findDOMNode(compiled);
+
+            TestUtils.Simulate.click(compiled);
+
+            expect(compiled.attributes['data-click-to'].value).toEqual('create');
+            var params = JSON.parse(compiled.attributes['data-params'].value);
+            expect(params.entity).toEqual('posts');
         });
     });
 });

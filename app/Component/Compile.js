@@ -1,24 +1,36 @@
 import React from 'react';
+import {Link} from 'react-router';
 import jsx from 'jsx-transform';
+import objectAssign from 'object-assign';
+
+import { MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton } from './Button';
+import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from './Column';
+import { InputField, CheckboxField, ButtonField } from './Field';
+
+let Components = {
+    MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton,
+    BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn,
+    InputField, CheckboxField, ButtonField,
+    Link, React
+};
 
 class Compile extends React.Component {
     evalInContext(template, context) {
         /*jshint evil:true*/
-        return eval(jsx.fromString(template, context));
+        var variables = [];
+        for (let i in context) {
+            if (context.hasOwnProperty(i)) {
+                variables.push('var ' + i + ' = this.' + i);
+            }
+        }
+
+        return eval(variables.join(';') + '; ' + jsx.fromString(template, context));
     }
-    // Replace {something} by {this.something}
-    // Avoid to replace {this.something} by {this.this.something}
-    // Allows to escape like \{something\}
-    changePropsScope(element) {
-        // Real regexp should be /(?<!\\){(\s*(?!this\.)[^}]+)(?<!\\)}/
-        // But JS doesn't handle negative lookbehind
-        return element.replace(/(\\)?{(\s*(?!this\.)[^\\}]+)(\\)?}/g, function($0, $1, $2)  {
-            return $1 === '\\' ?  '{' + $2 + '}' : '{this.' + $2 + '}';
-        });
-    }
+
     render() {
         let props = this.props || {};
         props.factory = 'this.createElement';
+        props.passUnknownTagsToFactory = true;
         props.createElement = React.createElement;
 
         if (!this.props || !this.props.children) {
@@ -38,8 +50,8 @@ class Compile extends React.Component {
                 children = '<span>' + children + '</span>';
             }
 
-            // Trick to allow scope swapping in eval statement
-            children = this.changePropsScope(children);
+            // Import components into context
+            props = objectAssign(props, Components);
 
             return this.evalInContext.apply(props, [children, props]);
         }

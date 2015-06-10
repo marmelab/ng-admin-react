@@ -43,6 +43,14 @@ export default {
         });
     },
 
+    loadCreateData(configuration, view, id) {
+        AppDispatcher.dispatch({
+            actionType: 'load_create_data',
+            configuration,
+            view
+        });
+    },
+
     loadDeleteData(configuration, view, id) {
         AppDispatcher.dispatch({
             actionType: 'load_delete_data',

@@ -41,14 +41,20 @@ class RestWrapper {
 
     createOne(rawEntity, entityName, url) {
         return Restful()
-            .oneUrl(entityName, url)
-            .post(rawEntity);
+            .allUrl(entityName, url)
+            .post(rawEntity)
+            .then((response) => {
+                return response().data;
+            });
     }
 
     updateOne(rawEntity, entityName, url) {
         return Restful()
             .oneUrl(entityName, url)
-            .put(rawEntity);
+            .put(rawEntity)
+            .then((response) => {
+                return response().data;
+            });
     }
 
     deleteOne(entityName, url) {

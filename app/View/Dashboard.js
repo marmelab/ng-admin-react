@@ -10,7 +10,6 @@ class DashboardView extends React.Component {
     constructor() {
         super();
 
-        this.state = EntityStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
@@ -72,6 +71,10 @@ class DashboardView extends React.Component {
     }
 
     render() {
+        if (!this.state) {
+            return <div />;
+        }
+
         let panels = this.state.data.get('panels') || [];
 
         return (

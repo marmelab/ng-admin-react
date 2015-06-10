@@ -231,6 +231,12 @@
                     nga.field('published', 'boolean')
                 ]);
 
+            tag.views['CreateView']
+                .fields([
+                    nga.field('name'),
+                    nga.field('published', 'boolean')
+                ]);
+
             // customize menu
             admin.menu(nga.menu()
                     .addChild(nga.menu(post).icon('<span class="glyphicon glyphicon-file"></span>')) // customize the entity menu icon

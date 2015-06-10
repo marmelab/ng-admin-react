@@ -10,7 +10,7 @@ class NumberColumn extends React.Component {
 }
 
 NumberColumn.propTypes = {
-    value: React.PropTypes.number.isRequired
+    value: React.PropTypes.number
 };
 
 export default NumberColumn;

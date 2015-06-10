@@ -1,6 +1,7 @@
 import objectAssign from 'object-assign';
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
+import WriteQueries from 'admin-config/lib/Queries/WriteQueries';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
 import RestWrapper from '../Services/RestWrapper';
@@ -9,6 +10,7 @@ class EntryRequester {
     constructor(configuration) {
         this.configuration = configuration;
         this.readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
+        this.writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
     }
 
     getEntries(dataStore, view, page=1, options={}) {
@@ -101,6 +103,35 @@ class EntryRequester {
 
             return dataStore;
         });
+    }
+
+    saveEntry(dataStore, view, rawEntry, id=null) {
+        let query;
+
+        if (id) {
+            query = this.writeQueries.updateOne(view, rawEntry, id);
+        } else {
+            query = this.writeQueries.createOne(view, rawEntry);
+        }
+
+        return query.then((data) => {
+            let entry = dataStore.mapEntry(
+                view.entity.name(),
+                view.identifier(),
+                view.getFields(),
+                data
+            );
+
+            dataStore.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
+
+            dataStore.setEntries(view.getEntity().uniqueId, [entry]);
+
+            return dataStore;
+        });
+    }
+
+    deleteEntry(view, id) {
+        return this.writeQueries.deleteOne(view, id);
     }
 
     getReferencesEntries(promise, view, dataStore) {

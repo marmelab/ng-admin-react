@@ -12,7 +12,6 @@ class ShowView extends React.Component {
     constructor() {
         super();
 
-        this.state = EntityStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
@@ -53,6 +52,10 @@ class ShowView extends React.Component {
     }
 
     render() {
+        if (!this.state) {
+            return <div />;
+        }
+
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity,
             view = this.getView(),

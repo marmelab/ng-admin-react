@@ -13,7 +13,6 @@ class ListView extends React.Component {
     constructor() {
         super();
 
-        this.state = EntityStore.getState();
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
@@ -61,6 +60,10 @@ class ListView extends React.Component {
     }
 
     render() {
+        if (!this.state) {
+            return <div />;
+        }
+
         let configuration = this.props.configuration;
         let entityName = this.context.router.getCurrentParams().entity;
         let view = this.getView(entityName);

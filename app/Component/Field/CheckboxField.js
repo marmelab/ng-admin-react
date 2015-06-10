@@ -24,7 +24,7 @@ class CheckboxField extends React.Component {
 
 CheckboxField.propTypes = {
     name: React.PropTypes.string.isRequired,
-    value: React.PropTypes.number,
+    value: React.PropTypes.any,
     type: React.PropTypes.string,
     updateField: React.PropTypes.func
 };

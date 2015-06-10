@@ -1,14 +1,11 @@
 import { EventEmitter } from 'events';
 import { Map, List } from 'immutable';
 
-import AppDispatcher from '../Services/AppDispatcher';
-
-import WriteQueries from 'admin-config/lib/Queries/WriteQueries';
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
+import AppDispatcher from '../Services/AppDispatcher';
 import EntryRequester from '../Services/EntryRequester';
-import RestWrapper from '../Services/RestWrapper';
 
 class EntityStore extends EventEmitter {
     constructor(...args) {
@@ -151,13 +148,35 @@ class EntityStore extends EventEmitter {
             });
     }
 
+    loadCreateData(configuration, view) {
+        this.initData();
+        this.emitChange();
+
+        let dataStore = new DataStore();
+        let entry = dataStore.createEntry(view.entity.name(), view.identifier(), view.getFields());
+        dataStore.addEntry(view.getEntity().uniqueId, entry);
+
+        this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+        this.data = this.data.update('values', v => {
+            v = v.clear();
+
+            let entry = dataStore.getFirstEntry(view.entity.uniqueId);
+
+            for (let fieldName in entry.values) {
+                v = v.set(fieldName, entry.values[fieldName]);
+            }
+
+            return v;
+        });
+        this.emitChange();
+    }
+
     loadDeleteData(configuration, view, identifierValue) {
         this.initData();
         this.emitChange();
 
-        let entryRequester = new EntryRequester(configuration);
-
-        entryRequester.getEntry(view, identifierValue, { references: true, referencesList: false, choices: false })
+        new EntryRequester(configuration)
+            .getEntry(view, identifierValue, { references: true, referencesList: false, choices: false })
             .then((dataStore) => {
                 this.data = this.data.update('originEntityId', v => identifierValue);
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
@@ -173,43 +192,32 @@ class EntityStore extends EventEmitter {
     }
 
     saveData(configuration, view) {
-        let rawEntry = {};
         let values = this.data.get('values');
         let id = this.data.get('originEntityId');
 
+        let rawEntry = {};
         for (let [name, value] of values) {
             rawEntry[name] = value;
         }
 
-        // TODO: move this one into ApiRequester
-        let writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
-        writeQueries.updateOne(view, rawEntry, id);
+        new EntryRequester(configuration)
+            .saveEntry(this.data.getIn(['dataStore', 'object']), view, rawEntry, id)
+            .then((dataStore) => {
+                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'version'], v => v + 1);
 
-        this.data = this.data.updateIn(['dataStore', 'object'], v => {
-            let entry = v.mapEntry(
-                view.entity.name(),
-                view.identifier(),
-                view.getFields(),
-                rawEntry
-            );
-
-            v.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
-
-            v.setEntries(view.getEntity().uniqueId, [entry]);
-
-            return v;
-        });
-        this.data = this.data.updateIn(['dataStore', 'version'], v => v + 1);
-        this.emitChange();
+                if (id) {
+                    this.emitChange();
+                } else {
+                    this.emitCreate();
+                }
+            });
     }
 
     deleteData(configuration, id, view) {
-        let emitDelete = this.emitDelete.bind(this);
-
-        // TODO: move this one into ApiRequester
-        let writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
-        writeQueries.deleteOne(view, id)
-            .then(emitDelete);
+        new EntryRequester(configuration)
+            .deleteEntry(view, id)
+            .then(() => this.emitDelete());
     }
 
     getState() {
@@ -224,8 +232,16 @@ class EntityStore extends EventEmitter {
         this.emit('entries_deleted');
     }
 
+    emitCreate() {
+        this.emit('entries_created');
+    }
+
     addChangeListener(callback) {
         this.on('entries_loaded', callback);
+    }
+
+    addCreateListener(callback) {
+        this.on('entries_created', callback);
     }
 
     addDeleteListener(callback) {
@@ -248,6 +264,9 @@ AppDispatcher.register((action) => {
             break;
         case 'load_edit_data':
             store.loadEditData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
+            break;
+        case 'load_create_data':
+            store.loadCreateData(action.configuration, action.view);
             break;
         case 'load_delete_data':
             store.loadDeleteData(action.configuration, action.view, action.id);

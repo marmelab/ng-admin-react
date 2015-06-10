@@ -110,4 +110,6 @@ ListView.propTypes = {
     configuration: React.PropTypes.object.isRequired
 };
 
+require('../autoloader')('ListView', ListView);
+
 export default ListView;

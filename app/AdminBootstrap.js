@@ -45,4 +45,6 @@ class AdminBootstrap extends React.Component {
     }
 }
 
+require('./autoloader')('AdminBootstrap', AdminBootstrap);
+
 export default AdminBootstrap;

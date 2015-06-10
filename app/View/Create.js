@@ -129,4 +129,6 @@ CreateView.propTypes = {
     configuration: React.PropTypes.object.isRequired
 };
 
+require('../autoloader')('CreateView', CreateView);
+
 export default CreateView;

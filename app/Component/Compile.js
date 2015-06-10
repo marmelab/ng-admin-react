@@ -28,17 +28,19 @@ class Compile extends React.Component {
     }
 
     render() {
-        let props = this.props || {};
+        let compiledElement = React.cloneElement(this);
+
+        let props = compiledElement.props || {};
         props.factory = 'this.createElement';
         props.passUnknownTagsToFactory = true;
         props.createElement = React.createElement;
 
-        if (!this.props || !this.props.children) {
+        if (!props || !props.children) {
             return null;
         }
 
         // Avoid string without root element
-        let children = this.props.children;
+        let children = props.children;
 
         if (Array.isArray(children)) {
             children = children.join('');

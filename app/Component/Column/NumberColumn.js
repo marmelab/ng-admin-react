@@ -19,4 +19,6 @@ NumberColumn.propTypes = {
     detailAction: React.PropTypes.func
 };
 
+require('../../autoloader')('NumberColumn', NumberColumn);
+
 export default NumberColumn;

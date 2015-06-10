@@ -1,15 +1,15 @@
-import autoload from './autoloader'
+import autoload from './autoloader';
 
 import React from 'react';
 import Router from 'react-router';
 
-import './AdminBootstrap';
-import './View/Dashboard';
-import './View/List';
-import './View/Show';
-import './View/Create';
-import './View/Edit';
-import './View/Delete';
+import AdminBootstrap from './AdminBootstrap';
+import DashboardView from './View/Dashboard';
+import ListView from './View/List';
+import ShowView from './View/Show';
+import CreateView from './View/Create';
+import EditView from './View/Edit';
+import DeleteView from './View/Delete';
 import ConfigurationFactory from 'admin-config/lib/Factory';
 
 import ViewActions from './Component/ViewActions';
@@ -37,8 +37,8 @@ class ReactAdmin extends React.Component {
             handler: null,
             factory: ConfigurationFactory,
             fieldViewConfiguration: FieldViewConfiguration,
-            routes: routes,
             autoload: autoload,
+            routes: routes,
             components: {
                 ViewActions: ViewActions
             }

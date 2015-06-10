@@ -43,7 +43,8 @@
     "scriptPreprocessor": "<rootDir>/jest-preprocessor.js",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react",
-      "<rootDir>/node_modules/admin-config"
+      "<rootDir>/node_modules/admin-config",
+      "autoloader"
     ]
   },
   "keywords": [

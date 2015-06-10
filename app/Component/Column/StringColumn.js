@@ -1,6 +1,6 @@
 import React from 'react';
 
-class DateColumn extends React.Component {
+class StringColumn extends React.Component {
     render() {
         let {value, detailAction} = this.props;
 
@@ -8,15 +8,13 @@ class DateColumn extends React.Component {
             return <a onClick={detailAction}>{value}</a>;
         }
 
-        return (
-            <span>{value}</span>
-        );
+        return <span>{value}</span>;
     }
 }
 
-DateColumn.propTypes = {
-    value: React.PropTypes.string.isRequired,
+StringColumn.propTypes = {
+    value: React.PropTypes.any.isRequired,
     detailAction: React.PropTypes.function
 };
 
-export default DateColumn;
+export default StringColumn;

@@ -3,9 +3,33 @@ import React from 'react';
 import Header from '../../Component/Datagrid/ColumnHeader';
 import DatagridActions from '../../Component/Datagrid/DatagridActions';
 
-import { BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from '../Column';
+import { StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from '../Column';
 
 class Datagrid extends React.Component {
+    getDetailAction (entry) {
+        return function() {
+            let entityName = this.props.entityName,
+                entity = this.props.configuration.getEntity(entityName),
+                route = entity.editionView().enabled ? 'edit' : 'show';
+
+            this.context.router.transitionTo(route, {entity: entityName, id: entry.identifierValue});
+        }.bind(this);
+    }
+
+    isDetailLink(field) {
+        if (field.isDetailLink() === false) {
+            return false;
+        }
+        if (field.type() !== 'reference' && field.type() !== 'reference_many') {
+            return true;
+        }
+        var referenceEntity = field.targetEntity().name();
+        var relatedEntity = this.props.configuration.getEntity(referenceEntity);
+        if (!relatedEntity) return false;
+
+        return relatedEntity.isReadOnly ? relatedEntity.showView().enabled : relatedEntity.editionView().enabled;
+    }
+
     buildHeaders() {
         let headers = [];
         let {name, listActions, sortDir, sortField} = this.props;
@@ -51,19 +75,21 @@ class Datagrid extends React.Component {
         for (let i in this.props.fields) {
             let field = this.props.fields[i];
             let fieldName = field.name();
+            let detailAction = this.isDetailLink(field) ? this.getDetailAction(row) : null;
             let renderedField;
+
 
             switch (field.type()) {
                 case 'string':
-                    renderedField = row.values[fieldName];
+                    renderedField = <StringColumn value={row.values[fieldName]} detailAction={detailAction} />;
                     break;
 
                 case 'boolean':
-                    renderedField = <BooleanColumn value={!!row.values[fieldName]} />;
+                    renderedField = <BooleanColumn value={!!row.values[fieldName]} detailAction={detailAction} />;
                     break;
 
                 case 'date':
-                    renderedField = <DateColumn value={row.values[fieldName]} format={field.format()} />;
+                    renderedField = <DateColumn value={row.values[fieldName]} format={field.format()} detailAction={detailAction} />;
                     break;
 
                 case 'template':
@@ -71,7 +97,7 @@ class Datagrid extends React.Component {
                     break;
 
                 case 'number':
-                    renderedField = <NumberColumn value={row.values[fieldName]} />;
+                    renderedField = <NumberColumn value={row.values[fieldName]} detailAction={detailAction} />;
                     break;
 
                 case 'reference':

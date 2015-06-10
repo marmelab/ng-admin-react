@@ -2,7 +2,13 @@ import React from 'react';
 
 class BooleanColumn extends React.Component {
     render() {
-        let className = !!this.props.value ? 'boolean-true' : 'boolean-false';
+        let {value, detailAction} = this.props,
+            className = !!value ? 'boolean-true' : 'boolean-false';
+
+        if (detailAction) {
+            return <a onClick={detailAction} className={className}>{value}</a>;
+        }
+
         return (
             <span className={className}></span>
         );
@@ -10,7 +16,8 @@ class BooleanColumn extends React.Component {
 }
 
 BooleanColumn.propTypes = {
-    value: React.PropTypes.any.isRequired
+    value: React.PropTypes.any.isRequired,
+    detailAction: React.PropTypes.function
 };
 
 export default BooleanColumn;

@@ -16,7 +16,7 @@ class DateColumn extends React.Component {
 
 DateColumn.propTypes = {
     value: React.PropTypes.string.isRequired,
-    detailAction: React.PropTypes.function
+    detailAction: React.PropTypes.func
 };
 
 export default DateColumn;

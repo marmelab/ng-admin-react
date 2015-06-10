@@ -14,7 +14,7 @@ class StringColumn extends React.Component {
 
 StringColumn.propTypes = {
     value: React.PropTypes.any.isRequired,
-    detailAction: React.PropTypes.function
+    detailAction: React.PropTypes.func
 };
 
 export default StringColumn;

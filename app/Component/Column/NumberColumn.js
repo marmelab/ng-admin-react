@@ -16,7 +16,7 @@ class NumberColumn extends React.Component {
 
 NumberColumn.propTypes = {
     value: React.PropTypes.number,
-    detailAction: React.PropTypes.function
+    detailAction: React.PropTypes.func
 };
 
 export default NumberColumn;

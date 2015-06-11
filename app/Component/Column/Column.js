@@ -34,6 +34,7 @@ class Column extends React.Component {
         let isDetailLink = this.isDetailLink(field);
         let detailAction = isDetailLink ? this.getDetailAction(this.props.entry) : null;
         let type = field.type();
+        let value = entry.values[field.name()];
         let fieldView = FieldViewConfiguration.getFieldView(type);
         let column = null;
 
@@ -41,8 +42,7 @@ class Column extends React.Component {
             column = isDetailLink ? fieldView.getLinkWidget() : fieldView.getReadWidget();
         }
 
-        //return <Compile detailAction={detailAction} field={field} entity={entity} entry={entry}>{column}</Compile>;
-        return <span>{column}</span>;
+        return <Compile detailAction={detailAction} field={field} entity={entity} entry={entry} value={value}>{column}</Compile>;
     }
 }
 

@@ -1,10 +1,10 @@
-class TextFieldView {
+class StringFieldView {
     static getReadWidget() {
         return '<StringColumn value={this.props.value} />';
     }
 
     static getLinkWidget() {
-        return '<a onClick={this.props.detailAction}>' + TextFieldView.getReadWidget() + '</a>';
+        return '<a onClick={this.props.detailAction}>' + StringFieldView.getReadWidget() + '</a>';
     }
 
     static getFilterWidget() {
@@ -13,9 +13,8 @@ class TextFieldView {
     }
 
     static getWriteWidget() {
-        // @TODO : Use text input field (textarea) when implemented
         return '<InputField type={"text"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />';
     }
 }
 
-export default TextFieldView;
+export default StringFieldView;

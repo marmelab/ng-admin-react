@@ -14,6 +14,20 @@ function getEntrySources() {
     return sources;
 }
 
+function getPlugins() {
+    var plugins = [new webpack.NoErrorsPlugin()];
+
+    if (process.env.NODE_ENV === 'production') {
+        plugins.push(new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }));
+    }
+
+    return plugins;
+}
+
 module.exports = {
     entry: getEntrySources(),
     output: {
@@ -37,14 +51,7 @@ module.exports = {
             { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: "file" }
         ]
     },
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        })
-    ],
+    plugins: getPlugins(),
     node: {
         fs: "empty"
     }

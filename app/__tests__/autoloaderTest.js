@@ -10,7 +10,7 @@ import '../Component/Column/NumberColumn';
 
 describe('autoloader', () => {
     describe('Should retrieve auto registrered component', () => {
-        it('Should wrap text inside a span', () => {
+        it('Should load a non loaded component', () => {
             var numberColumn = TestUtils.renderIntoDocument(<NumberColumn value={42} />);
             numberColumn = React.findDOMNode(numberColumn);
 

@@ -37,7 +37,6 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/jest-preprocessor.js",
-    "setupEnvScriptFile": "<rootDir>/jest-bootstrap.js",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/admin-config"

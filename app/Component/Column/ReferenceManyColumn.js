@@ -5,6 +5,7 @@ class ReferenceManyColumn extends React.Component {
     render() {
         let {values, field, entry} = this.props,
             referenceEntity = field.targetEntity(),
+            isDetail = referenceEntity.isReadOnly ? referenceEntity.showView().enabled : referenceEntity.editionView().enabled,
             to = referenceEntity.isReadOnly ? 'show' : field.detailLinkRoute(),
             identifiers = entry.values[field.name()],
             params;
@@ -21,9 +22,13 @@ class ReferenceManyColumn extends React.Component {
                         id: identifiers[i]
                     };
 
-                    return <Link to={to} params={params} key={i} className="label label-default">
-                        {value}
-                    </Link>;
+                    if (isDetail) {
+                        return <Link to={to} params={params} key={i} className="label label-default">
+                            {value}
+                        </Link>;
+                    }
+
+                    return <span className="label label-default">{value}</span>
                 })}
             </span>
         );

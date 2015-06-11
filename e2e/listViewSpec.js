@@ -111,5 +111,16 @@ testMethod('ListView', function () {
                 expect(browser.getCurrentUrl()).toContain('/posts/edit/1');
             });
         });
+
+        describe('detail link', function() {
+            it('should go to edit view', function() {
+                // Click on first detail link
+                $('table tr:nth-child(1) td:nth-child(2) a').click();
+                browser.sleep(500);
+
+                // Check browser URL
+                expect(browser.getCurrentUrl()).toContain('/comments/edit/1');
+            })
+        });
     });
 });

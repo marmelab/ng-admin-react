@@ -10,11 +10,12 @@ var routerWrapper = require('../../../Test/RouterWrapper');
 
 var ListView = require('admin-config/lib/View/ListView');
 var Entry = require('admin-config/lib/Entry');
+var Entity = require('admin-config/lib/Entity/Entity');
 var NumberField = require('admin-config/lib/Field/NumberField');
 var Field = require('admin-config/lib/Field/Field');
 var DateField = require('admin-config/lib/Field/DateField');
 
-function getDatagrid(name, entityName, fields, view, router, entries, sortDir, sortField) {
+function getDatagrid(name, entityName, fields, view, router, entries, sortDir, sortField, configuration) {
     return routerWrapper(() => <Datagrid
         name={name}
         fields={fields}
@@ -24,7 +25,8 @@ function getDatagrid(name, entityName, fields, view, router, entries, sortDir, s
         entries={entries}
         sortDir={sortDir}
         sortField={sortField}
-        listActions={view.listActions()}/>
+        listActions={view.listActions()}
+        configuration={configuration}/>
     );
 }
 
@@ -42,7 +44,7 @@ describe('Datagrid', () => {
 
         fields = [
             new NumberField('id').label('#'),
-            new Field('title').label('Title'),
+            new Field('title').label('Title').isDetailLink(true),
             new DateField('created_at').label('Creation date')
         ];
     });
@@ -97,6 +99,24 @@ describe('Datagrid', () => {
 
             expect(cells.length).toEqual(4);
             expect(cells[3].textContent).toContain('Edit');
+        });
+
+        it('should set rows with correct values, plus action buttons', () => {
+            var config = {
+                getEntity: () => new Entity()
+            };
+
+            var entries = [
+                new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1)
+            ];
+
+            view = view.listActions(['edit']);
+
+            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries, null, null, config);
+            var datagridNode = React.findDOMNode(datagrid);
+            var detailLink = datagridNode.querySelector('tbody tr:nth-child(1) td:nth-child(2) a');
+
+            expect(detailLink.tagName.toLowerCase()).toBe('a');
         });
     });
 });

@@ -1,3 +1,4 @@
+jest.autoMockOff();
 jest.dontMock('../BooleanColumn');
 
 var React = require('react/addons');

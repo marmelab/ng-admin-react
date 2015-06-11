@@ -5,17 +5,23 @@ class ReferenceColumn extends React.Component {
     render() {
         let {value, field, entry} = this.props,
             referenceEntity = field.targetEntity(),
-            to = referenceEntity.isReadOnly ? 'show' : field.detailLinkRoute(),
-            referenceId = entry.values[field.name()],
-            params = {
-                entity: referenceEntity.name(),
-                id: referenceId
-            };
+            isDetail = referenceEntity.isReadOnly ? referenceEntity.showView().enabled : referenceEntity.editionView().enabled;
+
+        if (isDetail) {
+            let to = referenceEntity.isReadOnly ? 'show' : field.detailLinkRoute(),
+                referenceId = entry.values[field.name()],
+                params = {
+                    entity: referenceEntity.name(),
+                    id: referenceId
+                };
+
+            return <Link className="reference-column" to={to} params={params}>
+                {value}
+            </Link>;
+        }
 
         return (
-            <Link className="reference-column" to={to} params={params}>
-                {value}
-            </Link>
+            <span>{value}</span>
         );
     }
 }

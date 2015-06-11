@@ -1,6 +1,6 @@
 import React from 'react';
 
-class NumberColumn extends React.Component {
+class StringColumn extends React.Component {
     render() {
         let {value, detailAction} = this.props;
 
@@ -8,15 +8,13 @@ class NumberColumn extends React.Component {
             return <a onClick={detailAction}>{value}</a>;
         }
 
-        return (
-            <span>{value}</span>
-        );
+        return <span>{value}</span>;
     }
 }
 
-NumberColumn.propTypes = {
-    value: React.PropTypes.number,
+StringColumn.propTypes = {
+    value: React.PropTypes.any.isRequired,
     detailAction: React.PropTypes.func
 };
 
-export default NumberColumn;
+export default StringColumn;

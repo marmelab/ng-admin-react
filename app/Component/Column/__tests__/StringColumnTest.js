@@ -29,6 +29,6 @@ describe('StringColumn', () => {
 
         TestUtils.Simulate.click(field);
 
-        expect(isCalled).toBeTruthy;
+        expect(isCalled).toBeTruthy();
     });
 });

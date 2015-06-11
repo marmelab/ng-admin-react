@@ -102,4 +102,22 @@ describe('Compile', () => {
             expect(params.entity).toEqual('posts');
         });
     });
+
+    describe('Compile sub elements', () => {
+        it('should compile any children', () => {
+            var column = '<a onClick={this.props.detailAction}><StringColumn value={this.props.value} /></a>';
+            var clicked = false;
+            var detailAction = function() {
+                clicked = true;
+            };
+
+            var compiled = TestUtils.renderIntoDocument(<Compile detailAction={detailAction} value={123}>{column}</Compile>);
+            compiled = React.findDOMNode(compiled);
+
+            TestUtils.Simulate.click(compiled);
+
+            expect(compiled.querySelector('span').innerHTML).toEqual('123');
+            expect(clicked).toBeTruthy();
+        })
+    });
 });

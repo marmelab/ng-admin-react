@@ -54,6 +54,7 @@ class Compile extends React.Component {
 
             // Import components into context
             props = objectAssign(props, Components);
+            props.props = this.props;
 
             return this.evalInContext.apply(props, [children, props]);
         }

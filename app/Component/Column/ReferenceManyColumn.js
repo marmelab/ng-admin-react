@@ -39,4 +39,6 @@ ReferenceManyColumn.propTypes = {
     values: React.PropTypes.array.isRequired
 };
 
+require('../../autoloader')('ReferenceManyColumn', ReferenceManyColumn);
+
 export default ReferenceManyColumn;

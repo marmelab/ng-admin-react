@@ -25,4 +25,6 @@ MaDeleteButton.propTypes = {
     label: React.PropTypes.string
 };
 
+require('../../autoloader')('MaDeleteButton', MaDeleteButton);
+
 export default MaDeleteButton;

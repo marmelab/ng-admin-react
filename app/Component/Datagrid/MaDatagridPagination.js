@@ -134,4 +134,6 @@ MaDatagridPagination.contextTypes = {
     router: React.PropTypes.func.isRequired
 };
 
+require('../../autoloader')('MaDatagridPagination', MaDatagridPagination);
+
 export default MaDatagridPagination;

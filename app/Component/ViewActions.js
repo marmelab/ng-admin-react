@@ -59,4 +59,6 @@ ViewActions.propTypes = {
 
 ViewActions.defaultProps = { view: null };
 
+require('../autoloader')('DashboardPanel', DashboardPanel);
+
 export default ViewActions;

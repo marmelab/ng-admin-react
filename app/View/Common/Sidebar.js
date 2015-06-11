@@ -18,4 +18,6 @@ class Sidebar extends React.Component {
     }
 }
 
+require('../../autoloader')('Sidebar', Sidebar);
+
 export default Sidebar;

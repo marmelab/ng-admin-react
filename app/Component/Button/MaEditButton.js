@@ -25,4 +25,6 @@ MaEditButton.propTypes = {
     label: React.PropTypes.string
 };
 
+require('../../autoloader')('MaEditButton', MaEditButton);
+
 export default MaEditButton;

@@ -36,4 +36,6 @@ ButtonField.propTypes = {
     updateField: React.PropTypes.func
 };
 
+require('../../autoloader')('ButtonField', ButtonField);
+
 export default ButtonField;

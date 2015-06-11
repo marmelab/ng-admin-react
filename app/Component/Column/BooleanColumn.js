@@ -20,4 +20,6 @@ BooleanColumn.propTypes = {
     detailAction: React.PropTypes.func
 };
 
+require('../../autoloader')('BooleanColumn', BooleanColumn);
+
 export default BooleanColumn;

@@ -16,4 +16,6 @@ class Header extends React.Component {
     }
 }
 
+require('../../autoloader')('Header', Header);
+
 export default Header;

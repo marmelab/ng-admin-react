@@ -40,4 +40,6 @@ Field.propTypes = {
     updateField: React.PropTypes.func.isRequired,
 };
 
+require('../../autoloader')('Field', Field);
+
 export default Field;

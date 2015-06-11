@@ -98,4 +98,6 @@ class MenuItem extends React.Component {
     }
 }
 
+require('../../autoloader')('MenuItem', MenuItem);
+
 export default MenuItem;

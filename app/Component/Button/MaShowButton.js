@@ -25,4 +25,6 @@ MaShowButton.propTypes = {
     label: React.PropTypes.string
 };
 
+require('../../autoloader')('MaShowButton', MaShowButton);
+
 export default MaShowButton;

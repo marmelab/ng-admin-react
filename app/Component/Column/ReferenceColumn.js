@@ -32,4 +32,6 @@ ReferenceColumn.propTypes = {
     field: React.PropTypes.object
 };
 
+require('../../autoloader')('ReferenceColumn', ReferenceColumn);
+
 export default ReferenceColumn;

@@ -1,5 +1,3 @@
-/*global describe,it,expect,$$,element,browser,by*/
-
 var testMethod = process.env.TRAVIS ? xdescribe : describe;
 
 testMethod('ListView', function () {

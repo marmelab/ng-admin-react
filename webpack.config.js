@@ -9,7 +9,7 @@ function getEntrySources() {
         sources.push('webpack/hot/dev-server');
     }
 
-    sources.push('./app/ReactAdmin.js');
+    sources.push('./app/index.js');
 
     return sources;
 }

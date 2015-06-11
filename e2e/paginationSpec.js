@@ -1,10 +1,13 @@
-/*global describe,it,expect,$$,element,browser,by*/
 describe('Pagination', function () {
     'use strict';
 
     beforeEach(function() {
         browser.get(browser.baseUrl + '#/comments/list');
-        browser.sleep(1000);
+        browser.driver.wait(function () {
+            browser.executeScript('window.scrollTo(0, document.body.scrollHeight);');
+
+            return browser.driver.isElementPresent(by.css('nav'));
+        }, 10000); // wait 10000ms
     });
 
     describe('informations', function() {
@@ -27,7 +30,6 @@ describe('Pagination', function () {
 
     describe('page change', function () {
         it('should allow page navigation', function () {
-            browser.executeScript('window.scrollTo(0, 800);');
             $$('.pagination-bar li:nth-child(3) a').click();
             browser.sleep(1000);
 

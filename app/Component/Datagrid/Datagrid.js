@@ -79,39 +79,6 @@ class Datagrid extends React.Component {
 
             let renderedField = <Column field={field} entity={entity} entry={row} configuration={this.props.configuration} />;
 
-            //switch (field.type()) {
-            //    case 'string':
-            //        renderedField = <StringColumn value={row.values[fieldName]} detailAction={detailAction} />;
-            //        break;
-            //
-            //    case 'boolean':
-            //        renderedField = <BooleanColumn value={!!row.values[fieldName]} detailAction={detailAction} />;
-            //        break;
-            //
-            //    case 'date':
-            //        renderedField = <DateColumn value={row.values[fieldName]} format={field.format()} detailAction={detailAction} />;
-            //        break;
-            //
-            //    case 'template':
-            //        renderedField = <TemplateColumn template={field.template()} entry={row} />;
-            //        break;
-            //
-            //    case 'number':
-            //        renderedField = <NumberColumn value={row.values[fieldName]} detailAction={detailAction} />;
-            //        break;
-            //
-            //    case 'reference':
-            //        renderedField = <ReferenceColumn value={row.listValues[fieldName]} field={field} entry={row} />;
-            //        break;
-            //
-            //    case 'reference_many':
-            //        renderedField = <ReferenceManyColumn values={row.listValues[fieldName]} field={field} entry={row} />;
-            //        break;
-            //
-            //    default:
-            //        throw new Error(`Unknown field type "${field.type()}".`);
-            //}
-
             cells.push(<td key={i}>{renderedField}</td>);
         }
 

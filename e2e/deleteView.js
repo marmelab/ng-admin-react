@@ -1,17 +1,14 @@
-/*global describe,it,expect,$$,element,browser,by*/
-
 var testMethod = process.env.TRAVIS ? xdescribe : describe;
 
-
-testMethod('DeleteView', function () {
+describe('DeleteView', function () {
     'use strict';
 
     beforeEach(function () {
-        browser.get(browser.baseUrl + '#/posts/list');
-
-        browser.driver.wait(function () {
-            return browser.driver.isElementPresent(by.css('table tr:nth-child(1)'));
-        }, 10000); // wait 10000ms
+        browser.get(browser.baseUrl + '#/posts/list').then(function () {
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('table tr:nth-child(1)'));
+            }, 10000); // wait 10s
+        });
     });
 
     describe('Deletion link', function () {

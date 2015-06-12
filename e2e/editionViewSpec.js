@@ -1,12 +1,12 @@
-describe('EditionViews', function () {
+describe('EditionView', function () {
     'use strict';
 
     beforeEach(function() {
-        browser.get(browser.baseUrl + '#/posts/edit/12');
-
-        browser.driver.wait(function () {
-            return browser.driver.isElementPresent(by.css('.react-admin-field-title input'));
-        }, 10000); // wait 10000ms
+        browser.get(browser.baseUrl + '#/posts/edit/12').then(function () {
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('.react-admin-field-title input'));
+            }, 10000); // wait 10s
+        });
     });
 
     describe('Edition', function() {

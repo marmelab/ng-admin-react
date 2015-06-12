@@ -2,12 +2,13 @@ describe('Pagination', function () {
     'use strict';
 
     beforeEach(function() {
-        browser.get(browser.baseUrl + '#/comments/list');
-        browser.driver.wait(function () {
-            browser.executeScript('window.scrollTo(0, document.body.scrollHeight);');
+        browser.get(browser.baseUrl + '#/comments/list').then(function () {
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('nav'));
+            }, 10000); // wait 10s
 
-            return browser.driver.isElementPresent(by.css('nav'));
-        }, 10000); // wait 10000ms
+            browser.executeScript('window.scrollTo(0, document.body.scrollHeight);');
+        });
     });
 
     describe('informations', function() {

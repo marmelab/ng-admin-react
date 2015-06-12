@@ -1,8 +1,6 @@
-/*global describe,it,expect,$$,element,browser,by*/
-
 var testMethod = process.env.TRAVIS ? xdescribe : describe;
 
-testMethod('Dashboard', function () {
+describe('Dashboard', function () {
     'use strict';
 
     beforeEach(function () {
@@ -12,7 +10,7 @@ testMethod('Dashboard', function () {
     it('should display a navigation menu linking to all entities', function () {
         browser.driver.wait(function () {
             return browser.driver.isElementPresent(by.css('.nav li:nth-child(4)'));
-        }, 5000); // wait 5s
+        }, 10000); // wait 10s
 
         $$('.nav li').then(function (items) {
             expect(items.length).toBe(5);
@@ -25,7 +23,7 @@ testMethod('Dashboard', function () {
     it('should display a panel for each entity with a list of recent items', function () {
         browser.driver.wait(function () {
             return browser.driver.isElementPresent(by.css('.panel:nth-child(2)'));
-        }, 5000); // wait 5s
+        }, 10000); // wait 10s
 
         $$('.panel').then(function (panels) {
             expect(panels.length).toBe(3);
@@ -39,11 +37,13 @@ testMethod('Dashboard', function () {
     it('should contains a detail link in the posts panel', function () {
         browser.driver.wait(function () {
             return browser.driver.isElementPresent(by.css('.panel:nth-child(1)'));
-        }, 5000); // wait 5s
+        }, 10000); // wait 10s
 
-        $('.panel:nth-child(1) tbody tr:nth-child(1) a').click().then(function() {
-            // Check browser URL
-            expect(browser.getCurrentUrl()).toContain('/posts/edit/12');
+        $$('.panel:nth-child(1) tbody tr:nth-child(1) a').then(function (links) {
+            links[0].click().then(function() {
+                // Check browser URL
+                expect(browser.getCurrentUrl()).toContain('/posts/edit/12');
+            });
         });
     });
 });

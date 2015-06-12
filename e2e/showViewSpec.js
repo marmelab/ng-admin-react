@@ -1,13 +1,12 @@
-/*global describe,it,expect,$$,element,browser,by*/
 describe('ShowView', function () {
     'use strict';
 
     beforeEach(function () {
-        browser.get(browser.baseUrl + '#/posts/show/1');
-
-        browser.driver.wait(function () {
-            return browser.driver.isElementPresent(by.css('#show-view'));
-        }, 10000); // wait 10000ms
+        browser.get(browser.baseUrl + '#/posts/show/1').then(function () {
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('#show-view'));
+            }, 10000); // wait 10s
+        });
     });
 
     // @TODO : decomment after choice field implementation

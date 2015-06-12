@@ -42,7 +42,10 @@ class Column extends React.Component {
             column = isDetailLink ? fieldView.getLinkWidget() : fieldView.getReadWidget();
         }
 
-        return <Compile detailAction={detailAction} field={field} entity={entity} entry={entry} value={value}>{column}</Compile>;
+        return <Compile detailAction={detailAction} field={field} configuration={this.props.configuration}
+                        dataStore={this.props.dataStore} entity={entity} entry={entry} value={value}>
+                {column}
+        </Compile>;
     }
 }
 

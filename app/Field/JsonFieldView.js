@@ -1,6 +1,6 @@
 class JsonFieldView {
     static getReadWidget() {
-        return '<JsonColumn value={this.props.value} />';
+        return '<JsonColumn value={this.props.value || {}} />';
     }
 
     static getLinkWidget() {

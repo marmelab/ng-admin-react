@@ -1,6 +1,7 @@
 class ReferencedListFieldView {
     static getReadWidget() {
-        return '<ReferencedList entries={this.props.entries} entityName={this.props.entity.name()} field={field} />';
+        return '<ReferencedList entries={this.props.dataStore.getEntries(this.props.field.targetEntity().uniqueId + "_list") || []} ' +
+            'entityName={this.props.entity.name()} field={this.props.field} configuration={this.props.configuration} />';
     }
 
     static getLinkWidget() {

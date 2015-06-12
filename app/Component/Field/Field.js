@@ -1,37 +1,29 @@
 import React from 'react';
 
-import { InputField, CheckboxField } from './';
+import Compile from '../Compile';
+import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
+
 
 class Field extends React.Component {
     render() {
-        let field = this.props.field;
+        let {field, value, entity} = this.props;
         let fieldName = field.name();
-        let value = this.props.value;
+
+        let fieldView = FieldViewConfiguration.getFieldView(field.type());
         let className = 'show-value react-admin-field-' + field.name() + ' ' +
             (field.getCssClasses(this.props.entry) || 'col-sm-10 col-md-8 col-lg-7');
 
-        let renderedField;
-        switch (field.type()) {
-            case 'string':
-                renderedField = <InputField type={'text'} name={fieldName} value={value} updateField={this.props.updateField} />;
-                break;
-
-            case 'boolean':
-                renderedField = <CheckboxField name={fieldName} value={value} updateField={this.props.updateField} />;
-                break;
-
-            default:
-                // TODO: add more types
-                renderedField = ''; // temporay
-                //throw new Error(`Unknown field type "${field.type()}".`);
-        }
+        let fieldTemplate = fieldView ? fieldView.getWriteWidget() : null;
 
         return (
             <div>
                 <label htmlFor={fieldName} className="col-sm-2 control-label">{ field.label() }</label>
 
                 <div className={className}>
-                    {renderedField}
+                    <Compile field={field} updateField={this.props.updateField} dataStore={this.props.dataStore}
+                             entity={entity} value={value} fieldName={fieldName} configuration={this.props.configuration}>
+                        {fieldTemplate}
+                    </Compile>
                 </div>
             </div>
         );
@@ -43,6 +35,7 @@ Field.propTypes = {
     entry: React.PropTypes.object.isRequired,
     field: React.PropTypes.object.isRequired,
     dataStore: React.PropTypes.object.isRequired,
+    configuration: React.PropTypes.object,
     value: React.PropTypes.any,
     updateField: React.PropTypes.func.isRequired,
 };

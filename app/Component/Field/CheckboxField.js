@@ -1,9 +1,8 @@
 import React from 'react';
 
 class CheckboxField extends React.Component {
-    onChange() {
-        let value = this.refs[this.props.name].getDOMNode().checked ? 1 : 0;
-        this.props.updateField(this.props.name, value);
+    onChange(e) {
+        this.props.updateField(this.props.name, e.target.checked ? 1 : 0);
     }
 
     render() {
@@ -12,7 +11,6 @@ class CheckboxField extends React.Component {
             checked: !!this.props.value,
             name: this.props.name,
             id: this.props.name,
-            ref: this.props.name,
             onChange: this.onChange.bind(this)
         };
 

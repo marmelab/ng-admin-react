@@ -43,9 +43,10 @@ class ShowView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity
-            || nextProps.query.sortField !== this.props.query.sortField
-            || nextProps.query.sortDir !== this.props.query.sortDir) {
+        if (nextProps.params.entity !== this.props.params.entity ||
+            nextProps.params.id !== this.props.params.id ||
+            nextProps.query.sortField !== this.props.query.sortField ||
+            nextProps.query.sortDir !== this.props.query.sortDir) {
 
             this.refreshData();
         }
@@ -62,6 +63,10 @@ class ShowView extends React.Component {
             dataStore = this.state.data.getIn(['dataStore', 'object']),
             entry = dataStore.getFirstEntry(view.getEntity().uniqueId),
             actions = view.actions() || ['list', 'edit', 'delete'];
+
+        if (!entry) {
+            return <div />;
+        }
 
         return (
             <div className="view show-view">

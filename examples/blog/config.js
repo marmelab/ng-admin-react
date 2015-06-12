@@ -126,7 +126,7 @@
                     nga.field('body').label('Comment').map(truncate),
                     nga.field(null, 'template') // template fields don't need a name in dashboard view
                          .label('Edition')
-                         .template('<Link to="edit" params={{entity: "posts", id: entry.identifierValue}}>Edit</Link>') // you can use custom directives, too
+                         .template('<Link to="edit" params={{entity: "comments", id: entry.identifierValue}}>Edit</Link>') // you can use custom directives, too
                 ]);
 
             comment.views['ListView']

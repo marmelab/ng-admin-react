@@ -73,6 +73,10 @@ class ListView extends React.Component {
         let entries = dataStore.getEntries(view.entity.uniqueId);
         let actions = view.actions() || ['create'];
 
+        if (!entries) {
+            return <div />;
+        }
+
         return (
             <div className="view list-view">
                 <ViewActions entityName={view.entity.name()} buttons={actions} />

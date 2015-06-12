@@ -5,7 +5,7 @@ class ReferenceFieldView {
     }
 
     static getLinkWidget() {
-        return '<a onClick={this.props.detailAction}>' + ReferenceFieldView.getReadWidget() + '</a>';
+        return ReferenceFieldView.getReadWidget();
     }
 
     static getFilterWidget() {

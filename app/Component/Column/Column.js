@@ -6,7 +6,7 @@ import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
 class Column extends React.Component {
     getDetailAction (entry) {
         return function() {
-            let entityName = this.props.entityName,
+            let entityName = this.props.entity.name(),
                 entity = this.props.configuration.getEntity(entityName),
                 route = entity.editionView().enabled ? 'edit' : 'show';
 
@@ -53,6 +53,10 @@ Column.propTypes = {
     field: React.PropTypes.object.isRequired,
     entry: React.PropTypes.object.isRequired,
     entity: React.PropTypes.object.isRequired
+};
+
+Column.contextTypes = {
+    router: React.PropTypes.func.isRequired
 };
 
 export default Column;

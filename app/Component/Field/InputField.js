@@ -1,8 +1,8 @@
 import React from 'react';
 
 class InputField extends React.Component {
-    onChange() {
-        this.props.updateField(this.props.name, this.refs[this.props.name].getDOMNode().value);
+    onChange(e) {
+        this.props.updateField(this.props.name, e.target.value);
     }
 
     render() {
@@ -11,7 +11,6 @@ class InputField extends React.Component {
             value: this.props.value ? this.props.value : null,
             name: this.props.name,
             id: this.props.name,
-            ref: this.props.name,
             onChange: this.onChange.bind(this)
         };
 

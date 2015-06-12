@@ -63,6 +63,10 @@ class ShowView extends React.Component {
             entry = dataStore.getFirstEntry(view.getEntity().uniqueId),
             actions = view.actions() || ['list', 'edit', 'delete'];
 
+        if (!entry) {
+            return <div />;
+        }
+
         return (
             <div className="view show-view">
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />

@@ -30,14 +30,17 @@ describe('Pagination', function () {
 
     describe('page change', function () {
         it('should allow page navigation', function () {
-            $$('.pagination-bar li:nth-child(3) a').click();
-            browser.sleep(1000);
+            $$('.pagination-bar li:nth-child(3) a').click().then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.pagination-bar .total'));
+                }, 10000); // wait 10s
 
-            $$('.pagination-bar .total').then(function (totalElements) {
-                expect(totalElements[0].getText()).toBe('11 - 11 on 11');
-            });
-            $$('.pagination-bar .pagination li').then(function (liElements) {
-                expect(liElements[2].getAttribute('class')).toContain('active');
+                $$('.pagination-bar .total').then(function (totalElements) {
+                    expect(totalElements[0].getText()).toBe('11 - 11 on 11');
+                });
+                $$('.pagination-bar .pagination li').then(function (liElements) {
+                    expect(liElements[2].getAttribute('class')).toContain('active');
+                });
             });
         });
     });

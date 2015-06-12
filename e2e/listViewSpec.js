@@ -1,5 +1,3 @@
-var testMethod = process.env.TRAVIS ? xdescribe : describe;
-
 describe('ListView', function () {
     'use strict';
 

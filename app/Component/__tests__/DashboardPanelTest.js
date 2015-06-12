@@ -2,6 +2,8 @@
 
 jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../Button/__mocks__/Link')});
+jest.dontMock('../../Field/FieldViewConfiguration');
+jest.dontMock('../../Field/StringFieldView');
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
@@ -14,13 +16,29 @@ var NumberField = require('admin-config/lib/Field/NumberField');
 var Field = require('admin-config/lib/Field/Field');
 var DateField = require('admin-config/lib/Field/DateField');
 
-function getPanel(view, label, dataStore, sortDir, sortField) {
+var FieldViewConfiguration = require('../../Field/FieldViewConfiguration');
+var StringFieldView = require('../../Field/StringFieldView');
+var NumberFieldView = require('../../Field/NumberFieldView');
+var DateFieldView = require('../../Field/DateFieldView');
+
+FieldViewConfiguration.registerFieldView('string', StringFieldView);
+FieldViewConfiguration.registerFieldView('number', NumberFieldView);
+FieldViewConfiguration.registerFieldView('date', DateFieldView);
+
+function getPanel(view, label, dataStore, sortDir, sortField, configuration) {
+    if (!configuration) {
+        configuration = {
+            getEntity: () => new Entity()
+        };
+    }
+
     return routerWrapper(() => <DashboardPanel
         view={view}
         label={label}
         dataStore={dataStore}
         sortDir={sortDir}
         sortField={sortField}
+        configuration={configuration}
         />
     );
 }

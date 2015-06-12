@@ -1,6 +1,6 @@
 class NumberFieldView {
     static getReadWidget() {
-        return '<BooleanColumn value={this.props.value} />';
+        return '<NumberColumn value={this.props.value} />';
     }
 
     static getLinkWidget() {

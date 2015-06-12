@@ -1,6 +1,6 @@
 class TemplateFieldView {
     static getReadWidget() {
-        return '<TemplateColumn value={this.props.value} />';
+        return '<TemplateColumn template={this.props.field.template()} entry={this.props.entry} />';
     }
 
     static getLinkWidget() {

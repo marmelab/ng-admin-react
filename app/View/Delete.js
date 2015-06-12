@@ -37,7 +37,8 @@ class DeleteView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity) {
+        if (nextProps.params.entity !== this.props.params.entity ||
+            nextProps.params.id !== this.props.params.id) {
             this.refreshData();
         }
     }

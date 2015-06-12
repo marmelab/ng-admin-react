@@ -43,9 +43,10 @@ class EditView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity
-            || nextProps.query.sortField !== this.props.query.sortField
-            || nextProps.query.sortDir !== this.props.query.sortDir) {
+        if (nextProps.params.entity !== this.props.params.entity ||
+            nextProps.params.id !== this.props.params.id ||
+            nextProps.query.sortField !== this.props.query.sortField ||
+            nextProps.query.sortDir !== this.props.query.sortDir) {
 
             this.refreshData();
         }

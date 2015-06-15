@@ -1,5 +1,6 @@
 import React from 'react';
 import ReferenceColumn from '../Component/Column/ReferenceColumn';
+import SelectField from '../Component/Field/SelectField';
 
 class ReferenceFieldView {
     static getReadWidget() {
@@ -19,8 +20,9 @@ class ReferenceFieldView {
     }
 
     static getWriteWidget() {
-        // @TODO : change when reference input will be implemented
-        return null;
+        return <SelectField name={this.props.fieldName} value={this.props.value}
+                            choices={this.props.dataStore.getChoices(this.props.field)}
+                            updateField={this.props.updateField} />;
     }
 }
 

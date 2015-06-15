@@ -10,7 +10,7 @@ class Field extends React.Component {
         let fieldName = field.name();
 
         let fieldView = FieldViewConfiguration.getFieldView(field.type());
-        let className = 'show-value react-admin-field-' + field.name() + ' ' +
+        let className = 'edit-value react-admin-field-' + field.name() + ' ' +
             (field.getCssClasses(this.props.entry) || 'col-sm-10 col-md-8 col-lg-7');
 
         let fieldTemplate = fieldView ? fieldView.getWriteWidget : null;

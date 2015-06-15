@@ -4,12 +4,12 @@ import jsx from 'jsx-transform';
 import objectAssign from 'object-assign';
 
 import { MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton } from './Button';
-import { StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from './Column';
+import { StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList } from './Column';
 import { InputField, CheckboxField, ButtonField } from './Field';
 
 let Components = {
     MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton,
-    StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn,
+    StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList,
     InputField, CheckboxField, ButtonField,
     Link, React
 };
@@ -24,7 +24,16 @@ class Compile extends React.Component {
             }
         }
 
-        return eval(variables.join(';') + '; ' + jsx.fromString(template, context));
+        if (typeof(template) === 'function') {
+            this.React = React;
+            template = template.apply(this, []);
+        }
+
+        if (typeof(template) === 'string') {
+            return eval(variables.join(';') + '; ' + jsx.fromString(template, context));
+        }
+
+        return template;
     }
 
     render() {
@@ -46,14 +55,17 @@ class Compile extends React.Component {
             children = children.join('');
         }
 
-        if (typeof(children) === 'string') {
+        if (typeof(children) === 'string' || typeof(children) === 'function') {
             // Wrap element without root tag
-            if (children.trim()[0] !== '<') {
-                children = '<span>' + children + '</span>';
+            if (typeof(children) === 'string') {
+                if (children.trim()[0] !== '<') {
+                    children = '<span>' + children + '</span>';
+                }
             }
 
             // Import components into context
             props = objectAssign(props, Components);
+            props.props = this.props;
 
             return this.evalInContext.apply(props, [children, props]);
         }

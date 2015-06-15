@@ -11,6 +11,7 @@ import DeleteView from './View/Delete';
 import ConfigurationFactory from 'admin-config/lib/Factory';
 
 import ViewActions from './Component/ViewActions';
+import FieldViewConfiguration from './Field/FieldViewConfiguration';
 
 import Pace from 'pace';
 
@@ -33,6 +34,7 @@ class ReactAdmin extends React.Component {
         this.state = {
             handler: null,
             factory: ConfigurationFactory,
+            fieldViewConfiguration: FieldViewConfiguration,
             routes: routes,
             components: {
                 ViewActions: ViewActions

@@ -70,7 +70,8 @@ class EditView extends React.Component {
 
             fields.push(
                 <div className="form-field form-group" key={field.order()}>
-                    <Field field={field} value={value} entity={view.entity} entry={entry} dataStore={dataStore} updateField={this.updateField} />
+                    <Field field={field} value={value} entity={view.getEntity()} entry={entry} configuration={this.props.configuration}
+                           dataStore={dataStore} updateField={this.updateField} />
                 </div>
             );
         }

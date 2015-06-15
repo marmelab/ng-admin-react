@@ -2,19 +2,14 @@ import React from 'react';
 
 class StringColumn extends React.Component {
     render() {
-        let {value, detailAction} = this.props;
-
-        if (detailAction) {
-            return <a onClick={detailAction}>{value}</a>;
-        }
+        let {value} = this.props;
 
         return <span>{value}</span>;
     }
 }
 
 StringColumn.propTypes = {
-    value: React.PropTypes.any.isRequired,
-    detailAction: React.PropTypes.func
+    value: React.PropTypes.any.isRequired
 };
 
 export default StringColumn;

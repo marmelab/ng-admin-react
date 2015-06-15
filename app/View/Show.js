@@ -5,7 +5,7 @@ import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
 import EntityStore from '../Stores/EntityStore';
-import ShowFields from '../Component/Show/ShowFields';
+import Column from '../Component/Column/Column';
 import Compile from '../Component/Compile';
 
 class ShowView extends React.Component {
@@ -78,10 +78,16 @@ class ShowView extends React.Component {
                 </div>
 
                 <div className="row form-horizontal" id="show-view">
-                    <ShowFields
-                        fields={view.getFields()}
-                        dataStore={dataStore}
-                        view={view} />
+                    { view.getFields().map((field, i) => (
+                        <div className="col-lg-12 form-group" key={i}>
+                            <label className="col-sm-2 control-label">{ field.label() }</label>
+
+                            <div className={'show-value react-admin-field-' + field.name() + (field.getCssClasses(entry) || 'col-sm-10 col-md-8 col-lg-7')}>
+                                <Column field={field} entity={view.getEntity()} entry={entry} dataStore={dataStore}
+                                        configuration={this.props.configuration} />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         )

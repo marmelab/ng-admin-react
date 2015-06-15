@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '../../Component/Datagrid/ColumnHeader';
 import DatagridActions from '../../Component/Datagrid/DatagridActions';
 
-import { StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn } from '../Column';
+import Column from '../Column/Column';
 
 class Datagrid extends React.Component {
     getDetailAction (entry) {
@@ -62,55 +62,22 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
+        let entity = this.props.configuration.getEntity(this.props.entityName);
+
         return this.props.entries.map((r, i) => (
-            <tr key={i}>{this.buildCells(r)}</tr>
+            <tr key={i}>{this.buildCells(r, entity)}</tr>
         ));
     }
 
-    buildCells(row) {
+    buildCells(row, entity) {
         let cells = [];
         let actions = this.props.listActions;
         let entityName = this.props.entityName;
 
         for (let i in this.props.fields) {
             let field = this.props.fields[i];
-            let fieldName = field.name();
-            let detailAction = this.isDetailLink(field) ? this.getDetailAction(row) : null;
-            let renderedField;
 
-
-            switch (field.type()) {
-                case 'string':
-                    renderedField = <StringColumn value={row.values[fieldName]} detailAction={detailAction} />;
-                    break;
-
-                case 'boolean':
-                    renderedField = <BooleanColumn value={!!row.values[fieldName]} detailAction={detailAction} />;
-                    break;
-
-                case 'date':
-                    renderedField = <DateColumn value={row.values[fieldName]} format={field.format()} detailAction={detailAction} />;
-                    break;
-
-                case 'template':
-                    renderedField = <TemplateColumn template={field.template()} entry={row} />;
-                    break;
-
-                case 'number':
-                    renderedField = <NumberColumn value={row.values[fieldName]} detailAction={detailAction} />;
-                    break;
-
-                case 'reference':
-                    renderedField = <ReferenceColumn value={row.listValues[fieldName]} field={field} entry={row} />;
-                    break;
-
-                case 'reference_many':
-                    renderedField = <ReferenceManyColumn values={row.listValues[fieldName]} field={field} entry={row} />;
-                    break;
-
-                default:
-                    throw new Error(`Unknown field type "${field.type()}".`);
-            }
+            let renderedField = <Column field={field} entity={entity} entry={row} configuration={this.props.configuration} />;
 
             cells.push(<td key={i}>{renderedField}</td>);
         }

@@ -8,6 +8,7 @@ var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Compile = require('../Compile');
 var routerWrapper = require('../../Test/RouterWrapper');
+var StringColumn = require('../Column/StringColumn');
 
 function getCompiledLinkFromString(strElement) {
     return routerWrapper(() => <Compile>{strElement}</Compile>);
@@ -101,5 +102,34 @@ describe('Compile', () => {
             var params = JSON.parse(compiled.attributes['data-params'].value);
             expect(params.entity).toEqual('posts');
         });
+    });
+
+    describe('Compile sub elements', () => {
+        it('should compile any children', () => {
+            var column = '<a onClick={this.props.detailAction}><StringColumn value={this.props.value} /></a>';
+            var clicked = false;
+            var detailAction = function() {
+                clicked = true;
+            };
+
+            var compiled = TestUtils.renderIntoDocument(<Compile detailAction={detailAction} value={123}>{column}</Compile>);
+            compiled = React.findDOMNode(compiled);
+
+            TestUtils.Simulate.click(compiled);
+
+            expect(compiled.querySelector('span').innerHTML).toEqual('123');
+            expect(clicked).toBeTruthy();
+        });
+
+        it('should compile element returned from a function', () => {
+            var column = function() {
+                return <StringColumn value={this.props.value} />;
+            };
+
+            var compiled = TestUtils.renderIntoDocument(<Compile value={'bike'}>{column}</Compile>);
+            compiled = React.findDOMNode(compiled);
+
+            expect(compiled.innerHTML).toEqual('bike');
+        })
     });
 });

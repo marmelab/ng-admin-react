@@ -22,7 +22,7 @@ class InputField extends React.Component {
 
 InputField.propTypes = {
     name: React.PropTypes.string.isRequired,
-    value: React.PropTypes.string,
+    value: React.PropTypes.any,
     type: React.PropTypes.string,
     updateField: React.PropTypes.func
 };

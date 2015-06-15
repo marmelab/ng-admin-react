@@ -17,6 +17,7 @@ class ReferencedList extends React.Component {
                 entries={entries}
                 sortDir={sortDir}
                 sortField={sortField}
+                configuration={this.props.configuration}
                 />
         );
     }

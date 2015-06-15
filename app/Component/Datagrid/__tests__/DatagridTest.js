@@ -2,6 +2,8 @@
 
 jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
+jest.dontMock('../../../Field/FieldViewConfiguration');
+jest.dontMock('../../../Field/StringFieldView');
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
@@ -15,7 +17,22 @@ var NumberField = require('admin-config/lib/Field/NumberField');
 var Field = require('admin-config/lib/Field/Field');
 var DateField = require('admin-config/lib/Field/DateField');
 
+var FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
+var StringFieldView = require('../../../Field/StringFieldView');
+var NumberFieldView = require('../../../Field/NumberFieldView');
+var DateFieldView = require('../../../Field/DateFieldView');
+
+FieldViewConfiguration.registerFieldView('string', StringFieldView);
+FieldViewConfiguration.registerFieldView('number', NumberFieldView);
+FieldViewConfiguration.registerFieldView('date', DateFieldView);
+
 function getDatagrid(name, entityName, fields, view, router, entries, sortDir, sortField, configuration) {
+    if (!configuration) {
+        configuration = {
+            getEntity: () => new Entity()
+        };
+    }
+
     return routerWrapper(() => <Datagrid
         name={name}
         fields={fields}
@@ -102,17 +119,13 @@ describe('Datagrid', () => {
         });
 
         it('should set rows with correct values, plus action buttons', () => {
-            var config = {
-                getEntity: () => new Entity()
-            };
-
             var entries = [
                 new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1)
             ];
 
             view = view.listActions(['edit']);
 
-            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries, null, null, config);
+            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries, null, null);
             var datagridNode = React.findDOMNode(datagrid);
             var detailLink = datagridNode.querySelector('tbody tr:nth-child(1) td:nth-child(2) a');
 

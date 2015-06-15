@@ -18,7 +18,7 @@ class BooleanFieldView {
 
     static getWriteWidget() {
         // @TODO: use boolean input when implemented
-        return '<CheckboxField name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />';
+        return <CheckboxField name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 }
 

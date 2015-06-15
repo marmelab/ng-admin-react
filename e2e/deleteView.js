@@ -26,7 +26,12 @@ describe('DeleteView', function () {
 
                 // Delete it
                 $('.btn-danger').click().then(function () {
-                    // Wait for list to load
+                    // Wait for notification to display
+                    browser.driver.sleep(1000);
+
+                    // Check that a notification has been displayed
+                    expect($('.humane-flatty-success').getText()).toBe('Element successfully deleted.');
+
                     browser.driver.wait(function () {
                         return browser.driver.isElementPresent(by.css('table tbody tr'));
                     }, 10000); // wait 10000ms

@@ -4,7 +4,7 @@ describe('DeleteView', function () {
     beforeEach(function () {
         browser.get(browser.baseUrl + '#/posts/list').then(function () {
             browser.driver.wait(function () {
-                return browser.driver.isElementPresent(by.css('table tr:nth-child(1)'));
+                return browser.driver.isElementPresent(by.css('table tr:nth-child(1) a.btn-delete'));
             }, 10000); // wait 10s
         });
     });
@@ -16,10 +16,13 @@ describe('DeleteView', function () {
                 // Check browser URL
                 expect(browser.getCurrentUrl()).toContain('/posts/delete/12');
 
+                // Wait for page to load
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.page-header h1'));
+                }, 5000); // wait 5s
+
                 // Check title
-                $$('.view-wrapper h1').then(function (h1Element) {
-                    expect(h1Element[0].getText()).toBe('Delete post "Qui tempore rerum et voluptates"');
-                });
+                expect($('.page-header h1').getText()).toBe('Delete post "Qui tempore rerum et voluptates"');
 
                 // Delete it
                 $('.btn-danger').click().then(function () {
@@ -29,9 +32,7 @@ describe('DeleteView', function () {
                     }, 10000); // wait 10000ms
 
                     // Check that post 11 has been deleted
-                    $$('table tr td:nth-child(1)').then(function (lastId) {
-                        expect(lastId[0].getText()).toNotBe(11);
-                    });
+                    expect($('table tr td:nth-child(1)').getText()).toNotBe(11);
                 });
             });
         });
@@ -42,10 +43,13 @@ describe('DeleteView', function () {
                 // Check browser URL
                 expect(browser.getCurrentUrl()).toContain('/posts/delete/12');
 
+                // Wait for page to load
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.page-header h1'));
+                }, 5000); // wait 5s
+
                 // Check title
-                $$('.view-wrapper h1').then(function (h1Element) {
-                    expect(h1Element[0].getText()).toBe('Delete post "Qui tempore rerum et voluptates"');
-                });
+                expect($('.page-header h1').getText()).toBe('Delete post "Qui tempore rerum et voluptates"');
 
                 // Cancel it
                 $('#delete-view .btn-default').click().then(function () {

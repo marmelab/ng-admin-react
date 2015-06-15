@@ -1,11 +1,15 @@
+import ReferenceColumn from '../Component/Column/ReferenceColumn';
+
 class ReferenceFieldView {
     static getReadWidget() {
-        return '<ReferenceColumn value={this.props.entry.listValues[this.props.field.name()]} ' +
-            'field={this.props.field} entry={this.props.entry} />';
+        return <ReferenceColumn value={this.props.entry.listValues[this.props.field.name()]}
+            field={this.props.field} entry={this.props.entry} />;
     }
 
     static getLinkWidget() {
-        return ReferenceFieldView.getReadWidget();
+        // Due to a scope issue, we can't call ReferenceFieldView.getReadWidget() here
+        return <ReferenceColumn value={this.props.entry.listValues[this.props.field.name()]}
+                                field={this.props.field} entry={this.props.entry} />;
     }
 
     static getFilterWidget() {

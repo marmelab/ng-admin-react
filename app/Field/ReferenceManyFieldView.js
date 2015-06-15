@@ -1,12 +1,16 @@
+import ReferenceManyColumn from '../Component/Column/ReferenceManyColumn';
+
 class ReferenceManyFieldView {
     static getReadWidget() {
-        return '<ReferenceManyColumn field={this.props.field} entry={this.props.entry} ' +
-            'values={this.props.entry.listValues[this.props.field.name()]} />';
+        return <ReferenceManyColumn field={this.props.field} entry={this.props.entry}
+            values={this.props.entry.listValues[this.props.field.name()]} />;
     }
 
     static getLinkWidget() {
         // Links are handled individually by the read component
-        return ReferenceManyFieldView.getReadWidget();
+        // Due to a scope issue, we can't call ReferenceManyFieldView.getReadWidget() here
+        return <ReferenceManyColumn field={this.props.field} entry={this.props.entry}
+                                    values={this.props.entry.listValues[this.props.field.name()]} />;
     }
 
     static getFilterWidget() {

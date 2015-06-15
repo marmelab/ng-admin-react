@@ -1,10 +1,13 @@
+import StringColumn from '../Component/Column/StringColumn';
+import InputField from '../Component/Field/InputField';
+
 class TextFieldView {
     static getReadWidget() {
-        return '<StringColumn value={this.props.value} />';
+        return <StringColumn value={this.props.value} />;
     }
 
     static getLinkWidget() {
-        return '<a onClick={this.props.detailAction}>' + TextFieldView.getReadWidget() + '</a>';
+        return <a onClick={this.props.detailAction}><StringColumn value={this.props.value} /></a>;
     }
 
     static getFilterWidget() {
@@ -14,7 +17,7 @@ class TextFieldView {
 
     static getWriteWidget() {
         // @TODO : Use text input field (textarea) when implemented
-        return '<InputField type={"text"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />';
+        return <InputField type={"text"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 }
 

@@ -1,10 +1,13 @@
+import BooleanColumn from '../Component/Column/BooleanColumn';
+import CheckboxField from '../Component/Field/CheckboxField';
+
 class BooleanFieldView {
     static getReadWidget() {
-        return '<BooleanColumn value={this.props.value} />';
+        return <BooleanColumn value={this.props.value} />;
     }
 
     static getLinkWidget() {
-        return '<a onClick={this.props.detailAction}>' + BooleanFieldView.getReadWidget() + '</a>';
+        return <a onClick={this.props.detailAction}><BooleanColumn value={this.props.value} /></a>;
     }
 
     static getFilterWidget() {
@@ -14,7 +17,7 @@ class BooleanFieldView {
 
     static getWriteWidget() {
         // @TODO: use boolean input when implemented
-        return '<InputField type={"text"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />';
+        return '<CheckboxField name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />';
     }
 }
 

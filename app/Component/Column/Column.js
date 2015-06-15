@@ -34,12 +34,12 @@ class Column extends React.Component {
         let isDetailLink = this.isDetailLink(field);
         let detailAction = isDetailLink ? this.getDetailAction(this.props.entry) : null;
         let type = field.type();
-        let value = entry.values[field.name()];
+        let value = entry.values[field.name()] || null;
         let fieldView = FieldViewConfiguration.getFieldView(type);
         let column = null;
 
         if (fieldView) {
-            column = isDetailLink ? fieldView.getLinkWidget() : fieldView.getReadWidget();
+            column = isDetailLink ? fieldView.getLinkWidget : fieldView.getReadWidget;
         }
 
         return <Compile detailAction={detailAction} field={field} configuration={this.props.configuration}

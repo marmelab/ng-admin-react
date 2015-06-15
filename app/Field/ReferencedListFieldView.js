@@ -1,7 +1,9 @@
+import ReferencedList from '../Component/Column/ReferencedList';
+
 class ReferencedListFieldView {
     static getReadWidget() {
-        return '<ReferencedList entries={this.props.dataStore.getEntries(this.props.field.targetEntity().uniqueId + "_list") || []} ' +
-            'entityName={this.props.entity.name()} field={this.props.field} configuration={this.props.configuration} />';
+        return <ReferencedList entries={this.props.dataStore.getEntries(this.props.field.targetEntity().uniqueId + "_list") || []}
+            entityName={this.props.entity.name()} field={this.props.field} configuration={this.props.configuration} />;
     }
 
     static getLinkWidget() {
@@ -13,7 +15,8 @@ class ReferencedListFieldView {
     }
 
     static getWriteWidget() {
-        return ReferencedListFieldView.getReadWidget();
+        return <ReferencedList entries={this.props.dataStore.getEntries(this.props.field.targetEntity().uniqueId + "_list") || []}
+                               entityName={this.props.entity.name()} field={this.props.field} configuration={this.props.configuration} />;
     }
 }
 

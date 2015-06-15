@@ -10,7 +10,7 @@ import { InputField, CheckboxField, ButtonField } from './Field';
 let Components = {
     MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton,
     StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList,
-    InputField, CheckboxField, ButtonField,
+    //InputField, CheckboxField, ButtonField,
     Link, React
 };
 
@@ -24,7 +24,15 @@ class Compile extends React.Component {
             }
         }
 
-        return eval(variables.join(';') + '; ' + jsx.fromString(template, context));
+        if (typeof(template) === 'function') {
+            template = template.apply(this, []);
+        }
+
+        if (typeof(template) === 'string') {
+            return eval(variables.join(';') + '; ' + jsx.fromString(template, context));
+        }
+
+        return template;
     }
 
     render() {
@@ -46,10 +54,12 @@ class Compile extends React.Component {
             children = children.join('');
         }
 
-        if (typeof(children) === 'string') {
+        if (typeof(children) === 'string' || typeof(children) === 'function') {
             // Wrap element without root tag
-            if (children.trim()[0] !== '<') {
-                children = '<span>' + children + '</span>';
+            if (typeof(children) === 'string') {
+                if (children.trim()[0] !== '<') {
+                    children = '<span>' + children + '</span>';
+                }
             }
 
             // Import components into context

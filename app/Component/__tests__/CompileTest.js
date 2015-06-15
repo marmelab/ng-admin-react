@@ -8,6 +8,7 @@ var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Compile = require('../Compile');
 var routerWrapper = require('../../Test/RouterWrapper');
+var StringColumn = require('../Column/StringColumn');
 
 function getCompiledLinkFromString(strElement) {
     return routerWrapper(() => <Compile>{strElement}</Compile>);
@@ -118,6 +119,17 @@ describe('Compile', () => {
 
             expect(compiled.querySelector('span').innerHTML).toEqual('123');
             expect(clicked).toBeTruthy();
+        });
+
+        it('should compile element returned from a function', () => {
+            var column = function() {
+                return <StringColumn value={this.props.value} />;
+            };
+
+            var compiled = TestUtils.renderIntoDocument(<Compile value={'bike'}>{column}</Compile>);
+            compiled = React.findDOMNode(compiled);
+
+            expect(compiled.innerHTML).toEqual('bike');
         })
     });
 });

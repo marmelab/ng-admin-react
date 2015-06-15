@@ -1,3 +1,4 @@
+import React from 'react';
 import StringColumn from '../Component/Column/StringColumn';
 import InputField from '../Component/Field/InputField';
 

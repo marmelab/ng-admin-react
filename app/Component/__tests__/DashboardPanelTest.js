@@ -4,6 +4,7 @@ jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../Button/__mocks__/Link')});
 jest.dontMock('../../Field/FieldViewConfiguration');
 jest.dontMock('../../Field/StringFieldView');
+jest.dontMock('react');
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;

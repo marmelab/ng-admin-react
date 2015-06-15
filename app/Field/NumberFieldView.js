@@ -1,3 +1,4 @@
+import React from 'react';
 import NumberColumn from '../Component/Column/NumberColumn';
 import InputField from '../Component/Field/InputField';
 

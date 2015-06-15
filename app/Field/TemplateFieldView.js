@@ -1,3 +1,4 @@
+import React from 'react';
 import TemplateColumn from '../Component/Column/TemplateColumn';
 
 class TemplateFieldView {

@@ -1,3 +1,4 @@
+import React from 'react';
 import BooleanColumn from '../Component/Column/BooleanColumn';
 import CheckboxField from '../Component/Field/CheckboxField';
 

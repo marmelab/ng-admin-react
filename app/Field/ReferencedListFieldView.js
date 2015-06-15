@@ -1,3 +1,4 @@
+import React from 'react';
 import ReferencedList from '../Component/Column/ReferencedList';
 
 class ReferencedListFieldView {

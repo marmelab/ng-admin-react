@@ -1,3 +1,4 @@
+import React from 'react';
 import ReferenceColumn from '../Component/Column/ReferenceColumn';
 
 class ReferenceFieldView {

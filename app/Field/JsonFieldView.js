@@ -1,3 +1,4 @@
+import React from 'react';
 import JsonColumn from '../Component/Column/JsonColumn';
 import InputField from '../Component/Field/InputField';
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import ReferenceManyColumn from '../Component/Column/ReferenceManyColumn';
 
 class ReferenceManyFieldView {

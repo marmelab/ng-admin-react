@@ -10,7 +10,7 @@ import { InputField, CheckboxField, ButtonField } from './Field';
 let Components = {
     MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton,
     StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList,
-    //InputField, CheckboxField, ButtonField,
+    InputField, CheckboxField, ButtonField,
     Link, React
 };
 
@@ -25,6 +25,7 @@ class Compile extends React.Component {
         }
 
         if (typeof(template) === 'function') {
+            this.React = React;
             template = template.apply(this, []);
         }
 

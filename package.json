@@ -26,6 +26,7 @@
     "protractor": "^2.1.0",
     "react-hot-loader": "^1.1.7",
     "react-immutable-render-mixin": "^0.8.1",
+    "react-select": "^0.4.9",
     "restful.js": "marmelab/restful.js#master",
     "sass-loader": "^0.4.1",
     "style-loader": "^0.8.3",

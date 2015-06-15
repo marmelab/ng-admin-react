@@ -275,6 +275,6 @@
 
     React.render(
         React.createElement(MyApp),
-        document.body
+        document.getElementById('my-app')
     );
 }());

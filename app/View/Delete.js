@@ -7,6 +7,7 @@ import ViewActions from '../Component/ViewActions';
 import Compile from '../Component/Compile';
 import EntityActions from '../Actions/EntityActions';
 import EntityStore from '../Stores/EntityStore';
+import Notification from '../Services/Notification';
 
 class DeleteView extends React.Component {
     constructor() {
@@ -17,6 +18,7 @@ class DeleteView extends React.Component {
 
     componentDidMount() {
         EntityStore.addDeleteListener(this.onDelete.bind(this));
+        EntityStore.addFailureListener(this.onDeletionFailure.bind(this));
         EntityStore.addChangeListener(this.onChange.bind(this));
 
         this.refreshData();
@@ -59,7 +61,18 @@ class DeleteView extends React.Component {
         let params = this.context.router.getCurrentParams(),
             entityName = params.entity;
 
+        Notification.log('Element successfully deleted.', { addnCls: 'humane-flatty-success' });
+
         this.context.router.transitionTo('list', {entity: entityName});
+    }
+
+    onDeletionFailure(response) {
+        let body = response.data;
+        if (typeof message === 'object') {
+            body = JSON.stringify(body);
+        }
+
+        Notification.log('Oops, an error occured : (code: ' + response.status + ') ' + body, {addnCls: 'humane-flatty-error'});
     }
 
     render() {

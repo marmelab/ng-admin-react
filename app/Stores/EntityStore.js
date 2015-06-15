@@ -106,7 +106,7 @@ class EntityStore extends EventEmitter {
             this.data = this.data.updateIn(['dataStore', 'object'], v => collection.dataStore);
             this.data = this.data.update('totalItems', v => collection.totalItems);
             this.emitChange();
-        });
+        }, this.emitResponseFailure.bind(this));
     }
 
     loadShowData(configuration, view, identifierValue, sortField, sortDir) {
@@ -119,7 +119,7 @@ class EntityStore extends EventEmitter {
             .then((dataStore) => {
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
                 this.emitChange();
-            });
+            }, this.emitResponseFailure.bind(this));
     }
 
     loadEditData(configuration, view, identifierValue, sortField, sortDir) {
@@ -145,10 +145,10 @@ class EntityStore extends EventEmitter {
                     return v;
                 });
                 this.emitChange();
-            });
+            }, this.emitResponseFailure.bind(this));
     }
 
-    loadCreateData(configuration, view) {
+    loadCreateData(view) {
         this.initData();
         this.emitChange();
 
@@ -183,7 +183,7 @@ class EntityStore extends EventEmitter {
                 this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
 
                 this.emitChange();
-            });
+            }, this.emitResponseFailure.bind(this));
     }
 
     updateData(fieldName, value) {
@@ -207,17 +207,18 @@ class EntityStore extends EventEmitter {
                 this.data = this.data.updateIn(['dataStore', 'version'], v => v + 1);
 
                 if (id) {
+                    this.emitUpdate();
                     this.emitChange();
                 } else {
                     this.emitCreate();
                 }
-            });
+            }, this.emitResponseFailure.bind(this));
     }
 
     deleteData(configuration, id, view) {
         new EntryRequester(configuration)
             .deleteEntry(view, id)
-            .then(() => this.emitDelete());
+            .then(this.emitDelete.bind(this), this.emitResponseFailure.bind(this));
     }
 
     getState() {
@@ -232,8 +233,16 @@ class EntityStore extends EventEmitter {
         this.emit('entries_deleted');
     }
 
+    emitResponseFailure(response) {
+        this.emit('action_failure', response);
+    }
+
     emitCreate() {
         this.emit('entries_created');
+    }
+
+    emitUpdate() {
+        this.emit('entries_updated');
     }
 
     addChangeListener(callback) {
@@ -244,8 +253,16 @@ class EntityStore extends EventEmitter {
         this.on('entries_created', callback);
     }
 
+    addUpdateListener(callback) {
+        this.on('entries_updated', callback);
+    }
+
     addDeleteListener(callback) {
         this.on('entries_deleted', callback);
+    }
+
+    addFailureListener(callback) {
+        this.on('action_failure', callback);
     }
 }
 
@@ -266,7 +283,7 @@ AppDispatcher.register((action) => {
             store.loadEditData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
         case 'load_create_data':
-            store.loadCreateData(action.configuration, action.view);
+            store.loadCreateData(action.view);
             break;
         case 'load_delete_data':
             store.loadDeleteData(action.configuration, action.view, action.id);

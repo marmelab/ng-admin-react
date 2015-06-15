@@ -1,6 +1,7 @@
 import React from 'react';
 import Inflector from 'inflected'
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+import Notification from '../Services/Notification';
 
 import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
@@ -17,6 +18,7 @@ class ShowView extends React.Component {
 
     componentDidMount() {
         EntityStore.addChangeListener(this.onChange.bind(this));
+        EntityStore.addFailureListener(this.onLoadFailure.bind(this));
 
         this.refreshData();
     }
@@ -50,6 +52,16 @@ class ShowView extends React.Component {
 
             this.refreshData();
         }
+    }
+
+    onLoadFailure(response) {
+        let body = response.data;
+        if (typeof message === 'object') {
+            body = JSON.stringify(body);
+        }
+
+        Notification.log('Oops, an error occured during data fetching : (code: ' + response.status + ') ' + body,
+            {addnCls: 'humane-flatty-error'});
     }
 
     render() {

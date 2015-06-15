@@ -1,5 +1,3 @@
-/*global describe,it,expect,$$,element,browser,by*/
-
 // @TODO : activate these tests after implementation of validation
 xdescribe('Form validation', function () {
     'use strict';

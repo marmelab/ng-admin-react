@@ -2,7 +2,12 @@ describe('Dashboard', function () {
     'use strict';
 
     beforeEach(function () {
-        browser.get(browser.baseUrl);
+        // Refresh Fakerest data
+        browser.get(browser.baseUrl).then(function () {
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('.panel-heading'));
+            }, 10000); // wait 10s
+        });
     });
 
     it('should display a navigation menu linking to all entities', function () {

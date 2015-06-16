@@ -25,7 +25,6 @@ class InputField extends React.Component {
         value = value ? moment(value, format) : null;
         let onChange = this.onChange.bind(this);
 
-
         return <DatePicker
             selected={value}
             dateFormat={format}

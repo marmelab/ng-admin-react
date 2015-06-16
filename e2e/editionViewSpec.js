@@ -78,6 +78,50 @@ describe('EditionView', function () {
 
     });
 
+    describe('DateField', function() {
+
+        beforeEach(function() {
+            browser.get(browser.baseUrl + '#/posts/edit/12').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.datepicker__input'));
+                }, 10000); // wait 10s
+            });
+        });
+
+        it('allows update from a calendar', function () {
+            $('input.datepicker__input').click().then(function () {
+                // Wait for calendar to display
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.datepicker__month .datepicker__day:nth-child(1)'));
+                }, 2000);
+
+                $('.datepicker__month .datepicker__day:nth-child(1)').click().then(function () {
+                    // Wait for calendar to hide
+                    var displayed = true;
+                    browser.driver.wait(function () {
+                        browser.driver.isElementPresent(by.css('.datepicker__container')).then(function (present) {
+                            displayed = present;
+                        });
+
+                        return !displayed;
+                    }, 5000);
+
+                    // Submit form
+                    $('#edit-view button[type="submit"]').click().then(function () {
+                        $('.btn-show').click().then(function () {
+                            browser.driver.wait(function () {
+                                return browser.driver.isElementPresent(by.css('.react-admin-field-published_at'));
+                            }, 10000); // wait 10s
+
+                            expect($('.react-admin-field-published_at').getText()).toBe('2012-10-28');
+                        });
+                    });
+                });
+            });
+        });
+
+    });
+
     xdescribe('ChoiceField', function() {
 
         it('should render as a dropdown when choices is an array', function () {

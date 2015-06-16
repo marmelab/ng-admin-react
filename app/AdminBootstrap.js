@@ -31,8 +31,6 @@ FieldViewConfiguration.registerFieldView('string', StringFieldView);
 FieldViewConfiguration.registerFieldView('template', TemplateFieldView);
 FieldViewConfiguration.registerFieldView('text', TextFieldView);
 
-require('../styles/app.scss');
-
 class AdminBootstrap extends React.Component {
     render() {
         return (

@@ -18,21 +18,25 @@ class ListView extends React.Component {
     }
 
     componentDidMount() {
-        EntityStore.addChangeListener(this.onChange.bind(this));
-        EntityStore.addFailureListener(this.onLoadFailure.bind(this));
+        this.boundedOnChange = this.onChange.bind(this);
+        EntityStore.addChangeListener(this.boundedOnChange);
+
+        this.boundedOnFailure = this.onLoadFailure.bind(this);
+        EntityStore.addFailureListener(this.boundedOnFailure);
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        EntityStore.removeAllListeners();
+        EntityStore.removeChangeListener(this.boundedOnChange);
+        EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity
-            || nextProps.query.page !== this.props.query.page
-            || nextProps.query.sortField !== this.props.query.sortField
-            || nextProps.query.sortDir !== this.props.query.sortDir) {
+        if (nextProps.params.entity !== this.props.params.entity ||
+            nextProps.query.page !== this.props.query.page ||
+            nextProps.query.sortField !== this.props.query.sortField ||
+            nextProps.query.sortDir !== this.props.query.sortDir) {
 
             this.refreshData();
         }
@@ -73,7 +77,7 @@ class ListView extends React.Component {
 
     render() {
         if (!this.state) {
-            return <div />;
+            return null;
         }
 
         let configuration = this.props.configuration;
@@ -85,8 +89,8 @@ class ListView extends React.Component {
         let entries = dataStore.getEntries(view.entity.uniqueId);
         let actions = view.actions() || ['create'];
 
-        if (!entries) {
-            return <div />;
+        if (!entries || !entries.length) {
+            return null;
         }
 
         return (

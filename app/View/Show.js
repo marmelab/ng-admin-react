@@ -17,14 +17,18 @@ class ShowView extends React.Component {
     }
 
     componentDidMount() {
-        EntityStore.addChangeListener(this.onChange.bind(this));
-        EntityStore.addFailureListener(this.onLoadFailure.bind(this));
+        this.boundedOnChange = this.onChange.bind(this);
+        EntityStore.addChangeListener(this.boundedOnChange);
+
+        this.boundedOnFailure = this.onLoadFailure.bind(this);
+        EntityStore.addFailureListener(this.boundedOnFailure);
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        EntityStore.removeAllListeners();
+        EntityStore.removeChangeListener(this.boundedOnChange);
+        EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
     getView(entityName) {
@@ -66,7 +70,7 @@ class ShowView extends React.Component {
 
     render() {
         if (!this.state) {
-            return <div />;
+            return null;
         }
 
         let params = this.context.router.getCurrentParams(),
@@ -77,7 +81,7 @@ class ShowView extends React.Component {
             actions = view.actions() || ['list', 'edit', 'delete'];
 
         if (!entry) {
-            return <div />;
+            return null;
         }
 
         return (

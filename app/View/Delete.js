@@ -17,15 +17,22 @@ class DeleteView extends React.Component {
     }
 
     componentDidMount() {
-        EntityStore.addDeleteListener(this.onDelete.bind(this));
-        EntityStore.addFailureListener(this.onDeletionFailure.bind(this));
-        EntityStore.addChangeListener(this.onChange.bind(this));
+        this.boundedOnDelete = this.onDelete.bind(this);
+        EntityStore.addDeleteListener(this.boundedOnDelete);
+
+        this.boundedOnChange = this.onChange.bind(this);
+        EntityStore.addChangeListener(this.boundedOnChange);
+
+        this.boundedOnFailure = this.onDeletionFailure.bind(this);
+        EntityStore.addFailureListener(this.boundedOnFailure);
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        EntityStore.removeAllListeners();
+        EntityStore.removeChangeListener(this.boundedOnChange);
+        EntityStore.removeDeleteListener(this.boundedOnDelete);
+        EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
     onChange() {
@@ -77,7 +84,7 @@ class DeleteView extends React.Component {
 
     render() {
         if (!this.state) {
-            return <div />;
+            return null;
         }
 
         let params = this.context.router.getCurrentParams(),
@@ -91,7 +98,7 @@ class DeleteView extends React.Component {
             };
 
         if (!entry) {
-            return <div />;
+            return null;
         }
 
         return (

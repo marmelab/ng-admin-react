@@ -17,15 +17,22 @@ class EditView extends React.Component {
     }
 
     componentDidMount() {
-        EntityStore.addChangeListener(this.onChange.bind(this));
-        EntityStore.addUpdateListener(this.onUpdate.bind(this));
-        EntityStore.addFailureListener(this.onFailure.bind(this));
+        this.boundedOnChange = this.onChange.bind(this);
+        EntityStore.addChangeListener(this.boundedOnChange);
+
+        this.boundedOnUpdate = this.onUpdate.bind(this);
+        EntityStore.addUpdateListener(this.boundedOnUpdate);
+
+        this.boundedOnFailure = this.onFailure.bind(this);
+        EntityStore.addFailureListener(this.boundedOnFailure);
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        EntityStore.removeAllListeners();
+        EntityStore.removeChangeListener(this.boundedOnChange);
+        EntityStore.removeUpdateListener(this.boundedOnUpdate);
+        EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
     getView(entityName) {
@@ -98,7 +105,7 @@ class EditView extends React.Component {
 
     render() {
         if (!this.state) {
-            return <div />;
+            return null;
         }
 
         let entityName = this.context.router.getCurrentParams().entity;
@@ -108,7 +115,7 @@ class EditView extends React.Component {
         let actions = view.actions() || ['list', 'delete'];
 
         if (!entry) {
-            return <div />;
+            return null;
         }
 
         return (

@@ -249,20 +249,40 @@ class EntityStore extends EventEmitter {
         this.on('entries_loaded', callback);
     }
 
+    removeChangeListener(callback) {
+        this.removeListener('entries_loaded', callback);
+    }
+
     addCreateListener(callback) {
         this.on('entries_created', callback);
+    }
+
+    removeCreateListener(callback) {
+        this.removeListener('entries_created', callback);
     }
 
     addUpdateListener(callback) {
         this.on('entries_updated', callback);
     }
 
+    removeUpdateListener(callback) {
+        this.removeListener('entries_updated', callback);
+    }
+
     addDeleteListener(callback) {
         this.on('entries_deleted', callback);
     }
 
+    removeDeleteListener(callback) {
+        this.removeListener('entries_deleted', callback);
+    }
+
     addFailureListener(callback) {
         this.on('action_failure', callback);
+    }
+
+    removeFailureListener(callback) {
+        this.removeListener('action_failure', callback);
     }
 }
 

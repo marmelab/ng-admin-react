@@ -17,15 +17,22 @@ class CreateView extends React.Component {
     }
 
     componentDidMount() {
-        EntityStore.addChangeListener(this.onChange.bind(this));
-        EntityStore.addCreateListener(this.onCreate.bind(this));
-        EntityStore.addFailureListener(this.onFailure.bind(this));
+        this.boundedOnChange = this.onChange.bind(this);
+        EntityStore.addChangeListener(this.boundedOnChange);
+
+        this.boundedOnCreate = this.onCreate.bind(this);
+        EntityStore.addCreateListener(this.boundedOnCreate);
+
+        this.boundedOnFailure = this.onFailure.bind(this);
+        EntityStore.addFailureListener(this.boundedOnFailure);
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        EntityStore.removeAllListeners();
+        EntityStore.removeCreateListener(this.boundedOnCreate);
+        EntityStore.removeChangeListener(this.boundedOnChange);
+        EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
     getView(entityName) {
@@ -97,7 +104,7 @@ class CreateView extends React.Component {
 
     render() {
         if (!this.state) {
-            return <div />;
+            return null;
         }
 
         let entityName = this.context.router.getCurrentParams().entity;
@@ -107,7 +114,7 @@ class CreateView extends React.Component {
         let actions = view.actions() || ['list'];
 
         if (!entry) {
-            return <div />;
+            return null;
         }
 
         return (

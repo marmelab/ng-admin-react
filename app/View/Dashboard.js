@@ -14,13 +14,14 @@ class DashboardView extends React.Component {
     }
 
     componentDidMount() {
-        EntityStore.addChangeListener(this.onChange.bind(this));
+        this.boundedOnChange = this.onChange.bind(this);
+        EntityStore.addChangeListener(this.boundedOnChange);
 
         this.refreshData();
     }
 
     componentWillUnmount() {
-        EntityStore.removeAllListeners();
+        EntityStore.removeChangeListener(this.boundedOnChange);
     }
 
     onChange() {
@@ -72,10 +73,14 @@ class DashboardView extends React.Component {
 
     render() {
         if (!this.state) {
-            return <div />;
+            return null;
         }
 
         let panels = this.state.data.get('panels') || [];
+
+        if (!panels.count()) {
+            return null;
+        }
 
         return (
             <div className="view dashboard-view">

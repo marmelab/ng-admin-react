@@ -1,3 +1,5 @@
+import autoload from './autoloader';
+
 import React from 'react';
 import Router from 'react-router';
 
@@ -35,6 +37,7 @@ class ReactAdmin extends React.Component {
             handler: null,
             factory: ConfigurationFactory,
             fieldViewConfiguration: FieldViewConfiguration,
+            autoload: autoload,
             routes: routes,
             components: {
                 ViewActions: ViewActions

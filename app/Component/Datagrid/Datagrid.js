@@ -122,4 +122,6 @@ Datagrid.contextTypes = {
     router: React.PropTypes.func.isRequired
 };
 
+require('../../autoloader')('Datagrid', Datagrid);
+
 export default Datagrid;

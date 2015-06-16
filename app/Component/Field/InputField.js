@@ -27,4 +27,6 @@ InputField.propTypes = {
     updateField: React.PropTypes.func
 };
 
+require('../../autoloader')('InputField', InputField);
+
 export default InputField;

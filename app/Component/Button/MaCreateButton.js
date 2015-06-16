@@ -23,4 +23,6 @@ MaCreateButton.propTypes = {
     label: React.PropTypes.string
 };
 
+require('../../autoloader')('MaCreateButton', MaCreateButton);
+
 export default MaCreateButton;

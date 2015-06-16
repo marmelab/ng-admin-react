@@ -126,4 +126,6 @@ DeleteView.propTypes = {
     configuration: React.PropTypes.object.isRequired
 };
 
+require('../autoloader')('DeleteView', DeleteView);
+
 export default DeleteView;

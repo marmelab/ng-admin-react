@@ -59,4 +59,6 @@ ViewActions.propTypes = {
 
 ViewActions.defaultProps = { view: null };
 
+require('../autoloader')('ViewActions', ViewActions);
+
 export default ViewActions;

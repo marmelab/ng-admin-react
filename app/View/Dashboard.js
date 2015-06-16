@@ -107,4 +107,6 @@ DashboardView.contextTypes = {
     router: React.PropTypes.func.isRequired
 };
 
+require('../autoloader')('DashboardView', DashboardView);
+
 export default DashboardView;

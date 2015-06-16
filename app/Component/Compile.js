@@ -74,4 +74,6 @@ class Compile extends React.Component {
     }
 }
 
+require('../autoloader')('Compile', Compile);
+
 export default Compile;

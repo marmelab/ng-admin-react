@@ -14,6 +14,7 @@
             return {configuration: null};
         },
         componentDidMount: function () {
+            var autoload = this.refs.admin.state.autoload;
             var nga = new this.refs.admin.state.factory();
             var admin = nga.application('rest-admin backend demo') // application main title
                 .baseApiUrl('http://localhost:3000/'); // main API endpoint
@@ -108,10 +109,10 @@
             post.views['ShowView'] // a showView displays one entry in full page - allows to display more data than in a a list
                 .fields([
                     nga.field('id'),
-                    post.views['EditView'].fields() // reuse fields from another view in another order
-                    // nga.field('custom_action', 'template')
-                    //     .label('')
-                    //     .template('<send-email post="entry"></send-email>')
+                    post.views['EditView'].fields(), // reuse fields from another view in another order
+                     nga.field('custom_action', 'template')
+                         .label('')
+                         .template('<SendEmail post="entry"></SendEmail>')
                 ]);
 
             post.views['DeleteView']
@@ -246,6 +247,14 @@
                         .addChild(nga.menu().title('Stats').icon('').link('/stats'))
                     )
                 );
+
+            // Add custom component
+            var SendEmail = React.createClass({
+                render: function () {
+                    return React.createElement('a', {className: 'btn btn-default', href: '#/stats'}, 'Show stats');
+                }
+            });
+            autoload('SendEmail', SendEmail);
 
             // Add custom route
             var ViewActions = this.refs.admin.state.components.ViewActions;

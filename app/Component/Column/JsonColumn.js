@@ -55,4 +55,6 @@ JsonColumn.propTypes = {
     ]).isRequired
 };
 
+require('../../autoloader')('JsonColumn', JsonColumn);
+
 export default JsonColumn;

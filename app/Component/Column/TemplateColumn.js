@@ -23,4 +23,6 @@ TemplateColumn.propTypes = {
     ]).isRequired
 };
 
+require('../../autoloader')('TemplateColumn', TemplateColumn);
+
 export default TemplateColumn;

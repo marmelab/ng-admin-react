@@ -21,4 +21,6 @@ MaBackButton.propTypes = {
     label: React.PropTypes.string
 };
 
+require('../../autoloader')('MaBackButton', MaBackButton);
+
 export default MaBackButton;

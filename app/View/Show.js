@@ -113,4 +113,6 @@ ShowView.propTypes = {
     configuration: React.PropTypes.object.isRequired
 };
 
+require('../autoloader')('ShowView', ShowView);
+
 export default ShowView;

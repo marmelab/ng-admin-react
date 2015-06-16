@@ -4,13 +4,11 @@ import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
 import WriteQueries from 'admin-config/lib/Queries/WriteQueries';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
-import RestWrapper from '../Services/RestWrapper';
-
 class EntryRequester {
-    constructor(configuration) {
+    constructor(configuration, RestWrapper) {
         this.configuration = configuration;
-        this.readQueries = new ReadQueries(new RestWrapper(), PromisesResolver, configuration);
-        this.writeQueries = new WriteQueries(new RestWrapper(), PromisesResolver, configuration);
+        this.readQueries = new ReadQueries(RestWrapper, PromisesResolver, configuration);
+        this.writeQueries = new WriteQueries(RestWrapper, PromisesResolver, configuration);
     }
 
     getEntries(dataStore, view, page=1, options={}) {

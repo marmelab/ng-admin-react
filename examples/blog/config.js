@@ -14,6 +14,14 @@
             return {configuration: null};
         },
         componentDidMount: function () {
+            var restful = this.refs.admin.state.restful;
+            restful.addFullRequestInterceptor(function (url, params, headers, data) {
+                headers['X-From'] = 'react-admin';
+
+                return {
+                    headers: headers
+                };
+            });
             var autoload = this.refs.admin.state.autoload;
             var nga = new this.refs.admin.state.factory();
             var admin = nga.application('rest-admin backend demo') // application main title

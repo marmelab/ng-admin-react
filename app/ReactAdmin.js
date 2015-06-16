@@ -2,15 +2,18 @@ import autoload from './autoloader';
 
 import React from 'react';
 import Router from 'react-router';
+import Restful from 'restful.js';
+
+import ConfigurationFactory from 'admin-config/lib/Factory';
 
 import AdminBootstrap from './AdminBootstrap';
+
 import DashboardView from './View/Dashboard';
 import ListView from './View/List';
 import ShowView from './View/Show';
 import CreateView from './View/Create';
 import EditView from './View/Edit';
 import DeleteView from './View/Delete';
-import ConfigurationFactory from 'admin-config/lib/Factory';
 
 import ViewActions from './Component/ViewActions';
 import FieldViewConfiguration from './Field/FieldViewConfiguration';
@@ -38,12 +41,20 @@ class ReactAdmin extends React.Component {
             factory: ConfigurationFactory,
             fieldViewConfiguration: FieldViewConfiguration,
             autoload: autoload,
+            restful: Restful(),
             routes: routes,
             components: {
                 ViewActions: ViewActions
             }
         };
     }
+
+    getChildContext() {
+        return {
+            restful: this.state.restful
+        }
+    }
+
     componentDidUpdate() {
         // stop progress bar
         Pace.stop();
@@ -52,11 +63,13 @@ class ReactAdmin extends React.Component {
     componentWillReceiveProps() {
         Router.run(routes, this.handleNavigation.bind(this));
     }
+
     handleNavigation(Handler) {
         this.setState({
             handler: Handler
         });
     }
+
     render() {
         if(!this.state.handler || !this.props.configuration) return null;
 
@@ -67,6 +80,10 @@ class ReactAdmin extends React.Component {
         return <Handler configuration={this.props.configuration}/>;
     }
 }
+
+ReactAdmin.childContextTypes = {
+    restful: React.PropTypes.func.isRequired
+};
 
 ReactAdmin.propTypes = {
     configuration: React.PropTypes.object

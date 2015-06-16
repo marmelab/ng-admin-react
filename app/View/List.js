@@ -55,7 +55,7 @@ class ListView extends React.Component {
     refreshData() {
         const {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadListData(this.props.configuration, this.getView(), page, sortField, sortDir);
+        EntityActions.loadListData(this.context.restful, this.props.configuration, this.getView(), page, sortField, sortDir);
     }
 
     onLoadFailure(response) {
@@ -120,7 +120,8 @@ class ListView extends React.Component {
 }
 
 ListView.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    restful: React.PropTypes.func.isRequired
 };
 ListView.propTypes = {
     configuration: React.PropTypes.object.isRequired

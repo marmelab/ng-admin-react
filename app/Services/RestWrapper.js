@@ -1,6 +1,8 @@
-import Restful from 'restful.js';
-
 class RestWrapper {
+    constructor(Restful) {
+        this.Restful = Restful;
+    }
+
     /**
      * Returns the promise of one resource by URL
      *
@@ -10,7 +12,7 @@ class RestWrapper {
      * @returns {promise}
      */
     getOne(entityName, url) {
-        return Restful()
+        return this.Restful
             .oneUrl(entityName, url)
             .get()
             .then((response) => {
@@ -28,7 +30,7 @@ class RestWrapper {
      * @returns {promise}
      */
     getList(params, entityName, url) {
-        return Restful()
+        return this.Restful
             .allUrl(entityName, url)
             .getAll(params)
             .then((response) => {
@@ -40,7 +42,7 @@ class RestWrapper {
     }
 
     createOne(rawEntity, entityName, url) {
-        return Restful()
+        return this.Restful
             .allUrl(entityName, url)
             .post(rawEntity)
             .then((response) => {
@@ -49,7 +51,7 @@ class RestWrapper {
     }
 
     updateOne(rawEntity, entityName, url) {
-        return Restful()
+        return this.Restful
             .oneUrl(entityName, url)
             .put(rawEntity)
             .then((response) => {
@@ -58,7 +60,7 @@ class RestWrapper {
     }
 
     deleteOne(entityName, url) {
-        return Restful()
+        return this.Restful
             .oneUrl(entityName, url)
             .delete();
     }

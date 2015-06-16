@@ -6,6 +6,7 @@ import DataStore from 'admin-config/lib/DataStore/DataStore';
 
 import AppDispatcher from '../Services/AppDispatcher';
 import EntryRequester from '../Services/EntryRequester';
+import RestWrapper from '../Services/RestWrapper';
 
 class EntityStore extends EventEmitter {
     constructor(...args) {
@@ -30,11 +31,15 @@ class EntityStore extends EventEmitter {
         });
     }
 
-    loadDashbordPanels(configuration, sortField, sortDir) {
+    getEntryRequester(restful, configuration) {
+        return new EntryRequester(configuration, new RestWrapper(restful));
+    }
+
+    loadDashbordPanels(restful, configuration, sortField, sortDir) {
         this.initData();
         this.emitChange();
 
-        const entryRequester = new EntryRequester(configuration);
+        const entryRequester = this.getEntryRequester(restful, configuration);
         const dashboardViews = configuration.getViewsOfType('DashboardView');
         let panels = List();
         let dataStore = new DataStore();
@@ -86,7 +91,7 @@ class EntityStore extends EventEmitter {
             });
     }
 
-    loadListData(configuration, view, page = 1, sortField = null, sortDir = null) {
+    loadListData(restful, configuration, view, page = 1, sortField = null, sortDir = null) {
         this.initData();
         this.emitChange();
 
@@ -94,39 +99,36 @@ class EntityStore extends EventEmitter {
         this.data = this.data.update('sortField', v => sortField);
         this.data = this.data.update('sortDir', v => sortDir);
 
-        const entryRequester = new EntryRequester(configuration);
-
-        entryRequester.getEntries(new DataStore(), view, page, {
-            references: true,
-            sortField,
-            sortDir
-        }).then((collection) => {
-            this.data = this.data.updateIn(['dataStore', 'object'], v => collection.dataStore);
-            this.data = this.data.update('totalItems', v => collection.totalItems);
-            this.emitChange();
-        }, this.emitResponseFailure.bind(this));
+        this.getEntryRequester(restful, configuration)
+            .getEntries(new DataStore(), view, page, {
+                references: true,
+                sortField,
+                sortDir
+            }).then((collection) => {
+                this.data = this.data.updateIn(['dataStore', 'object'], v => collection.dataStore);
+                this.data = this.data.update('totalItems', v => collection.totalItems);
+                this.emitChange();
+            }, this.emitResponseFailure.bind(this));
     }
 
-    loadShowData(configuration, view, identifierValue, sortField, sortDir) {
+    loadShowData(restful, configuration, view, identifierValue, sortField, sortDir) {
         this.initData();
         this.emitChange();
 
-        const entryRequester = new EntryRequester(configuration);
-
-        entryRequester.getEntry(view, identifierValue, { references: true, referencesList: true, sortField, sortDir })
+        this.getEntryRequester(restful, configuration)
+            .getEntry(view, identifierValue, { references: true, referencesList: true, sortField, sortDir })
             .then((dataStore) => {
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
                 this.emitChange();
             }, this.emitResponseFailure.bind(this));
     }
 
-    loadEditData(configuration, view, identifierValue, sortField, sortDir) {
+    loadEditData(restful, configuration, view, identifierValue, sortField, sortDir) {
         this.initData();
         this.emitChange();
 
-        const entryRequester = new EntryRequester(configuration);
-
-        entryRequester.getEntry(view, identifierValue, { references: true, referencesList: true, choices: true, sortField, sortDir })
+        this.getEntryRequester(restful, configuration)
+            .getEntry(view, identifierValue, { references: true, referencesList: true, choices: true, sortField, sortDir })
             .then((dataStore) => {
                 this.data = this.data.update('originEntityId', v => identifierValue);
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
@@ -169,11 +171,11 @@ class EntityStore extends EventEmitter {
             });
     }
 
-    loadDeleteData(configuration, view, identifierValue) {
+    loadDeleteData(restful, configuration, view, identifierValue) {
         this.initData();
         this.emitChange();
 
-        new EntryRequester(configuration)
+        this.getEntryRequester(restful, configuration)
             .getEntry(view, identifierValue, { references: true, referencesList: false, choices: false })
             .then((dataStore) => {
                 this.data = this.data.update('originEntityId', v => identifierValue);
@@ -189,7 +191,7 @@ class EntityStore extends EventEmitter {
         this.emitChange();
     }
 
-    saveData(configuration, view) {
+    saveData(restful, configuration, view) {
         const values = this.data.get('values');
         const id = this.data.get('originEntityId');
 
@@ -198,7 +200,7 @@ class EntityStore extends EventEmitter {
             rawEntry[name] = value;
         }
 
-        new EntryRequester(configuration)
+        this.getEntryRequester(restful, configuration)
             .saveEntry(this.data.getIn(['dataStore', 'object']), view, rawEntry, id)
             .then((dataStore) => {
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
@@ -213,8 +215,8 @@ class EntityStore extends EventEmitter {
             }, this.emitResponseFailure.bind(this));
     }
 
-    deleteData(configuration, id, view) {
-        new EntryRequester(configuration)
+    deleteData(restful, configuration, id, view) {
+        this.getEntryRequester(restful, configuration)
             .deleteEntry(view, id)
             .then(this.emitDelete.bind(this), this.emitResponseFailure.bind(this));
     }
@@ -289,31 +291,31 @@ const store = new EntityStore();
 AppDispatcher.register((action) => {
     switch(action.actionType) {
         case 'load_dashboard_panels':
-            store.loadDashbordPanels(action.configuration, action.sortField, action.sortDir);
+            store.loadDashbordPanels(action.restful, action.configuration, action.sortField, action.sortDir);
             break;
         case 'load_list_data':
-            store.loadListData(action.configuration, action.view, action.page, action.sortField, action.sortDir);
+            store.loadListData(action.restful, action.configuration, action.view, action.page, action.sortField, action.sortDir);
             break;
         case 'load_show_data':
-            store.loadShowData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
+            store.loadShowData(action.restful, action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
         case 'load_edit_data':
-            store.loadEditData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
+            store.loadEditData(action.restful, action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
         case 'load_create_data':
             store.loadCreateData(action.configuration, action.view);
             break;
         case 'load_delete_data':
-            store.loadDeleteData(action.configuration, action.view, action.id);
+            store.loadDeleteData(action.restful, action.configuration, action.view, action.id);
             break;
         case 'update_data':
             store.updateData(action.fieldName, action.value);
             break;
         case 'delete_data':
-            store.deleteData(action.configuration, action.id, action.view);
+            store.deleteData(action.restful, action.configuration, action.id, action.view);
             break;
         case 'save_data':
-            store.saveData(action.configuration, action.view);
+            store.saveData(action.restful, action.configuration, action.view);
             break;
     }
 });

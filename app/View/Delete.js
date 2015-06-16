@@ -42,7 +42,7 @@ class DeleteView extends React.Component {
     refreshData() {
         const {id} = this.context.router.getCurrentParams();
 
-        EntityActions.loadDeleteData(this.props.configuration, this.getView(), id);
+        EntityActions.loadDeleteData(this.context.restful, this.props.configuration, this.getView(), id);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -55,7 +55,7 @@ class DeleteView extends React.Component {
     deleteEntry() {
         const {id} = this.context.router.getCurrentParams();
 
-        EntityActions.deleteData(this.props.configuration, id, this.getView());
+        EntityActions.deleteData(this.context.restful, this.props.configuration, id, this.getView());
     }
 
     getView(entityName) {
@@ -127,7 +127,8 @@ class DeleteView extends React.Component {
 }
 
 DeleteView.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    restful: React.PropTypes.func.isRequired
 };
 DeleteView.propTypes = {
     configuration: React.PropTypes.object.isRequired

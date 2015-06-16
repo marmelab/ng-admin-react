@@ -1,6 +1,6 @@
 import React from 'react';
 import StringColumn from '../Component/Column/StringColumn';
-import InputField from '../Component/Field/InputField';
+import TextField from '../Component/Field/TextField';
 
 class TextFieldView {
     static getReadWidget() {
@@ -17,8 +17,7 @@ class TextFieldView {
     }
 
     static getWriteWidget() {
-        // @TODO : Use text input field (textarea) when implemented
-        return <InputField type={"text"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
+        return <TextField name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 }
 

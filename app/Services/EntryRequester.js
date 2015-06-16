@@ -5,10 +5,10 @@ import WriteQueries from 'admin-config/lib/Queries/WriteQueries';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
 class EntryRequester {
-    constructor(configuration, RestWrapper) {
+    constructor(configuration, restWrapper) {
         this.configuration = configuration;
-        this.readQueries = new ReadQueries(RestWrapper, PromisesResolver, configuration);
-        this.writeQueries = new WriteQueries(RestWrapper, PromisesResolver, configuration);
+        this.readQueries = new ReadQueries(restWrapper, PromisesResolver, configuration);
+        this.writeQueries = new WriteQueries(restWrapper, PromisesResolver, configuration);
     }
 
     getEntries(dataStore, view, page=1, options={}) {

@@ -1,6 +1,6 @@
 class RestWrapper {
-    constructor(Restful) {
-        this.Restful = Restful;
+    constructor(restful) {
+        this.restful = restful;
     }
 
     /**
@@ -12,7 +12,7 @@ class RestWrapper {
      * @returns {promise}
      */
     getOne(entityName, url) {
-        return this.Restful
+        return this.restful
             .oneUrl(entityName, url)
             .get()
             .then((response) => {
@@ -30,7 +30,7 @@ class RestWrapper {
      * @returns {promise}
      */
     getList(params, entityName, url) {
-        return this.Restful
+        return this.restful
             .allUrl(entityName, url)
             .getAll(params)
             .then((response) => {
@@ -42,7 +42,7 @@ class RestWrapper {
     }
 
     createOne(rawEntity, entityName, url) {
-        return this.Restful
+        return this.restful
             .allUrl(entityName, url)
             .post(rawEntity)
             .then((response) => {
@@ -51,7 +51,7 @@ class RestWrapper {
     }
 
     updateOne(rawEntity, entityName, url) {
-        return this.Restful
+        return this.restful
             .oneUrl(entityName, url)
             .put(rawEntity)
             .then((response) => {
@@ -60,7 +60,7 @@ class RestWrapper {
     }
 
     deleteOne(entityName, url) {
-        return this.Restful
+        return this.restful
             .oneUrl(entityName, url)
             .delete();
     }

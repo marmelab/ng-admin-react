@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 describe('DeleteView', function () {
     'use strict';
 
@@ -26,8 +28,8 @@ describe('DeleteView', function () {
 
                 // Delete it
                 $('.btn-danger').click().then(function () {
-                    // Wait for notification to display
-                    browser.driver.sleep(1000);
+                    // Wait for notification to be displayed
+                    utils.waitElementWithText('.humane-flatty-success');
 
                     // Check that a notification has been displayed
                     expect($('.humane-flatty-success').getText()).toBe('Element successfully deleted.');

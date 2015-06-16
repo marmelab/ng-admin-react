@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 describe('EditionView', function () {
     'use strict';
 
@@ -17,8 +19,8 @@ describe('EditionView', function () {
         it('should update values on form submit', function () {
             $('#edit-view .react-admin-field-title input').sendKeys(' and what ?').then(function () {
                 $('#edit-view button[type="submit"]').click().then(function () {
-                    // Wait for notification to display
-                    browser.driver.sleep(1000);
+                    // Wait for notification to be displayed
+                    utils.waitElementWithText('.humane-flatty-success');
 
                     // Check that a notification has been displayed
                     expect($('.humane-flatty-success').getText()).toBe('Changes successfully saved.');

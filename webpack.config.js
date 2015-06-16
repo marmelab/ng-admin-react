@@ -11,6 +11,7 @@ function getEntrySources() {
 
     // vendor sources
     sources.push('pace/themes/blue/pace-theme-flash.css');
+    sources.push('react-datepicker/dist/react-datepicker.css');
 
     // react-admin sources
     sources.push('./styles/react-select-bootstrap.css');

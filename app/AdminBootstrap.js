@@ -19,8 +19,8 @@ import TextFieldView from './Field/TextFieldView';
 import TemplateFieldView from './Field/TemplateFieldView';
 
 FieldViewConfiguration.registerFieldView('boolean', BooleanFieldView);
-FieldViewConfiguration.registerFieldView('date', TextFieldView);
-FieldViewConfiguration.registerFieldView('datetime', TextFieldView);
+FieldViewConfiguration.registerFieldView('date', DateFieldView);
+FieldViewConfiguration.registerFieldView('datetime', DateFieldView);
 FieldViewConfiguration.registerFieldView('email', EmailFieldView);
 FieldViewConfiguration.registerFieldView('json', JsonFieldView);
 FieldViewConfiguration.registerFieldView('number', NumberFieldView);

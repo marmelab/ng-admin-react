@@ -1,15 +1,25 @@
 import React from 'react';
+import moment from 'moment/moment';
 
 class DateColumn extends React.Component {
     render() {
-        let {value} = this.props;
+        let {value, field} = this.props;
+
+        if (field) {
+            let format = field.format();
+            if (!format) {
+                format = field.type() === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss';
+            }
+            value = moment(value, format).format(format);
+        }
 
         return <span>{value}</span>;
     }
 }
 
 DateColumn.propTypes = {
-    value: React.PropTypes.string.isRequired
+    value: React.PropTypes.string.isRequired,
+    field: React.PropTypes.object
 };
 
 require('../../autoloader')('DateColumn', DateColumn);

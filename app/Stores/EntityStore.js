@@ -148,27 +148,27 @@ class EntityStore extends EventEmitter {
             }, this.emitResponseFailure.bind(this));
     }
 
-    loadCreateData(view) {
+    loadCreateData(configuration, view) {
         this.initData();
         this.emitChange();
 
-        let dataStore = new DataStore();
-        let entry = dataStore.createEntry(view.entity.name(), view.identifier(), view.getFields());
-        dataStore.addEntry(view.getEntity().uniqueId, entry);
+        new EntryRequester(configuration)
+            .createEntry(view)
+            .then((dataStore) => {
+                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.update('values', v => {
+                    v = v.clear();
 
-        this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
-        this.data = this.data.update('values', v => {
-            v = v.clear();
+                    let entry = dataStore.getFirstEntry(view.entity.uniqueId);
 
-            let entry = dataStore.getFirstEntry(view.entity.uniqueId);
+                    for (let fieldName in entry.values) {
+                        v = v.set(fieldName, entry.values[fieldName]);
+                    }
 
-            for (let fieldName in entry.values) {
-                v = v.set(fieldName, entry.values[fieldName]);
-            }
-
-            return v;
-        });
-        this.emitChange();
+                    return v;
+                });
+                this.emitChange();
+            });
     }
 
     loadDeleteData(configuration, view, identifierValue) {
@@ -303,7 +303,7 @@ AppDispatcher.register((action) => {
             store.loadEditData(action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
         case 'load_create_data':
-            store.loadCreateData(action.view);
+            store.loadCreateData(action.configuration, action.view);
             break;
         case 'load_delete_data':
             store.loadDeleteData(action.configuration, action.view, action.id);

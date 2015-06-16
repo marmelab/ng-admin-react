@@ -53,6 +53,27 @@ class EntryRequester {
         });
     }
 
+    createEntry(view) {
+        let dataStore = new DataStore();
+
+        let promise = new Promise((resolve, reject) => {
+            let entry = dataStore.createEntry(view.entity.name(), view.identifier(), view.getFields());
+
+            resolve({
+                rawEntries: [],
+                entries: [entry]
+            });
+        });
+
+        promise = this.getChoicesEntries(promise, view, dataStore);
+
+        return promise.then((response) => {
+            dataStore.addEntry(view.entity.uniqueId, response.entries[0]);
+
+            return dataStore;
+        });
+    }
+
     getEntry(view, identifierValue, options={}) {
         options = objectAssign({
             references: false,
@@ -95,7 +116,7 @@ class EntryRequester {
         }
 
         return promise.then((response) => {
-            if (options.references || options.referencesList || options.choices) {
+            if (options.references || options.referencesList) {
                 dataStore.fillReferencesValuesFromEntry(response.entries[0], view.getReferences(), true);
             }
 

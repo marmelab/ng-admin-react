@@ -9,7 +9,7 @@ class StringColumn extends React.Component {
 }
 
 StringColumn.propTypes = {
-    value: React.PropTypes.any.isRequired
+    value: React.PropTypes.any
 };
 
 export default StringColumn;

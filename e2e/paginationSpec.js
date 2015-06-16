@@ -1,13 +1,20 @@
 describe('Pagination', function () {
     'use strict';
 
-    beforeEach(function() {
-        browser.get(browser.baseUrl + '#/comments/list').then(function () {
+    beforeEach(function () {
+        // Refresh Fakerest data
+        browser.get(browser.baseUrl).then(function () {
             browser.driver.wait(function () {
-                return browser.driver.isElementPresent(by.css('nav'));
+                return browser.driver.isElementPresent(by.css('.panel-heading'));
             }, 10000); // wait 10s
 
-            browser.executeScript('window.scrollTo(0, document.body.scrollHeight);');
+            browser.get(browser.baseUrl + '#/comments/list').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('nav'));
+                }, 10000); // wait 10s
+
+                browser.executeScript('window.scrollTo(0, document.body.scrollHeight);');
+            });
         });
     });
 

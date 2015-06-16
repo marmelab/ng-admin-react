@@ -22,12 +22,5 @@ exports.config = {
     framework: 'jasmine',
     onPrepare: function () {
         browser.ignoreSynchronization = true;
-
-        // Refresh Fakerest data
-        browser.get(browser.baseUrl).then(function () {
-            browser.driver.wait(function () {
-                return browser.driver.isElementPresent(by.css('.panel-heading'));
-            }, 10000); // wait 10s
-        });
     }
 };

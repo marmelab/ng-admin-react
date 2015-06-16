@@ -1,15 +1,25 @@
 describe('EditionView', function () {
     'use strict';
 
-    beforeEach(function() {
-        browser.get(browser.baseUrl + '#/posts/edit/12').then(function () {
+    beforeEach(function () {
+        // Refresh Fakerest data
+        browser.get(browser.baseUrl).then(function () {
             browser.driver.wait(function () {
-                return browser.driver.isElementPresent(by.css('.react-admin-field-title input'));
+                return browser.driver.isElementPresent(by.css('.panel-heading'));
             }, 10000); // wait 10s
         });
     });
 
     describe('Edition', function() {
+
+        beforeEach(function() {
+            browser.get(browser.baseUrl + '#/posts/edit/12').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-title input'));
+                }, 10000); // wait 10s
+            });
+        });
+
         it('should render an edit page with form fields', function () {
             expect($('.react-admin-field-title input').getAttribute('value')).toBe('Qui tempore rerum et voluptates');
         });
@@ -21,6 +31,43 @@ describe('EditionView', function () {
                 });
             });
         });
+
+    });
+
+    describe('SelectField', function() {
+
+        beforeEach(function() {
+            browser.get(browser.baseUrl + '#/comments/edit/11').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-post_id input'));
+                }, 10000); // wait 10s
+            });
+        });
+
+        it('should render as a dropdown with reference choices', function () {
+            expect($('.react-admin-field-post_id input').getAttribute('value')).toBe('1');
+            expect($('.react-admin-field-post_id div.Select-placeholder').getText()).toBe('Accusantium qui nihil voluptatum quia voluptas maxime ab similique');
+
+            $('.react-admin-field-post_id span.Select-arrow').click().then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-post_id div.Select-menu-outer'));
+                }, 5000); // wait 5s
+
+                $$('.react-admin-field-post_id .Select-option').then(function (options) {
+                    expect(options.length).toBe(12);
+                });
+            });
+        });
+
+        it('should render as a dropdown when choices is a function', function () {
+            $('#edit-view .react-admin-field-post_id .Select-input input')
+                .sendKeys('Sint dignissimos in architecto aut')
+                .sendKeys(protractor.Key.ENTER)
+                .then(function () {
+                    expect($('.react-admin-field-post_id input').getAttribute('value')).toBe('2');
+                });
+        });
+
     });
 
     xdescribe('ChoiceField', function() {

@@ -2,9 +2,10 @@ describe('ShowView', function () {
     'use strict';
 
     beforeEach(function () {
-        browser.get(browser.baseUrl + '#/posts/show/1').then(function () {
+        // Refresh Fakerest data
+        browser.get(browser.baseUrl).then(function () {
             browser.driver.wait(function () {
-                return browser.driver.isElementPresent(by.css('#show-view'));
+                return browser.driver.isElementPresent(by.css('.panel-heading'));
             }, 10000); // wait 10s
         });
     });
@@ -25,6 +26,12 @@ describe('ShowView', function () {
 
     describe('ReferencedListField', function () {
         it('should render as a datagrid', function () {
+            browser.get(browser.baseUrl + '#/posts/show/1').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.datagrid th'));
+                }, 10000); // wait 10s
+            });
+
             $$('.datagrid th').then(function (headers) {
                 expect(headers.length).toBe(2);
 

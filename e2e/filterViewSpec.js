@@ -1,8 +1,15 @@
-/*global describe,it,expect,$$,element,browser,by*/
-
 // @TODO : activate these tests after implementation of filters
 xdescribe('Global filter', function () {
     'use strict';
+
+    beforeEach(function () {
+        // Refresh Fakerest data
+        browser.get(browser.baseUrl).then(function () {
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('.panel-heading'));
+            }, 10000); // wait 10s
+        });
+    });
 
     beforeEach(function() {
         browser.get(browser.baseUrl + '#/comments/list');

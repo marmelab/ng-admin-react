@@ -18,6 +18,7 @@
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
     "flux": "^2.0.3",
+    "humane-js": "^3.2.2",
     "immutable": "^3.7.3",
     "inflected": "^1.1.6",
     "jest-cli": "^0.4.13",

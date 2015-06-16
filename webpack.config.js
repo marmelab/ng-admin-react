@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 function getEntrySources() {
-    var sources = [];
+    var sources = ['humane-js/themes/flatty.css'];
 
     if (process.env.NODE_ENV !== 'production') { // for live reload
         sources.push('webpack-dev-server/client?http://0.0.0.0:8080');

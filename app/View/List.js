@@ -1,5 +1,6 @@
 import React from 'react';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+import Notification from '../Services/Notification';
 
 import Datagrid from '../Component/Datagrid/Datagrid';
 import MaDatagridPagination from '../Component/Datagrid/MaDatagridPagination';
@@ -18,6 +19,7 @@ class ListView extends React.Component {
 
     componentDidMount() {
         EntityStore.addChangeListener(this.onChange.bind(this));
+        EntityStore.addFailureListener(this.onLoadFailure.bind(this));
 
         this.refreshData();
     }
@@ -50,6 +52,16 @@ class ListView extends React.Component {
         let {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         EntityActions.loadListData(this.props.configuration, this.getView(), page, sortField, sortDir);
+    }
+
+    onLoadFailure(response) {
+        let body = response.data;
+        if (typeof message === 'object') {
+            body = JSON.stringify(body);
+        }
+
+        Notification.log('Oops, an error occured during data fetching : (code: ' + response.status + ') ' + body,
+            {addnCls: 'humane-flatty-error'});
     }
 
     buildPagination(view) {

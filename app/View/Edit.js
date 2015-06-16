@@ -2,6 +2,7 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 import Compile from '../Component/Compile';
+import Notification from '../Services/Notification';
 
 import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
@@ -17,6 +18,8 @@ class EditView extends React.Component {
 
     componentDidMount() {
         EntityStore.addChangeListener(this.onChange.bind(this));
+        EntityStore.addUpdateListener(this.onUpdate.bind(this));
+        EntityStore.addFailureListener(this.onFailure.bind(this));
 
         this.refreshData();
     }
@@ -33,6 +36,10 @@ class EditView extends React.Component {
 
     onChange() {
         this.setState(EntityStore.getState());
+    }
+
+    onUpdate() {
+        Notification.log('Changes successfully saved.', {addnCls: 'humane-flatty-success'});
     }
 
     refreshData() {
@@ -54,6 +61,16 @@ class EditView extends React.Component {
 
     updateField(name, value) {
         EntityActions.updateData(name, value);
+    }
+
+    onFailure(response) {
+        let body = response.data;
+        if (typeof message === 'object') {
+            body = JSON.stringify(body);
+        }
+
+        Notification.log('Oops, an error occured : (code: ' + response.status + ') ' + body,
+            {addnCls: 'humane-flatty-error'});
     }
 
     save(e) {

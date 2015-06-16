@@ -2,6 +2,7 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 import Compile from '../Component/Compile';
+import Notification from '../Services/Notification';
 
 import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
@@ -18,6 +19,7 @@ class CreateView extends React.Component {
     componentDidMount() {
         EntityStore.addChangeListener(this.onChange.bind(this));
         EntityStore.addCreateListener(this.onCreate.bind(this));
+        EntityStore.addFailureListener(this.onFailure.bind(this));
 
         this.refreshData();
     }
@@ -62,7 +64,19 @@ class CreateView extends React.Component {
         let dataStore = this.state.data.get('dataStore').first();
         let entry = dataStore.getFirstEntry(this.getView(entityName).entity.uniqueId);
 
+        Notification.log('Element successfully created.', {addnCls: 'humane-flatty-success'});
+
         this.context.router.transitionTo('edit', { entity: entityName, id: entry.identifierValue });
+    }
+
+    onFailure(response) {
+        let body = response.data;
+        if (typeof message === 'object') {
+            body = JSON.stringify(body);
+        }
+
+        Notification.log('Oops, an error occured : (code: ' + response.status + ') ' + body,
+            {addnCls: 'humane-flatty-error'});
     }
 
     buildFields(view, entry, dataStore) {

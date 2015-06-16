@@ -1,5 +1,9 @@
 function register(name, value) {
-    global.__defineGetter__(name, () => value);
+    if (global.hasOwnProperty(name)) {
+        return;
+    }
+
+    Object.defineProperty(global, name, {get: () => value});
 }
 
 export default register;

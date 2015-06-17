@@ -36,11 +36,11 @@ class ReactAdmin extends React.Component {
     constructor(props) {
         super(props);
 
-        let restful = Restful();
-        let components = {
+        const restful = Restful();
+        const components = {
             ViewActions: ViewActions
         };
-        let configuration = props.configureApp(
+        const configuration = props.configureApp(
             new ConfigurationFactory(),
             FieldViewConfiguration,
             components,

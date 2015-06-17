@@ -13,6 +13,8 @@ function getEntrySources() {
     sources.push('pace/themes/blue/pace-theme-flash.css');
     sources.push('humane-js/themes/flatty.css');
     sources.push('react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+    sources.push('medium-editor/dist/css/medium-editor.css');
+    sources.push('medium-editor/dist/css/themes/default.css');
 
     // react-admin sources
     sources.push('./styles/react-select-bootstrap.css');

@@ -5,6 +5,11 @@
  * https://twitter.com/jedwatson https://twitter.com/jossmackison https://twitter.com/keystonejs
  * MIT License: https://github.com/keystonejs/react-select
 */
+.Select.is-multi {
+  height: auto !important;
+  padding: 2px 12px;
+}
+
 .Select-control {
   position: relative;
   overflow: hidden;
@@ -26,13 +31,9 @@
 .is-searchable.is-focused:not(.is-open) > .Select-control {
   cursor: text;
 }
-.is-focused:not(.is-open) > .Select-control {
-  border-color: #0088cc #0099e6 #0099e6;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px -1px rgba(0, 136, 204, 0.5);
-}
 .Select-placeholder {
   color: #aaaaaa;
-  padding: 2px 52px 8px 0px;
+  padding: 1px 52px 8px 0px;
   position: absolute;
   top: 0;
   left: 0;
@@ -41,6 +42,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.is-multi .Select-placeholder {
+  top: 5px;
+  left: 3px;
 }
 .has-value > .Select-control > .Select-placeholder {
   color: #333333;
@@ -52,7 +57,7 @@
   font-family: inherit;
   font-size: inherit;
   margin: 0;
-  padding: 0;
+  padding: 1px 0 0 0;
   outline: none;
   display: inline-block;
   -webkit-appearance: none;
@@ -99,6 +104,9 @@
 .Select-clear > span {
   font-size: 1.1em;
 }
+.is-multi .Select-clear {
+  top: 2px;
+}
 .Select-arrow {
   border-color: #999999 transparent transparent;
   border-style: solid;
@@ -111,6 +119,9 @@
   right: 0;
   top: 8px;
   width: 0;
+}
+.is-multi .Select-arrow {
+  top: 12px;
 }
 .Select-menu-outer {
   border-bottom-right-radius: 4px;
@@ -160,7 +171,7 @@
   padding: 8px 10px;
 }
 .Select.is-multi .Select-control {
-  padding: 2px 52px 2px 3px;
+  padding-right: 52px;
 }
 .Select.is-multi .Select-input {
   vertical-align: middle;
@@ -169,12 +180,12 @@
   padding: 3px 0;
 }
 .Select-item {
-  background-color: #f2f9fc;
+  background-color: #337ab7;
   border-radius: 2px;
-  border: 1px solid #c9e6f2;
-  color: #0088cc;
+  border: 1px solid #2e6da4;
+  color: #fff;
   display: inline-block;
-  font-size: 1em;
+  font-size: 12px;
   margin: 2px;
 }
 .Select-item-icon,
@@ -201,8 +212,8 @@
 }
 .Select-item-icon:hover,
 .Select-item-icon:focus {
-  background-color: #ddeff7;
-  color: #0077b3;
+  background-color: #fff;
+  color: #337ab7;
 }
 .Select-item-icon:active {
   background-color: #c9e6f2;

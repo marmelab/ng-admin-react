@@ -7,13 +7,17 @@ class SelectField extends React.Component {
     }
 
     render() {
-        const attributes = {
-            value: this.props.value ? `${this.props.value}` : null,
+        let attributes = {
             options: this.props.choices.map(v => { v.value = `${v.value}`; return v; }),
+            multi: !!this.props.multiple,
             name: this.props.name,
             id: this.props.name,
             onChange: this.onChange.bind(this)
         };
+
+        if (this.props.value.length) {
+            attributes.value = `${this.props.value}`;
+        }
 
         return (
             <Select {...attributes} className="form-control" />
@@ -24,7 +28,8 @@ class SelectField extends React.Component {
 SelectField.propTypes = {
     name: React.PropTypes.string.isRequired,
     choices: React.PropTypes.array.isRequired,
-    value: React.PropTypes.any,
+    multiple: React.PropTypes.boolean,
+    value: React.PropTypes.array,
     type: React.PropTypes.string,
     updateField: React.PropTypes.func
 };

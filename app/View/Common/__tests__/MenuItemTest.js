@@ -2,10 +2,10 @@ jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../../../Component/Button/__mocks__/Link')});
 jest.dontMock('../MenuItem');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
-var MenuItem = require('../MenuItem');
-var routerWrapper = require('../../../Test/RouterWrapper');
+let React = require('react/addons');
+let TestUtils = React.addons.TestUtils;
+let MenuItem = require('../MenuItem');
+let routerWrapper = require('../../../Test/RouterWrapper');
 
 function getMenuItem(menu) {
     return routerWrapper(() => {
@@ -13,9 +13,8 @@ function getMenuItem(menu) {
     });
 }
 
-function getMenu(title, link, children, icon, isActive, isChildActive) {
-    children = children || [];
-    let uuid =  Math.random();
+function getMenu(title, link, children = [], icon = null, isActive = false, isChildActive = false) {
+    const uuid =  Math.random();
 
     return {
         uuid: uuid,
@@ -33,12 +32,12 @@ describe('MenuItem', () => {
 
     describe('With simple menu without child', () => {
         it('Should display desired menu', () => {
-            var menu = getMenu('Post', '/posts/list', [], null, true);
-            var menuItem = getMenuItem(menu);
+            let menu = getMenu('Post', '/posts/list', [], null, true);
+            let menuItem = getMenuItem(menu);
             menuItem = React.findDOMNode(menuItem);
 
-            var link = menuItem.querySelector('a');
-            var icons = menuItem.querySelectorAll('.glyphicon-list');
+            let link = menuItem.querySelector('a');
+            let icons = menuItem.querySelectorAll('.glyphicon-list');
             TestUtils.Simulate.click(link);
 
             expect(icons.length).toEqual(1);
@@ -50,15 +49,15 @@ describe('MenuItem', () => {
 
     describe('With simple menu with children', () => {
         it('Should display desired buttons', () => {
-            var child1 = getMenu('Post', '/posts/list', [], null, true);
-            var child2 = getMenu('Comment', '/posts/list', [], null, false);
-            var menu = getMenu('Blog', null, [child1, child2], null, false, true);
-            var menuItem = getMenuItem(menu);
+            let child1 = getMenu('Post', '/posts/list', [], null, true);
+            let child2 = getMenu('Comment', '/posts/list', [], null, false);
+            let menu = getMenu('Blog', null, [child1, child2], null, false, true);
+            let menuItem = getMenuItem(menu);
             menuItem = React.findDOMNode(menuItem);
 
-            var arrow = menuItem.querySelector('.arrow');
-            var childrenContainer = menuItem.querySelector('.nav-second-level');
-            var childNodes = menuItem.querySelectorAll('ul li');
+            let arrow = menuItem.querySelector('.arrow');
+            let childrenContainer = menuItem.querySelector('.nav-second-level');
+            let childNodes = menuItem.querySelectorAll('ul li');
 
             expect(arrow.className).toContain('glyphicon-menu-down');
             expect(childrenContainer).toBeTruthy();

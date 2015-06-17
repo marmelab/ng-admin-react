@@ -8,9 +8,9 @@ import Column from '../Column/Column';
 class Datagrid extends React.Component {
     getDetailAction (entry) {
         return function() {
-            let entityName = this.props.entityName,
-                entity = this.props.configuration.getEntity(entityName),
-                route = entity.editionView().enabled ? 'edit' : 'show';
+            const entityName = this.props.entityName;
+            const entity = this.props.configuration.getEntity(entityName);
+            const route = entity.editionView().enabled ? 'edit' : 'show';
 
             this.context.router.transitionTo(route, {entity: entityName, id: entry.identifierValue});
         }.bind(this);
@@ -23,8 +23,9 @@ class Datagrid extends React.Component {
         if (field.type() !== 'reference' && field.type() !== 'reference_many') {
             return true;
         }
-        var referenceEntity = field.targetEntity().name();
-        var relatedEntity = this.props.configuration.getEntity(referenceEntity);
+        const referenceEntity = field.targetEntity().name();
+        const relatedEntity = this.props.configuration.getEntity(referenceEntity);
+
         if (!relatedEntity) return false;
 
         return relatedEntity.isReadOnly ? relatedEntity.showView().enabled : relatedEntity.editionView().enabled;
@@ -32,13 +33,13 @@ class Datagrid extends React.Component {
 
     buildHeaders() {
         let headers = [];
-        let {name, listActions, sortDir, sortField} = this.props;
+        const {name, listActions, sortDir, sortField} = this.props;
 
         for (let i in this.props.fields) {
-            let fieldName = this.props.fields[i].name();
+            const fieldName = this.props.fields[i].name();
             let sort = null;
 
-            if (name + '.' + fieldName === sortField) {
+            if (`${name}.${fieldName}` === sortField) {
                 sort = sortDir;
             }
 
@@ -62,7 +63,7 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        let entity = this.props.configuration.getEntity(this.props.entityName);
+        const entity = this.props.configuration.getEntity(this.props.entityName);
 
         return this.props.entries.map((r, i) => (
             <tr key={i}>{this.buildCells(r, entity)}</tr>
@@ -71,13 +72,12 @@ class Datagrid extends React.Component {
 
     buildCells(row, entity) {
         let cells = [];
-        let actions = this.props.listActions;
-        let entityName = this.props.entityName;
+        const actions = this.props.listActions;
+        const entityName = this.props.entityName;
 
         for (let i in this.props.fields) {
-            let field = this.props.fields[i];
-
-            let renderedField = <Column field={field} entity={entity} entry={row} configuration={this.props.configuration} />;
+            const field = this.props.fields[i];
+            const renderedField = <Column field={field} entity={entity} entry={row} configuration={this.props.configuration} />;
 
             cells.push(<td key={i}>{renderedField}</td>);
         }

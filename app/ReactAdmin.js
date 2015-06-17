@@ -63,7 +63,7 @@ class ReactAdmin extends React.Component {
         // start progress bar
         Pace.start();
 
-        var Handler = this.state.handler;
+        const Handler = this.state.handler;
         return <Handler configuration={this.props.configuration}/>;
     }
 }

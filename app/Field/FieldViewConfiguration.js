@@ -1,4 +1,4 @@
-var fieldViews = {};
+let fieldViews = {};
 
 class FieldViewConfiguration {
     static registerFieldView(type, FieldView) {

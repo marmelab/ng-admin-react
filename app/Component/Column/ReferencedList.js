@@ -4,8 +4,8 @@ import PathUtils from 'react-router/lib/PathUtils';
 
 class ReferencedList extends React.Component {
     render() {
-        let {entries, field, entityName} = this.props;
-        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+        const {entries, field, entityName} = this.props;
+        const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         return (
             <Datagrid

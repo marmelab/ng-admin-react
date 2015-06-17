@@ -37,16 +37,16 @@ class DashboardView extends React.Component {
     }
 
     refreshData() {
-        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+        const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         EntityActions.loadDashboardPanels(this.props.configuration, sortField, sortDir);
     }
 
     buildPanels(panels, odd=true) {
-        let sortDir = this.state.data.get('sortDir');
-        let sortField = this.state.data.get('sortField');
-        let dataStore = this.state.data.getIn(['dataStore', 'object']);
-        let panelViews = [];
+        const sortDir = this.state.data.get('sortDir');
+        const sortField = this.state.data.get('sortField');
+        const dataStore = this.state.data.getIn(['dataStore', 'object']);
+        const panelViews = [];
         let label, view;
 
         panels
@@ -76,7 +76,7 @@ class DashboardView extends React.Component {
             return null;
         }
 
-        let panels = this.state.data.get('panels') || [];
+        const panels = this.state.data.get('panels') || [];
 
         if (!panels.count()) {
             return null;

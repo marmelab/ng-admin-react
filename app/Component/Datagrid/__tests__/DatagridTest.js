@@ -5,22 +5,22 @@ jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
 jest.dontMock('../../../Field/FieldViewConfiguration');
 jest.dontMock('../../../Field/StringFieldView');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
-var Datagrid = require('../Datagrid');
-var routerWrapper = require('../../../Test/RouterWrapper');
+const React = require('react/addons');
+const TestUtils = React.addons.TestUtils;
+const Datagrid = require('../Datagrid');
+const routerWrapper = require('../../../Test/RouterWrapper');
 
-var ListView = require('admin-config/lib/View/ListView');
-var Entry = require('admin-config/lib/Entry');
-var Entity = require('admin-config/lib/Entity/Entity');
-var NumberField = require('admin-config/lib/Field/NumberField');
-var Field = require('admin-config/lib/Field/Field');
-var DateField = require('admin-config/lib/Field/DateField');
+const ListView = require('admin-config/lib/View/ListView');
+const Entry = require('admin-config/lib/Entry');
+const Entity = require('admin-config/lib/Entity/Entity');
+const NumberField = require('admin-config/lib/Field/NumberField');
+const Field = require('admin-config/lib/Field/Field');
+const DateField = require('admin-config/lib/Field/DateField');
 
-var FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
-var StringFieldView = require('../../../Field/StringFieldView');
-var NumberFieldView = require('../../../Field/NumberFieldView');
-var DateFieldView = require('../../../Field/DateFieldView');
+const FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
+const StringFieldView = require('../../../Field/StringFieldView');
+const NumberFieldView = require('../../../Field/NumberFieldView');
+const DateFieldView = require('../../../Field/DateFieldView');
 
 FieldViewConfiguration.registerFieldView('string', StringFieldView);
 FieldViewConfiguration.registerFieldView('number', NumberFieldView);
@@ -48,9 +48,9 @@ function getDatagrid(name, entityName, fields, view, router, entries, sortDir, s
 }
 
 describe('Datagrid', () => {
-    var view;
-    var router;
-    var fields;
+    let view;
+    let router;
+    let fields;
 
     beforeEach(() => {
         view = new ListView('myView');
@@ -68,17 +68,17 @@ describe('Datagrid', () => {
 
     describe('Column headers', () => {
         it('should set header with correct label for each field', () => {
-            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
+            let datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
             datagrid = React.findDOMNode(datagrid);
 
-            var headers = [].slice.call(datagrid.querySelectorAll('thead th')).map(h => h.textContent);
+            const headers = [].slice.call(datagrid.querySelectorAll('thead th')).map(h => h.textContent);
             expect(headers).toEqual(['#', 'Title', 'Creation date']);
         });
 
         it('should send `sort` event to datagrid when clicking on header', () => {
-            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
-            var datagridNode = React.findDOMNode(datagrid);
-            var header = datagridNode.querySelector('thead th a');
+            const datagrid = getDatagrid('myView', 'myEntity', fields, view, router, [], null, null);
+            const datagridNode = React.findDOMNode(datagrid);
+            const header = datagridNode.querySelector('thead th a');
             TestUtils.Simulate.click(header);
 
             expect(header.attributes['data-click-to'].value).toEqual('my-route');
@@ -87,15 +87,15 @@ describe('Datagrid', () => {
 
     describe('Datagrid entries', () => {
         it('should set rows with correct values for each field', () => {
-            var entries = [
+            const entries = [
                 new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1),
                 new Entry('posts', { 'id': 2, 'title': 'Second Post', 'created_at': '2015-05-28' }, 2),
                 new Entry('posts', { 'id': 3, 'title': 'Third Post', 'created_at': '2015-05-29' }, 3)
             ];
 
-            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries);
-            var datagridNode = React.findDOMNode(datagrid);
-            var rows = datagridNode.querySelectorAll('tbody tr');
+            const datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries);
+            const datagridNode = React.findDOMNode(datagrid);
+            const rows = datagridNode.querySelectorAll('tbody tr');
 
             expect(rows.length).toEqual(3);
             expect(rows[0].childNodes.length).toEqual(3);
@@ -104,30 +104,30 @@ describe('Datagrid', () => {
         });
 
          it('should set rows with correct values, plus action buttons', () => {
-            var entries = [
+            const entries = [
                 new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1)
             ];
 
             view = view.listActions(['edit']);
 
-            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries);
-            var datagridNode = React.findDOMNode(datagrid);
-            var cells = datagridNode.querySelectorAll('tbody tr td');
+            const datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries);
+            const datagridNode = React.findDOMNode(datagrid);
+            const cells = datagridNode.querySelectorAll('tbody tr td');
 
             expect(cells.length).toEqual(4);
             expect(cells[3].textContent).toContain('Edit');
         });
 
         it('should set rows with correct values, plus action buttons', () => {
-            var entries = [
+            const entries = [
                 new Entry('posts', { 'id': 1, 'title': 'First Post', 'created_at': '2015-05-27' }, 1)
             ];
 
             view = view.listActions(['edit']);
 
-            var datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries, null, null);
-            var datagridNode = React.findDOMNode(datagrid);
-            var detailLink = datagridNode.querySelector('tbody tr:nth-child(1) td:nth-child(2) a');
+            const datagrid = getDatagrid('myView', 'myEntity', fields, view, router, entries, null, null);
+            const datagridNode = React.findDOMNode(datagrid);
+            const detailLink = datagridNode.querySelector('tbody tr:nth-child(1) td:nth-child(2) a');
 
             expect(detailLink.tagName.toLowerCase()).toBe('a');
         });

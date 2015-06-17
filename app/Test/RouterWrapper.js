@@ -1,5 +1,5 @@
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+const React = require('react/addons');
+const TestUtils = React.addons.TestUtils;
 
 // Mock router
 // @see https://github.com/rackt/react-router/blob/master/docs/guides/testing.md
@@ -14,7 +14,7 @@ RouterStub.getCurrentRoutes = () => ([{name: 'my-route'}]);
 RouterStub.transitionTo = () => { };
 
 function wrapComponent(cb) {
-    var TestWrapper = React.createClass({
+    const TestWrapper = React.createClass({
         childContextTypes: {
             router: React.PropTypes.func
         },

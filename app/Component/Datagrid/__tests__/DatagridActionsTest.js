@@ -5,12 +5,12 @@ jest.dontMock('../DatagridActions');
 jest.dontMock('../../../Test/RouterWrapper');
 jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
-var DatagridActions = require('../DatagridActions');
-var routerWrapper = require('../../../Test/RouterWrapper');
+const React = require('react/addons');
+const TestUtils = React.addons.TestUtils;
+const DatagridActions = require('../DatagridActions');
+const routerWrapper = require('../../../Test/RouterWrapper');
 
-var Entry = require('admin-config/lib/Entry');
+const Entry = require('admin-config/lib/Entry');
 
 function getActions(entityName, listActions, entry, size=null) {
     return routerWrapper(() => {
@@ -19,7 +19,7 @@ function getActions(entityName, listActions, entry, size=null) {
 }
 
 describe('DatagridActions', () => {
-    var myEntry;
+    let myEntry;
 
     beforeEach(() => {
         myEntry = new Entry('posts', { 'id': 1, 'title': 'First Post' }, 1);
@@ -27,7 +27,7 @@ describe('DatagridActions', () => {
 
     describe('Without actions', () => {
         it('Should not display anything', () => {
-            var actions = getActions('MyEntity', [], myEntry);
+            let actions = getActions('MyEntity', [], myEntry);
             actions = React.findDOMNode(actions);
 
             expect(actions.childNodes.length).toEqual(0);
@@ -36,7 +36,7 @@ describe('DatagridActions', () => {
 
     describe('With actions', () => {
         it('Should display list of buttons with default size', () => {
-            var actions = getActions('MyEntity', ['edit', 'delete'], myEntry);
+            let actions = getActions('MyEntity', ['edit', 'delete'], myEntry);
             actions = React.findDOMNode(actions);
 
             expect(actions.childNodes.length).toEqual(2);
@@ -46,17 +46,17 @@ describe('DatagridActions', () => {
         });
 
         it('Should display list of buttons with specified', () => {
-            var actions = getActions('MyEntity', ['edit', 'delete'], myEntry, 'xs');
+            let actions = getActions('MyEntity', ['edit', 'delete'], myEntry, 'xs');
             actions = React.findDOMNode(actions);
 
             expect(actions.childNodes[0].className).toEqual('btn btn-edit btn-default btn-xs');
         });
 
         it('Should display clickable button', () => {
-            var actions = getActions('MyEntity', ['edit'], myEntry);
+            let actions = getActions('MyEntity', ['edit'], myEntry);
             actions = React.findDOMNode(actions);
 
-            var edit = actions.childNodes[0];
+            const edit = actions.childNodes[0];
             TestUtils.Simulate.click(edit);
 
             expect(edit.attributes['data-click-to'].value).toEqual('edit');

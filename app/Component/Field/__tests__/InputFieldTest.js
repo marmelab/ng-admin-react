@@ -1,19 +1,19 @@
 jest.autoMockOff();
 jest.dontMock('../InputField');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+const React = require('react/addons');
+const TestUtils = React.addons.TestUtils;
 
 describe('InputField', () => {
-    var InputField, values = {};
-    var onChange = (name, value) => { values[name] = value; };
+    let InputField, values = {};
+    const onChange = (name, value) => { values[name] = value; };
 
     beforeEach(() => {
         InputField = require('../InputField');
     });
 
     it('should get an input with correct default value and editable', () => {
-        var input = TestUtils.renderIntoDocument(<InputField name="my_field" value="default val" updateField={onChange}/>);
+        let input = TestUtils.renderIntoDocument(<InputField name="my_field" value="default val" updateField={onChange}/>);
             input = React.findDOMNode(input);
 
         expect(input.value).toBe('default val');

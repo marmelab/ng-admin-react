@@ -40,7 +40,7 @@ class DeleteView extends React.Component {
     }
 
     refreshData() {
-        let {id} = this.context.router.getCurrentParams();
+        const {id} = this.context.router.getCurrentParams();
 
         EntityActions.loadDeleteData(this.props.configuration, this.getView(), id);
     }
@@ -53,7 +53,7 @@ class DeleteView extends React.Component {
     }
 
     deleteEntry() {
-        let {id} = this.context.router.getCurrentParams();
+        const {id} = this.context.router.getCurrentParams();
 
         EntityActions.deleteData(this.props.configuration, id, this.getView());
     }
@@ -65,8 +65,8 @@ class DeleteView extends React.Component {
     }
 
     onDelete() {
-        let params = this.context.router.getCurrentParams(),
-            entityName = params.entity;
+        const params = this.context.router.getCurrentParams();
+        const entityName = params.entity;
 
         Notification.log('Element successfully deleted.', { addnCls: 'humane-flatty-success' });
 
@@ -79,7 +79,7 @@ class DeleteView extends React.Component {
             body = JSON.stringify(body);
         }
 
-        Notification.log('Oops, an error occured : (code: ' + response.status + ') ' + body, {addnCls: 'humane-flatty-error'});
+        Notification.log(`Oops, an error occured : (code: ${response.status}) ${body}`, {addnCls: 'humane-flatty-error'});
     }
 
     render() {
@@ -87,7 +87,7 @@ class DeleteView extends React.Component {
             return null;
         }
 
-        let params = this.context.router.getCurrentParams(),
+        const params = this.context.router.getCurrentParams(),
             entityName = params.entity,
             view = this.props.configuration.getEntity(entityName).deletionView(),
             dataStore = this.state.data.get('dataStore').first(),

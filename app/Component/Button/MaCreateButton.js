@@ -3,9 +3,9 @@ import {Link} from 'react-router';
 
 class MaCreateButton extends React.Component {
     render() {
-        let size = !!this.props.size ? ' btn-' + this.props.size : '',
-            className = 'btn btn-create btn-default' + size,
-            params = {
+        const size = !!this.props.size ? ` btn-${this.props.size}` : '';
+        const className = `btn btn-create btn-default${size}`;
+        const params = {
                 entity: this.props.entityName
             };
 

@@ -1,18 +1,18 @@
 jest.autoMockOff();
 jest.dontMock('../ViewActions');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
-var ViewActions = require('../ViewActions');
-var routerWrapper = require('../../Test/RouterWrapper');
+const React = require('react/addons');
+const TestUtils = React.addons.TestUtils;
+const ViewActions = require('../ViewActions');
+const routerWrapper = require('../../Test/RouterWrapper');
 
 function getActions(buttons, entry, view) {
     return routerWrapper(() => <ViewActions buttons={buttons} entry={entry} entityName={view.entity.name()} />);
 }
 
 describe('ViewActions', () => {
-    var view;
-    var entry;
+    let view;
+    let entry;
 
     beforeEach(() => {
         entry = {
@@ -27,10 +27,10 @@ describe('ViewActions', () => {
 
     describe('With buttons prop', () => {
         it('Should display desired buttons', () => {
-            var viewActions = getActions(['back', 'delete'], entry, view);
+            let viewActions = getActions(['back', 'delete'], entry, view);
             viewActions = React.findDOMNode(viewActions);
 
-            var buttons = viewActions.querySelectorAll('.btn');
+            const buttons = viewActions.querySelectorAll('.btn');
 
             expect(buttons[0].innerHTML).toContain('Back');
             expect(buttons[1].innerHTML).toContain('Delete');

@@ -1,10 +1,9 @@
 jest.autoMockOff();
 jest.dontMock('../autoloader');
 
-var autoload = require('../autoloader');
-
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+const autoload = require('../autoloader');
+const React = require('react/addons');
+const TestUtils = React.addons.TestUtils;
 
 import '../Component/Column/NumberColumn';
 

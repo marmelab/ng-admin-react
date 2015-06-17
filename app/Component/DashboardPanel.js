@@ -5,10 +5,10 @@ import Datagrid from './Datagrid/Datagrid';
 
 class DashboardPanel extends React.Component {
     render() {
-        let view = this.props.view;
-        let entity = view.entity;
-        let entries = this.props.dataStore.getEntries(entity.uniqueId);
-        let params = {
+        const view = this.props.view;
+        const entity = view.entity;
+        const entries = this.props.dataStore.getEntries(entity.uniqueId);
+        const params = {
             entity: entity.name()
         };
 

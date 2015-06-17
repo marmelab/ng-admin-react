@@ -34,8 +34,8 @@ class EntityStore extends EventEmitter {
         this.initData();
         this.emitChange();
 
-        let entryRequester = new EntryRequester(configuration);
-        let dashboardViews = configuration.getViewsOfType('DashboardView');
+        const entryRequester = new EntryRequester(configuration);
+        const dashboardViews = configuration.getViewsOfType('DashboardView');
         let panels = List();
         let dataStore = new DataStore();
         let promises = [];
@@ -86,17 +86,15 @@ class EntityStore extends EventEmitter {
             });
     }
 
-    loadListData(configuration, view, page, sortField, sortDir) {
+    loadListData(configuration, view, page = 1, sortField = null, sortDir = null) {
         this.initData();
         this.emitChange();
-
-        page = page || 1;
 
         this.data = this.data.update('page', v => page);
         this.data = this.data.update('sortField', v => sortField);
         this.data = this.data.update('sortDir', v => sortDir);
 
-        let entryRequester = new EntryRequester(configuration);
+        const entryRequester = new EntryRequester(configuration);
 
         entryRequester.getEntries(new DataStore(), view, page, {
             references: true,
@@ -113,7 +111,7 @@ class EntityStore extends EventEmitter {
         this.initData();
         this.emitChange();
 
-        let entryRequester = new EntryRequester(configuration);
+        const entryRequester = new EntryRequester(configuration);
 
         entryRequester.getEntry(view, identifierValue, { references: true, referencesList: true, sortField, sortDir })
             .then((dataStore) => {
@@ -126,7 +124,7 @@ class EntityStore extends EventEmitter {
         this.initData();
         this.emitChange();
 
-        let entryRequester = new EntryRequester(configuration);
+        const entryRequester = new EntryRequester(configuration);
 
         entryRequester.getEntry(view, identifierValue, { references: true, referencesList: true, choices: true, sortField, sortDir })
             .then((dataStore) => {
@@ -192,8 +190,8 @@ class EntityStore extends EventEmitter {
     }
 
     saveData(configuration, view) {
-        let values = this.data.get('values');
-        let id = this.data.get('originEntityId');
+        const values = this.data.get('values');
+        const id = this.data.get('originEntityId');
 
         let rawEntry = {};
         for (let [name, value] of values) {
@@ -286,7 +284,7 @@ class EntityStore extends EventEmitter {
     }
 }
 
-let store = new EntityStore();
+const store = new EntityStore();
 
 AppDispatcher.register((action) => {
     switch(action.actionType) {

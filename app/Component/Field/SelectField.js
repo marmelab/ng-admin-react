@@ -7,9 +7,9 @@ class SelectField extends React.Component {
     }
 
     render() {
-        let attributes = {
-            value: this.props.value ? '' + this.props.value : null,
-            options: this.props.choices.map(v => { v.value = '' + v.value; return v; }),
+        const attributes = {
+            value: this.props.value ? `${this.props.value}` : null,
+            options: this.props.choices.map(v => { v.value = `${v.value}`; return v; }),
             name: this.props.name,
             id: this.props.name,
             onChange: this.onChange.bind(this)

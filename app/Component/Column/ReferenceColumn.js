@@ -3,12 +3,12 @@ import {Link} from 'react-router';
 
 class ReferenceColumn extends React.Component {
     render() {
-        let {value, field, entry} = this.props,
-            referenceEntity = field.targetEntity(),
-            isDetail = referenceEntity.isReadOnly ? referenceEntity.showView().enabled : referenceEntity.editionView().enabled;
+        const {value, field, entry} = this.props;
+        const referenceEntity = field.targetEntity();
+        const isDetail = referenceEntity.isReadOnly ? referenceEntity.showView().enabled : referenceEntity.editionView().enabled;
 
         if (isDetail) {
-            let to = referenceEntity.isReadOnly ? 'show' : field.detailLinkRoute(),
+            const to = referenceEntity.isReadOnly ? 'show' : field.detailLinkRoute(),
                 referenceId = entry.values[field.name()],
                 params = {
                     entity: referenceEntity.name(),

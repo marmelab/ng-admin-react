@@ -6,7 +6,7 @@ class InputField extends React.Component {
     }
 
     render() {
-        let attributes = {
+        const attributes = {
             type: this.props.type ? this.props.type : 'text',
             value: this.props.value ? this.props.value : null,
             name: this.props.name,

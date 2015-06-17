@@ -5,7 +5,7 @@ import { MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButto
 
 class ViewActions extends React.Component {
     render() {
-        let {size, entityName, buttons, entry} = this.props;
+        const {size, entityName, buttons, entry} = this.props;
         let results;
         let i = 0;
 

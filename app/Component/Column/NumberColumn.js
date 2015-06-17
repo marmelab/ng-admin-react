@@ -2,7 +2,7 @@ import React from 'react';
 
 class NumberColumn extends React.Component {
     render() {
-        let {value, detailAction} = this.props;
+        const {value, detailAction} = this.props;
 
         if (detailAction) {
             return <a onClick={detailAction}>{value}</a>;

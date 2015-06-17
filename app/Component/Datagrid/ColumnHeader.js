@@ -3,14 +3,14 @@ import {Link} from 'react-router';
 
 class ColumnHeader extends React.Component {
     render() {
-        let params = this.context.router.getCurrentParams();
-        let routes = this.context.router.getCurrentRoutes();
-        let currentQuery = this.context.router.getCurrentQuery();
-        let route = routes[routes.length - 1];
+        const params = this.context.router.getCurrentParams();
+        const routes = this.context.router.getCurrentRoutes();
+        const currentQuery = this.context.router.getCurrentQuery();
+        const route = routes[routes.length - 1];
         let {sort, fieldName, name, label} = this.props;
 
-        let query = {
-            sortField: name + '.' + fieldName,
+        const query = {
+            sortField: `${name}.${fieldName}`,
             sortDir: sort === 'ASC' ? 'DESC' : 'ASC'
         };
 
@@ -19,11 +19,11 @@ class ColumnHeader extends React.Component {
         }
 
         if (sort) {
-            sort = <span className={'sorted sorted-' + sort.toLowerCase()}></span>
+            sort = <span className={`sorted sorted-${sort.toLowerCase()}`}></span>
         }
 
         return (
-            <th className={'react-admin-column-' + fieldName} key={fieldName}>
+            <th className={`react-admin-column-${fieldName}`} key={fieldName}>
                 <Link to={route.name} params={params} query={query}>
                     {sort}
                     {label}

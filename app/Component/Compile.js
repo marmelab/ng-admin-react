@@ -7,7 +7,7 @@ import { MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButto
 import { StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList } from './Column';
 import { InputField, CheckboxField, ButtonField } from './Field';
 
-let Components = {
+const Components = {
     MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton,
     StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList,
     InputField, CheckboxField, ButtonField,
@@ -20,7 +20,7 @@ class Compile extends React.Component {
         var variables = [];
         for (let i in context) {
             if (context.hasOwnProperty(i)) {
-                variables.push('var ' + i + ' = this.' + i);
+                variables.push(`var ${i} = this.${i}`);
             }
         }
 
@@ -30,7 +30,7 @@ class Compile extends React.Component {
         }
 
         if (typeof(template) === 'string') {
-            return eval(variables.join(';') + '; ' + jsx.fromString(template, context));
+            return eval(`${variables.join(';')}; ${jsx.fromString(template, context)}`);
         }
 
         return template;
@@ -59,7 +59,7 @@ class Compile extends React.Component {
             // Wrap element without root tag
             if (typeof(children) === 'string') {
                 if (children.trim()[0] !== '<') {
-                    children = '<span>' + children + '</span>';
+                    children = `<span>${children}</span>`;
                 }
             }
 

@@ -6,7 +6,7 @@ import MaDeleteButton from '../Button/MaDeleteButton';
 
 class DatagridActions extends React.Component {
     render() {
-        let {size, entityName, listActions, entry} = this.props;
+        const {size, entityName, listActions, entry} = this.props;
         let buttons;
         let i = 0;
 

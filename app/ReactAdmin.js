@@ -36,17 +36,35 @@ class ReactAdmin extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            handler: null,
-            factory: ConfigurationFactory,
-            fieldViewConfiguration: FieldViewConfiguration,
-            autoload: autoload,
-            restful: Restful(),
-            routes: routes,
-            components: {
-                ViewActions: ViewActions
-            }
+        let restful = Restful();
+        let components = {
+            ViewActions: ViewActions
         };
+        let configuration = props.configureApp(
+            new ConfigurationFactory(),
+            FieldViewConfiguration,
+            components,
+            routes,
+            restful,
+            autoload
+        );
+
+        this.loaded = false;
+
+        Router.run(routes, (Handler) => {
+            if (this.loaded) {
+                this.setState({
+                    handler: Handler
+                });
+            }
+
+            this.state = {
+                handler: Handler,
+                configuration: configuration,
+                restful: restful
+            };
+            this.loaded = true;
+        });
     }
 
     getChildContext() {
@@ -60,24 +78,13 @@ class ReactAdmin extends React.Component {
         Pace.stop();
     }
 
-    componentWillReceiveProps() {
-        Router.run(routes, this.handleNavigation.bind(this));
-    }
-
-    handleNavigation(Handler) {
-        this.setState({
-            handler: Handler
-        });
-    }
-
     render() {
-        if(!this.state.handler || !this.props.configuration) return null;
-
         // start progress bar
         Pace.start();
 
         const Handler = this.state.handler;
-        return <Handler configuration={this.props.configuration}/>;
+
+        return <Handler configuration={this.state.configuration}/>;
     }
 }
 
@@ -86,7 +93,7 @@ ReactAdmin.childContextTypes = {
 };
 
 ReactAdmin.propTypes = {
-    configuration: React.PropTypes.object
+    configureApp: React.PropTypes.func.isRequired
 };
 
 export default ReactAdmin;

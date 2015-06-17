@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 function getEntrySources() {
-    var sources = ['humane-js/themes/flatty.css'];
+    var sources = [];
 
     if (process.env.NODE_ENV !== 'production') { // for live reload
         sources.push('webpack-dev-server/client?http://0.0.0.0:8080');
@@ -11,7 +11,8 @@ function getEntrySources() {
 
     // vendor sources
     sources.push('pace/themes/blue/pace-theme-flash.css');
-    sources.push('react-datepicker/dist/react-datepicker.css');
+    sources.push('humane-js/themes/flatty.css');
+    sources.push('react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
 
     // react-admin sources
     sources.push('./styles/react-select-bootstrap.css');

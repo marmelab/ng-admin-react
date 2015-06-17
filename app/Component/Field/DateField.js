@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment/moment';
-import DatePicker from 'react-datepicker/dist/react-datepicker.js';
+import DateTimePicker from 'react-bootstrap-datetimepicker';
 
 class InputField extends React.Component {
     getFormat() {
@@ -15,7 +15,7 @@ class InputField extends React.Component {
     }
 
     onChange(date) {
-        this.props.updateField(this.props.name, date.format(this.getFormat()));
+        this.props.updateField(this.props.name, date);
     }
 
     render() {
@@ -25,13 +25,23 @@ class InputField extends React.Component {
         if (value) {
             value = typeof(value) === 'string' ? moment(value, format) : moment(value);
         }
-        let onChange = this.onChange.bind(this);
 
-        return <DatePicker
-            selected={value}
-            dateFormat={format}
-            onChange={onChange}
-            />;
+        let attributes = {
+            dateTime: value,
+            format: format,
+            inputFormat: format,
+            onChange: this.onChange.bind(this)
+        };
+
+        if ('date' === this.props.field.type()) {
+            attributes.mode = 'date';
+        }
+
+        return (
+            <div className="row col-sm-4">
+                <DateTimePicker {...attributes} />
+            </div>
+        );
     }
 }
 

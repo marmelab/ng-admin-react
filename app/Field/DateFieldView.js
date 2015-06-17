@@ -1,6 +1,6 @@
 import React from 'react';
 import DateColumn from '../Component/Column/DateColumn';
-import InputField from '../Component/Field/InputField';
+import DateField from '../Component/Field/DateField';
 
 class DateFieldView {
     static getReadWidget() {
@@ -17,8 +17,7 @@ class DateFieldView {
     }
 
     static getWriteWidget() {
-        // @TODO : Add date field
-        return <InputField type={"date"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
+        return <DateField type={"date"} name={this.props.fieldName} field={this.props.field} value={this.props.value} updateField={this.props.updateField} />;
     }
 }
 

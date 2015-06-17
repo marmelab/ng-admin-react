@@ -20,7 +20,7 @@ describe('CreationView', function () {
         });
     });
 
-    describe('Creation', function() {
+    describe('Creation', function () {
         it('should render a creation page with form fields', function () {
             expect($('.react-admin-field-title input').getAttribute('value')).toBe('');
         });
@@ -29,21 +29,28 @@ describe('CreationView', function () {
             $('#create-view .react-admin-field-title input').sendKeys('My new post').then(function () {
                 // Fill textarea
                 $('#create-view .react-admin-field-teaser textarea').sendKeys('My teaser').then(function () {
-                    $('#create-view button[type="submit"]').click().then(function () {
-                        // Wait for notification to be displayed
-                        utils.waitElementWithText('.humane-flatty-success');
+                    // Fill wysiwyg
+                    $('.wysiwyg-field').sendKeys('My long text').then(function () {
+                        $('#create-view button[type="submit"]').click().then(function () {
+                            // Wait for notification to be displayed
+                            utils.waitElementWithText('.humane-flatty-success');
 
-                        // Check that a notification has been displayed
-                        expect($('.humane-flatty-success').getText()).toBe('Element successfully created.');
+                            // Check that a notification has been displayed
+                            expect($('.humane-flatty-success').getText()).toBe('Element successfully created.');
 
-                        expect(browser.getCurrentUrl()).toContain('/posts/edit/');
-                        browser.driver.wait(function () {
-                            return browser.driver.isElementPresent(by.css('.page-header h1'));
-                        }, 10000); // wait 10s
+                            expect(browser.getCurrentUrl()).toContain('/posts/edit/');
+                            browser.driver.wait(function () {
+                                return browser.driver.isElementPresent(by.css('.page-header h1'));
+                            }, 10000); // wait 10s
 
-                        expect($('.page-header h1').getText()).toContain('Edit post');
-                        expect($('.page-header h1').getText()).toContain('My new post');
-                        expect($('#teaser').getText()).toContain('My teaser');
+                            expect($('.page-header h1').getText()).toContain('Edit post');
+                            expect($('.page-header h1').getText()).toContain('My new post');
+
+                            expect($('#teaser').getText()).toContain('My teaser');
+
+                            expect($('.wysiwyg-field p').getText()).toContain('My long text');
+
+                        });
                     });
                 });
             });
@@ -76,5 +83,4 @@ describe('CreationView', function () {
         });
 
     });
-
 });

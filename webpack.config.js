@@ -13,6 +13,8 @@ function getEntrySources() {
     sources.push('pace/themes/blue/pace-theme-flash.css');
     sources.push('humane-js/themes/flatty.css');
     sources.push('react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+    sources.push('medium-editor/dist/css/medium-editor.css');
+    sources.push('medium-editor/dist/css/themes/default.css');
 
     // react-admin sources
     sources.push('./styles/react-select-bootstrap.css');
@@ -58,6 +60,7 @@ module.exports = {
             { test: /admin-config/, loaders: ['babel?stage=1&optional[]=runtime'] },
             { test: /\.js$/, loaders: ['react-hot', 'babel?stage=1&optional[]=runtime'], exclude: /node_modules/ },
             { test: /react-router\/.*\.js$/, loader: 'babel'},
+            { test: /react-medium-editor\/.*\.js$/, loader: 'babel'},
             { test: /\.css$/, loader: ExtractTextPlugin.extract('css') },
             { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
             { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: "url" }

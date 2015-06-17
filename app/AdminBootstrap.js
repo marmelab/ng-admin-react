@@ -17,6 +17,7 @@ import ReferenceFieldView from './Field/ReferenceFieldView';
 import ReferenceManyFieldView from './Field/ReferenceManyFieldView';
 import TextFieldView from './Field/TextFieldView';
 import TemplateFieldView from './Field/TemplateFieldView';
+import WysiwygFieldView from './Field/WysiwygFieldView';
 
 FieldViewConfiguration.registerFieldView('boolean', BooleanFieldView);
 FieldViewConfiguration.registerFieldView('date', DateFieldView);
@@ -30,6 +31,7 @@ FieldViewConfiguration.registerFieldView('reference_many', ReferenceManyFieldVie
 FieldViewConfiguration.registerFieldView('string', StringFieldView);
 FieldViewConfiguration.registerFieldView('template', TemplateFieldView);
 FieldViewConfiguration.registerFieldView('text', TextFieldView);
+FieldViewConfiguration.registerFieldView('wysiwyg', WysiwygFieldView);
 
 class AdminBootstrap extends React.Component {
     render() {

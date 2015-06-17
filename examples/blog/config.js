@@ -18,6 +18,14 @@
             };
         });
 
+        // Add custom component
+        var SendEmail = React.createClass({
+            render: function () {
+                return <a className='btn btn-default' href='#/stats'>Show stats</a>;
+            }
+        });
+        autoload('SendEmail', SendEmail);
+
         var admin = nga.application('rest-admin backend demo') // application main title
             .baseApiUrl('http://localhost:3000/'); // main API endpoint
 
@@ -114,7 +122,7 @@
                 post.views['EditView'].fields(), // reuse fields from another view in another order
                  nga.field('custom_action', 'template')
                      .label('')
-                     .template('<SendEmail post="entry"></SendEmail>')
+                     .template(<SendEmail post="entry"></SendEmail>)
             ]);
 
         post.views['DeleteView']
@@ -129,7 +137,9 @@
                 nga.field('body').label('Comment').map(truncate),
                 nga.field(null, 'template') // template fields don't need a name in dashboard view
                      .label('Edition')
-                     .template('<Link to="edit" params={{entity: "comments", id: entry.identifierValue}}>Edit</Link>') // you can use custom directives, too
+                     .template(function() {
+                        return <Link to="edit" params={{entity: "comments", id: this.props.entry.identifierValue}}>Edit</Link>;
+                    }) // you can use custom directives, too
             ]);
 
         comment.views['ListView']
@@ -250,35 +260,23 @@
                 )
             );
 
-        // Add custom component
-        var SendEmail = React.createClass({
-            render: function () {
-                return React.createElement('a', {className: 'btn btn-default', href: '#/stats'}, 'Show stats');
-            }
-        });
-        autoload('SendEmail', SendEmail);
-
         // Add custom route
         var ViewActions = components.ViewActions;
+        var Route = ReactRouter.Route;
         var Stats = React.createClass({
             render: function () {
-                return React.createElement('div', {className: 'page-header'},
-                    React.createElement(ViewActions, {buttons: ['back']}),
-                    React.createElement('h1', null, 'Stats'),
-                    React.createElement('p', {className: 'lead'}, 'You can add custom pages, too')
-                    );
+                return <div>
+                    <ViewActions buttons={['back']} />
+                    <h1>Stats</h1>
+                    <p className='lead'>You can add custom pages, too</p>
+                </div>;
             }
         });
 
-        routes.props.children.push(
-            React.createElement(ReactRouter.Route, { name: 'stats', path: '/stats', handler: Stats })
-        );
+        routes.props.children.push(<Route name="stats" path="/stats" handler={Stats} />);
 
         return admin;
     }
 
-    React.render(
-        React.createElement(ReactAdmin, { configureApp: configureApp }),
-        document.getElementById('my-app')
-    );
+    React.render(<ReactAdmin configureApp={configureApp} />, document.getElementById('my-app'));
 }());

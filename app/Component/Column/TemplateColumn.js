@@ -7,7 +7,7 @@ class TemplateColumn extends React.Component {
 
         let computedTemplate = template;
         if (typeof(template) === 'function') {
-            computedTemplate = template(this.props.entry);
+            computedTemplate = template.apply(this, [this.props.entry]);
         }
 
         return (

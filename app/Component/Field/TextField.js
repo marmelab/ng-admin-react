@@ -9,12 +9,12 @@ class TextField extends React.Component {
         let attributes = {
             name: this.props.name,
             id: this.props.name,
-            onChange: this.onChange.bind(this)
+            onChange: this.onChange.bind(this),
+            value: this.props.value ? this.props.value : null
         };
-        let value = this.props.value ? this.props.value : null;
 
         return (
-            <textarea {...attributes} className="form-control">{value}</textarea>
+            <textarea {...attributes} className="form-control"></textarea>
         );
     }
 }

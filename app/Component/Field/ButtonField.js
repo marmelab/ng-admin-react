@@ -23,7 +23,7 @@ class ButtonField extends React.Component {
 
         return (
             <div>
-                <a onClick={this.toggle.bind(this)}>{this.props.label}</a>
+                <a onClick={this.toggle.bind(this)} className={className}>{this.props.label}</a>
             </div>
         );
     }

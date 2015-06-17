@@ -39,7 +39,7 @@ class DashboardView extends React.Component {
     refreshData() {
         const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadDashboardPanels(this.props.configuration, sortField, sortDir);
+        EntityActions.loadDashboardPanels(this.context.restful, this.props.configuration, sortField, sortDir);
     }
 
     buildPanels(panels, odd=true) {
@@ -105,11 +105,13 @@ class DashboardView extends React.Component {
     }
 }
 
+DashboardView.contextTypes = {
+    router: React.PropTypes.func.isRequired,
+    restful: React.PropTypes.func.isRequired
+};
+
 DashboardView.propTypes = {
     configuration: React.PropTypes.object.isRequired
-};
-DashboardView.contextTypes = {
-    router: React.PropTypes.func.isRequired
 };
 
 require('../autoloader')('DashboardView', DashboardView);

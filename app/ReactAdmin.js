@@ -2,15 +2,18 @@ import autoload from './autoloader';
 
 import React from 'react';
 import Router from 'react-router';
+import Restful from 'restful.js';
+
+import ConfigurationFactory from 'admin-config/lib/Factory';
 
 import AdminBootstrap from './AdminBootstrap';
+
 import DashboardView from './View/Dashboard';
 import ListView from './View/List';
 import ShowView from './View/Show';
 import CreateView from './View/Create';
 import EditView from './View/Edit';
 import DeleteView from './View/Delete';
-import ConfigurationFactory from 'admin-config/lib/Factory';
 
 import ViewActions from './Component/ViewActions';
 import FieldViewConfiguration from './Field/FieldViewConfiguration';
@@ -33,43 +36,64 @@ class ReactAdmin extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            handler: null,
-            factory: ConfigurationFactory,
-            fieldViewConfiguration: FieldViewConfiguration,
-            autoload: autoload,
-            routes: routes,
-            components: {
-                ViewActions: ViewActions
-            }
+        const restful = Restful();
+        const components = {
+            ViewActions: ViewActions
         };
+        const configuration = props.configureApp(
+            new ConfigurationFactory(),
+            FieldViewConfiguration,
+            components,
+            routes,
+            restful,
+            autoload
+        );
+
+        this.loaded = false;
+
+        Router.run(routes, (Handler) => {
+            if (this.loaded) {
+                this.setState({
+                    handler: Handler
+                });
+            }
+
+            this.state = {
+                handler: Handler,
+                configuration: configuration,
+                restful: restful
+            };
+            this.loaded = true;
+        });
     }
+
+    getChildContext() {
+        return {
+            restful: this.state.restful
+        }
+    }
+
     componentDidUpdate() {
         // stop progress bar
         Pace.stop();
     }
 
-    componentWillReceiveProps() {
-        Router.run(routes, this.handleNavigation.bind(this));
-    }
-    handleNavigation(Handler) {
-        this.setState({
-            handler: Handler
-        });
-    }
     render() {
-        if(!this.state.handler || !this.props.configuration) return null;
-
         // start progress bar
         Pace.start();
 
         const Handler = this.state.handler;
-        return <Handler configuration={this.props.configuration}/>;
+
+        return <Handler configuration={this.state.configuration}/>;
     }
 }
 
+ReactAdmin.childContextTypes = {
+    restful: React.PropTypes.func.isRequired
+};
+
 ReactAdmin.propTypes = {
-    configuration: React.PropTypes.object
+    configureApp: React.PropTypes.func.isRequired
 };
 
 export default ReactAdmin;

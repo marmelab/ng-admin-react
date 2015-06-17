@@ -46,7 +46,7 @@ class CreateView extends React.Component {
     }
 
     refreshData() {
-        EntityActions.loadCreateData(this.props.configuration, this.getView());
+        EntityActions.loadCreateData(this.context.restful, this.props.configuration, this.getView());
     }
 
     componentWillReceiveProps(nextProps) {
@@ -63,7 +63,7 @@ class CreateView extends React.Component {
     save(e) {
         e.preventDefault();
 
-        EntityActions.saveData(this.props.configuration, this.getView());
+        EntityActions.saveData(this.context.restful, this.props.configuration, this.getView());
     }
 
     onCreate() {
@@ -144,7 +144,8 @@ class CreateView extends React.Component {
 }
 
 CreateView.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    restful: React.PropTypes.func.isRequired
 };
 CreateView.propTypes = {
     configuration: React.PropTypes.object.isRequired

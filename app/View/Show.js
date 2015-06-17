@@ -45,7 +45,7 @@ class ShowView extends React.Component {
         const {id} = this.context.router.getCurrentParams();
         const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadShowData(this.props.configuration, this.getView(), id, sortField, sortDir);
+        EntityActions.loadShowData(this.context.restful, this.props.configuration, this.getView(), id, sortField, sortDir);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -111,7 +111,8 @@ class ShowView extends React.Component {
 }
 
 ShowView.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    restful: React.PropTypes.func.isRequired
 };
 ShowView.propTypes = {
     configuration: React.PropTypes.object.isRequired

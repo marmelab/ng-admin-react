@@ -53,7 +53,7 @@ class EditView extends React.Component {
         const {id} = this.context.router.getCurrentParams();
         const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadEditData(this.props.configuration, this.getView(), id, sortField, sortDir);
+        EntityActions.loadEditData(this.context.restful, this.props.configuration, this.getView(), id, sortField, sortDir);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -83,7 +83,7 @@ class EditView extends React.Component {
     save(e) {
         e.preventDefault();
 
-        EntityActions.saveData(this.props.configuration, this.getView());
+        EntityActions.saveData(this.context.restful, this.props.configuration, this.getView());
     }
 
     buildFields(view, entry, dataStore) {
@@ -145,7 +145,8 @@ class EditView extends React.Component {
 }
 
 EditView.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    restful: React.PropTypes.func.isRequired
 };
 EditView.propTypes = {
     configuration: React.PropTypes.object.isRequired

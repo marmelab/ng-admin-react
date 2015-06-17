@@ -11,13 +11,13 @@ class MaDatagridPagination extends React.Component {
     }
 
     computePagination(props) {
-        let totalItems = props.totalItems;
-        let page = props.page || 1;
-        let perPage = props.perPage || 1;
-        let nbPages =  Math.ceil(totalItems / perPage) || 1;
-        let offsetEnd = Math.min(page * perPage, totalItems);
-        let offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
-        let displayPagination = perPage < totalItems;
+        const totalItems = props.totalItems;
+        const page = props.page || 1;
+        const perPage = props.perPage || 1;
+        const nbPages =  Math.ceil(totalItems / perPage) || 1;
+        const offsetEnd = Math.min(page * perPage, totalItems);
+        const offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
+        const displayPagination = perPage < totalItems;
 
         this.setState({
             offsetBegin: offsetBegin,
@@ -29,8 +29,8 @@ class MaDatagridPagination extends React.Component {
     }
 
     range (page) {
-        var input = [],
-            nbPages = this.state.nbPages;
+        let input = [];
+        const nbPages = this.state.nbPages;
 
         // display page links around the current page
         if (page > 2) {
@@ -67,12 +67,13 @@ class MaDatagridPagination extends React.Component {
             return null;
         }
 
-        let totalItems = this.props.totalItems;
-        let entity = this.props.entity;
-        let page = +this.state.page;
+        const totalItems = this.props.totalItems;
+        const entity = this.props.entity;
+        const page = +this.state.page;
+        const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+
         let itemCount = null;
         let pagination = null;
-        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         if (totalItems > 0) {
             itemCount = <div className="total">
@@ -88,7 +89,7 @@ class MaDatagridPagination extends React.Component {
             let prev = <li></li>;
             let next = <li></li>;
             let items = [];
-            let query = this.context.router.getCurrentQuery() || {};
+            const query = this.context.router.getCurrentQuery() || {};
 
             if (page != 1) {
                 prev = <li><Link className="prev" to="list" params={{entity: entity}} query={{page: page - 1, sortField:sortField, sortDir: sortDir}}>« Prev</Link></li>
@@ -99,7 +100,7 @@ class MaDatagridPagination extends React.Component {
             }
 
             this.range(page).map(i => {
-                let className = i == page ? 'active' : '';
+                const className = i == page ? 'active' : '';
 
                 if (i == '.') {
                     items.push(<li key={i} className={className}><span>&hellip;</span></li>)

@@ -19,7 +19,7 @@ class ButtonField extends React.Component {
     }
 
     render() {
-        let className = classNames('btn', 'btn-default', { active: this.isActive() });
+        const className = classNames('btn', 'btn-default', { active: this.isActive() });
 
         return (
             <div>

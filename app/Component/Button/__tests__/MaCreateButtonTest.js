@@ -1,11 +1,11 @@
 jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../__mocks__/Link')});
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+const React = require('react/addons');
+const TestUtils = React.addons.TestUtils;
 
 describe('MaCreateButton', () => {
-    var MaCreateButton;
+    let MaCreateButton;
 
     beforeEach(() => {
         MaCreateButton = require('../MaCreateButton');
@@ -13,7 +13,7 @@ describe('MaCreateButton', () => {
 
     describe('With good props', () => {
         it('Should display label and size', () => {
-            var createButton = TestUtils.renderIntoDocument(<MaCreateButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
+            let createButton = TestUtils.renderIntoDocument(<MaCreateButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
             createButton = React.findDOMNode(createButton);
 
             expect(createButton.className).toContain('btn btn-create btn-default btn-xs');
@@ -21,7 +21,7 @@ describe('MaCreateButton', () => {
         });
 
         it('Should redirect to the create route', () => {
-            var createButton = TestUtils.renderIntoDocument(<MaCreateButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
+            let createButton = TestUtils.renderIntoDocument(<MaCreateButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
             createButtonNode = React.findDOMNode(createButton);
 
             expect(createButtonNode.attributes['data-click-to'].value).toEqual('');
@@ -30,7 +30,7 @@ describe('MaCreateButton', () => {
 
             expect(createButtonNode.attributes['data-click-to'].value).toEqual('create');
 
-            var params = JSON.parse(createButtonNode.attributes['data-params'].value);
+            const params = JSON.parse(createButtonNode.attributes['data-params'].value);
             expect(params.entity).toEqual('MyEntity');
         });
     });

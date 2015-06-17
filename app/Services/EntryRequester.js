@@ -172,11 +172,11 @@ class EntryRequester {
         .then((optimizedReference) => {
             optimizedReferencedData = optimizedReference;
 
-            var references = view.getReferences(),
+            let references = view.getReferences(),
                 referencedData = objectAssign(nonOptimizedReferencedData, optimizedReferencedData),
                 referencedEntries;
 
-            for (var name in referencedData) {
+            for (let name in referencedData) {
                 referencedEntries = dataStore.mapEntries(
                     references[name].targetEntity().name(),
                     references[name].targetEntity().identifier(),
@@ -201,17 +201,17 @@ class EntryRequester {
             rawEntries = response.rawEntries;
             entries = response.entries;
 
-            var referencedLists = view.getReferencedLists();
+            const referencedLists = view.getReferencedLists();
 
             // only works with one entry
             return this.readQueries.getReferencedListData(referencedLists, sortField, sortDir, entries[0].identifierValue);
         })
         .then((referencedListData) => {
-            var referencedLists = view.getReferencedLists();
-            var referencedList;
-            var referencedListEntries;
+            const referencedLists = view.getReferencedLists();
+            let referencedList;
+            let referencedListEntries;
 
-            for (var i in referencedLists) {
+            for (let i in referencedLists) {
                 referencedList = referencedLists[i];
                 referencedListEntries = referencedListData[i];
 
@@ -242,10 +242,10 @@ class EntryRequester {
             return this.readQueries.getAllReferencedData(view.getReferences());
         })
         .then((choicesData) => {
-            var choices = view.getReferences();
-            var choiceEntries;
+            const choices = view.getReferences();
+            let choiceEntries;
 
-            for (var name in choicesData) {
+            for (let name in choicesData) {
                 choiceEntries = dataStore.mapEntries(
                     choices[name].targetEntity().name(),
                     choices[name].targetEntity().identifier(),

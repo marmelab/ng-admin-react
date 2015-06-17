@@ -3,12 +3,13 @@ import {Link} from 'react-router';
 
 class ReferenceManyColumn extends React.Component {
     render() {
-        let {values, field, entry} = this.props,
-            referenceEntity = field.targetEntity(),
-            isDetail = referenceEntity.isReadOnly ? referenceEntity.showView().enabled : referenceEntity.editionView().enabled,
-            to = referenceEntity.isReadOnly ? 'show' : field.detailLinkRoute(),
-            identifiers = entry.values[field.name()],
-            params;
+        const {values, field, entry} = this.props;
+        const referenceEntity = field.targetEntity();
+        const isDetail = referenceEntity.isReadOnly ? referenceEntity.showView().enabled : referenceEntity.editionView().enabled;
+        const to = referenceEntity.isReadOnly ? 'show' : field.detailLinkRoute();
+        const identifiers = entry.values[field.name()];
+
+        let params;
 
         if (!values) {
             return <span />;

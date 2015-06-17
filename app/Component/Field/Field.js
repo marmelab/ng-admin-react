@@ -6,14 +6,14 @@ import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
 
 class Field extends React.Component {
     render() {
-        let {field, value, entity} = this.props;
-        let fieldName = field.name();
+        const {field, value, entity} = this.props;
+        const fieldName = field.name();
 
-        let fieldView = FieldViewConfiguration.getFieldView(field.type());
-        let className = 'edit-value react-admin-field-' + field.name() + ' ' +
+        const fieldView = FieldViewConfiguration.getFieldView(field.type());
+        const className = `edit-value react-admin-field-${field.name()} ` +
             (field.getCssClasses(this.props.entry) || 'col-sm-10 col-md-8 col-lg-7');
 
-        let fieldTemplate = fieldView ? fieldView.getWriteWidget : null;
+        const fieldTemplate = fieldView ? fieldView.getWriteWidget : null;
 
         return (
             <div>

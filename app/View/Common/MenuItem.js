@@ -9,7 +9,7 @@ class MenuItem extends React.Component {
     }
 
     isOpen(menu) {
-        let path = window.location.pathname;
+        const path = window.location.pathname;
 
         return menu.isChildActive(path) || this.state.openMenus.indexOf(menu) !== -1;
     }
@@ -17,9 +17,9 @@ class MenuItem extends React.Component {
     toggleChildren(e) {
         e.preventDefault();
 
-        let menu = this.props.menu;
-        let path = window.location.pathname;
-        let openMenus = this.state.openMenus;
+        const menu = this.props.menu;
+        const path = window.location.pathname;
+        const openMenus = this.state.openMenus;
 
         if (openMenus.indexOf(menu) !== -1) {
             // menu is already open, the click closes it
@@ -43,23 +43,23 @@ class MenuItem extends React.Component {
             return null;
         }
 
-        let menu = this.props.menu;
-        let link = menu.link();
-        let hasChild = menu.hasChild();
-        let path = window.location.pathname;
+        const menu = this.props.menu;
+        const link = menu.link();
+        const hasChild = menu.hasChild();
+        const path = window.location.pathname;
         let className = 'entities-repeat' + (menu.isActive(path) ? ' active' : '');
         let content;
         let childrenContainer;
-        let icon = menu.icon()
+        const icon = menu.icon()
                 ? <span className="icon" dangerouslySetInnerHTML={{__html: menu.icon() }}></span>
                 : <span className="glyphicon glyphicon-list"></span>;
-        let arrowClass = 'glyphicon arrow ' + (this.isOpen(menu) ? 'glyphicon-menu-down' : 'glyphicon-menu-right');
-        let arrow = hasChild ? <span className={arrowClass}></span> : null;
+        const arrowClass = 'glyphicon arrow ' + (this.isOpen(menu) ? 'glyphicon-menu-down' : 'glyphicon-menu-right');
+        const arrow = hasChild ? <span className={arrowClass}></span> : null;
 
         // Children
         if (hasChild) {
-            let containerClass = 'nav nav-second-level collapsible ' + (!this.isOpen(menu) ? 'collapsed' : '');
-            let children = menu.children();
+            const containerClass = 'nav nav-second-level collapsible ' + (!this.isOpen(menu) ? 'collapsed' : '');
+            const children = menu.children();
             let childrenElements = [];
             let child;
 

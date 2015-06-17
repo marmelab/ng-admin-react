@@ -2,7 +2,7 @@ import React from 'react';
 
 class JsonColumn extends React.Component {
     guessType(obj) {
-        var type = Object.prototype.toString.call(obj);
+        const type = Object.prototype.toString.call(obj);
 
         switch (type) {
             case '[object Object]': return 'Object';
@@ -12,9 +12,9 @@ class JsonColumn extends React.Component {
     }
 
     getSubContent(value, key) {
-        let type = this.guessType(value);
-        let content = type === 'Literal' ? value : <JsonColumn value={value} />;
-        let keyLabel = key ? <th className="active">{ key }</th>  : null;
+        const type = this.guessType(value);
+        const content = type === 'Literal' ? value : <JsonColumn value={value} />;
+        const keyLabel = key ? <th className="active">{ key }</th>  : null;
 
         return <tr>
                     {keyLabel}
@@ -23,8 +23,8 @@ class JsonColumn extends React.Component {
     }
 
     render() {
-        let value = this.props.value;
-        let type = this.guessType(value);
+        const value = this.props.value;
+        const type = this.guessType(value);
         let result = null;
         let rows;
 

@@ -1,4 +1,4 @@
-var React = require('react/react');
+const React = require('react/react');
 
 class Link extends React.Component {
     constructor() {

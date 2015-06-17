@@ -53,7 +53,7 @@ class ListView extends React.Component {
     }
 
     refreshData() {
-        let {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+        const {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         EntityActions.loadListData(this.props.configuration, this.getView(), page, sortField, sortDir);
     }
@@ -64,13 +64,13 @@ class ListView extends React.Component {
             body = JSON.stringify(body);
         }
 
-        Notification.log('Oops, an error occured during data fetching : (code: ' + response.status + ') ' + body,
+        Notification.log(`Oops, an error occured during data fetching  : (code: ${response.status}) ${body}`,
             {addnCls: 'humane-flatty-error'});
     }
 
     buildPagination(view) {
-        let totalItems = this.state.data.get('totalItems');
-        let page = this.state.data.get('page');
+        const totalItems = this.state.data.get('totalItems');
+        const page = this.state.data.get('page');
 
         return <MaDatagridPagination totalItems={totalItems} entity={view.entity.name()} page={page} perPage={view.perPage()} />;
     }
@@ -80,14 +80,14 @@ class ListView extends React.Component {
             return null;
         }
 
-        let configuration = this.props.configuration;
-        let entityName = this.context.router.getCurrentParams().entity;
-        let view = this.getView(entityName);
-        let sortDir = this.state.data.get('sortDir');
-        let sortField = this.state.data.get('sortField');
-        let dataStore = this.state.data.getIn(['dataStore', 'object']);
-        let entries = dataStore.getEntries(view.entity.uniqueId);
-        let actions = view.actions() || ['create'];
+        const configuration = this.props.configuration;
+        const entityName = this.context.router.getCurrentParams().entity;
+        const view = this.getView(entityName);
+        const sortDir = this.state.data.get('sortDir');
+        const sortField = this.state.data.get('sortField');
+        const dataStore = this.state.data.getIn(['dataStore', 'object']);
+        const entries = dataStore.getEntries(view.entity.uniqueId);
+        const actions = view.actions() || ['create'];
 
         if (!entries || !entries.length) {
             return null;

@@ -6,9 +6,9 @@ import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
 class Column extends React.Component {
     getDetailAction (entry) {
         return function() {
-            let entityName = this.props.entity.name(),
-                entity = this.props.configuration.getEntity(entityName),
-                route = entity.editionView().enabled ? 'edit' : 'show';
+            const entityName = this.props.entity.name();
+            const entity = this.props.configuration.getEntity(entityName);
+            const route = entity.editionView().enabled ? 'edit' : 'show';
 
             this.context.router.transitionTo(route, {entity: entityName, id: entry.identifierValue});
         }.bind(this);
@@ -21,21 +21,22 @@ class Column extends React.Component {
         if (field.type() !== 'reference' && field.type() !== 'reference_many') {
             return true;
         }
-        var referenceEntity = field.targetEntity().name();
-        var relatedEntity = this.props.configuration.getEntity(referenceEntity);
+        const referenceEntity = field.targetEntity().name();
+        const relatedEntity = this.props.configuration.getEntity(referenceEntity);
+
         if (!relatedEntity) return false;
 
         return relatedEntity.isReadOnly ? relatedEntity.showView().enabled : relatedEntity.editionView().enabled;
     }
 
     render() {
-        let {field, entry, entity} = this.props;
+        const {field, entry, entity} = this.props;
+        const isDetailLink = this.isDetailLink(field);
+        const detailAction = isDetailLink ? this.getDetailAction(this.props.entry) : null;
+        const type = field.type();
+        const value = entry.values[field.name()] || null;
+        const fieldView = FieldViewConfiguration.getFieldView(type);
 
-        let isDetailLink = this.isDetailLink(field);
-        let detailAction = isDetailLink ? this.getDetailAction(this.props.entry) : null;
-        let type = field.type();
-        let value = entry.values[field.name()] || null;
-        let fieldView = FieldViewConfiguration.getFieldView(type);
         let column = null;
 
         if (fieldView) {

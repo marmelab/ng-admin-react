@@ -42,8 +42,8 @@ class ShowView extends React.Component {
     }
 
     refreshData() {
-        let {id} = this.context.router.getCurrentParams();
-        let {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+        const {id} = this.context.router.getCurrentParams();
+        const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         EntityActions.loadShowData(this.props.configuration, this.getView(), id, sortField, sortDir);
     }
@@ -64,7 +64,7 @@ class ShowView extends React.Component {
             body = JSON.stringify(body);
         }
 
-        Notification.log('Oops, an error occured during data fetching : (code: ' + response.status + ') ' + body,
+        Notification.log(`Oops, an error occured during data fetching : (code: ${response.status}) ${body}`,
             {addnCls: 'humane-flatty-error'});
     }
 
@@ -73,12 +73,12 @@ class ShowView extends React.Component {
             return null;
         }
 
-        let params = this.context.router.getCurrentParams(),
-            entityName = params.entity,
-            view = this.getView(),
-            dataStore = this.state.data.getIn(['dataStore', 'object']),
-            entry = dataStore.getFirstEntry(view.getEntity().uniqueId),
-            actions = view.actions() || ['list', 'edit', 'delete'];
+        const params = this.context.router.getCurrentParams();
+        const entityName = params.entity;
+        const view = this.getView();
+        const dataStore = this.state.data.getIn(['dataStore', 'object']);
+        const entry = dataStore.getFirstEntry(view.getEntity().uniqueId);
+        const actions = view.actions() || ['list', 'edit', 'delete'];
 
         if (!entry) {
             return null;

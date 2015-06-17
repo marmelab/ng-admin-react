@@ -3,9 +3,9 @@ import Compile from '../Compile';
 
 class TemplateColumn extends React.Component {
     render() {
-        var template = this.props.template;
+        const template = this.props.template;
 
-        var computedTemplate = template;
+        let computedTemplate = template;
         if (typeof(template) === 'function') {
             computedTemplate = template(this.props.entry);
         }

@@ -67,9 +67,9 @@ class CreateView extends React.Component {
     }
 
     onCreate() {
-        let entityName = this.context.router.getCurrentParams().entity;
-        let dataStore = this.state.data.get('dataStore').first();
-        let entry = dataStore.getFirstEntry(this.getView(entityName).entity.uniqueId);
+        const entityName = this.context.router.getCurrentParams().entity;
+        const dataStore = this.state.data.get('dataStore').first();
+        const entry = dataStore.getFirstEntry(this.getView(entityName).entity.uniqueId);
 
         Notification.log('Element successfully created.', {addnCls: 'humane-flatty-success'});
 
@@ -82,7 +82,7 @@ class CreateView extends React.Component {
             body = JSON.stringify(body);
         }
 
-        Notification.log('Oops, an error occured : (code: ' + response.status + ') ' + body,
+        Notification.log(`Oops, an error occured : (code: ${response.status}) ${body}`,
             {addnCls: 'humane-flatty-error'});
     }
 
@@ -90,7 +90,7 @@ class CreateView extends React.Component {
         let fields = [];
 
         for (let field of view.getFields()) {
-            let value = this.state.data.getIn(['values', field.name()]);
+            const value = this.state.data.getIn(['values', field.name()]);
 
             fields.push(
                 <div className="form-field form-group" key={field.order()}>
@@ -107,11 +107,11 @@ class CreateView extends React.Component {
             return null;
         }
 
-        let entityName = this.context.router.getCurrentParams().entity;
-        let view = this.getView(entityName);
-        let dataStore = this.state.data.get('dataStore').first();
-        let entry = dataStore.getFirstEntry(view.entity.uniqueId);
-        let actions = view.actions() || ['list'];
+        const entityName = this.context.router.getCurrentParams().entity;
+        const view = this.getView(entityName);
+        const dataStore = this.state.data.get('dataStore').first();
+        const entry = dataStore.getFirstEntry(view.entity.uniqueId);
+        const actions = view.actions() || ['list'];
 
         if (!entry) {
             return null;

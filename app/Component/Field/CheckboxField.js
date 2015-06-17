@@ -6,7 +6,7 @@ class CheckboxField extends React.Component {
     }
 
     render() {
-        let attributes = {
+        const attributes = {
             type: 'checkbox',
             checked: !!this.props.value,
             name: this.props.name,

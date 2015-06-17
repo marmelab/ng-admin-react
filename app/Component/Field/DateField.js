@@ -22,7 +22,9 @@ class InputField extends React.Component {
         let {value} = this.props;
 
         let format = this.getFormat();
-        value = value ? moment(value, format) : null;
+        if (value) {
+            value = typeof(value) === 'string' ? moment(value, format) : moment(value);
+        }
         let onChange = this.onChange.bind(this);
 
         return <DatePicker

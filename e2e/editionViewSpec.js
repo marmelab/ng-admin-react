@@ -92,10 +92,10 @@ describe('EditionView', function () {
             $('input.datepicker__input').click().then(function () {
                 // Wait for calendar to display
                 browser.driver.wait(function () {
-                    return browser.driver.isElementPresent(by.css('.datepicker__month .datepicker__day:nth-child(1)'));
+                    return browser.driver.isElementPresent(by.css('.datepicker__month .datepicker__day--selected'));
                 }, 2000);
 
-                $('.datepicker__month .datepicker__day:nth-child(1)').click().then(function () {
+                $('.datepicker__month .datepicker__day--selected + div').click().then(function () {
                     // Wait for calendar to hide
                     var displayed = true;
                     browser.driver.wait(function () {
@@ -113,7 +113,7 @@ describe('EditionView', function () {
                                 return browser.driver.isElementPresent(by.css('.react-admin-field-published_at'));
                             }, 10000); // wait 10s
 
-                            expect($('.react-admin-field-published_at').getText()).toBe('2012-10-28');
+                            expect($('.react-admin-field-published_at').getText()).toBe('2012-11-08');
                         });
                     });
                 });

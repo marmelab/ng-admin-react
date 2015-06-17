@@ -3,7 +3,7 @@ import moment from 'moment/moment';
 import DateTimePicker from 'react-bootstrap-datetimepicker';
 import classNames from 'classnames';
 
-class InputField extends React.Component {
+class DateField extends React.Component {
     getFormat(type) {
         let {field} = this.props;
 
@@ -44,11 +44,11 @@ class InputField extends React.Component {
     }
 }
 
-InputField.propTypes = {
+DateField.propTypes = {
     field: React.PropTypes.object.isRequired,
     name: React.PropTypes.object.isRequired,
     value: React.PropTypes.any,
     updateField: React.PropTypes.func
 };
 
-export default InputField;
+export default DateField;

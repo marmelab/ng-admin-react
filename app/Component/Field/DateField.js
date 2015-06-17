@@ -21,15 +21,15 @@ class InputField extends React.Component {
 
     render() {
         let {value, type} = this.props;
-
         let format = this.getFormat(type);
-        if (value) {
-            value = typeof(value) === 'string' ? moment(value, format) : moment(value);
+
+        if (!value) {
+            value = moment().format(format);
         }
 
         const attributes = {
             mode: type,
-            dateTime: value.format(format),
+            dateTime: value,
             format: format,
             inputFormat: format,
             onChange: this.onChange.bind(this)

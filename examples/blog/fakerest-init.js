@@ -38,7 +38,7 @@
     // use sinon.js to monkey-patch XmlHttpRequest
     sinon.FakeXMLHttpRequest.useFilters = true;
     sinon.FakeXMLHttpRequest.addFilter(function (method, url) {
-        return url.indexOf('/socket.io/') !== -1;
+        return url.indexOf('/socket.io/') !== -1 || url.indexOf('config.js') !== -1;
     });
 
     var server = sinon.fakeServer.create();

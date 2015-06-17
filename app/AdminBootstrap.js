@@ -1,5 +1,5 @@
 import React from 'react';
-import {RouteHandler} from 'react-router';
+import {RouteHandler, Link} from 'react-router';
 
 import Header from "./View/Common/Header";
 import Sidebar from "./View/Common/Sidebar";
@@ -48,5 +48,6 @@ class AdminBootstrap extends React.Component {
 }
 
 require('./autoloader')('AdminBootstrap', AdminBootstrap);
+require('./autoloader')('Link', Link);
 
 export default AdminBootstrap;

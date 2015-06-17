@@ -83,24 +83,24 @@ describe('EditionView', function () {
         beforeEach(function() {
             browser.get(browser.baseUrl + '#/posts/edit/12').then(function () {
                 browser.driver.wait(function () {
-                    return browser.driver.isElementPresent(by.css('.datepicker__input'));
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-published_at input'));
                 }, 10000); // wait 10s
             });
         });
 
         it('allows update from a calendar', function () {
-            $('input.datepicker__input').click().then(function () {
+            $('.react-admin-field-published_at .input-group-addon').click().then(function () {
                 // Wait for calendar to display
                 browser.driver.wait(function () {
-                    return browser.driver.isElementPresent(by.css('.datepicker__month .datepicker__day--selected'));
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-published_at .bootstrap-datetimepicker-widget td.active'));
                 }, 2000);
 
-                $('.datepicker__month .datepicker__day--selected + div').click().then(function () {
+                $('.react-admin-field-published_at .bootstrap-datetimepicker-widget td.active + td').click().then(function () {
                     // Wait for calendar to hide
                     var displayed = true;
                     browser.driver.wait(function () {
-                        browser.driver.isElementPresent(by.css('.datepicker__container')).then(function (present) {
-                            displayed = present;
+                        $('.react-admin-field-published_at .bootstrap-datetimepicker-widget').isDisplayed().then(function (value) {
+                            displayed = value;
                         });
 
                         return !displayed;

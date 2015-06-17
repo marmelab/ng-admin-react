@@ -17,7 +17,7 @@ class DateFieldView {
     }
 
     static getWriteWidget() {
-        return <DateField type={"date"} name={this.props.fieldName} field={this.props.field} value={this.props.value} updateField={this.props.updateField} />;
+        return <DateField type={this.props.field.type()} name={this.props.fieldName} field={this.props.field} value={this.props.value} updateField={this.props.updateField} />;
     }
 }
 

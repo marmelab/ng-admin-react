@@ -1,45 +1,54 @@
 import React from 'react';
 import moment from 'moment/moment';
-import DatePicker from 'react-datepicker/dist/react-datepicker.js';
+import DateTimePicker from 'react-bootstrap-datetimepicker';
+import classNames from 'classnames';
 
-class InputField extends React.Component {
-    getFormat() {
+class DateField extends React.Component {
+    getFormat(type) {
         let {field} = this.props;
 
         let format = field.format();
         if (!format) {
-            format = field.type() === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss';
+            format = 'datetime' === type ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
         }
 
         return format;
     }
 
     onChange(date) {
-        this.props.updateField(this.props.name, date.format(this.getFormat()));
+        this.props.updateField(this.props.name, date);
     }
 
     render() {
-        let {value} = this.props;
+        let {value, type} = this.props;
+        let format = this.getFormat(type);
 
-        let format = this.getFormat();
-        if (value) {
-            value = typeof(value) === 'string' ? moment(value, format) : moment(value);
+        if (!value) {
+            value = moment().format(format);
         }
-        let onChange = this.onChange.bind(this);
 
-        return <DatePicker
-            selected={value}
-            dateFormat={format}
-            onChange={onChange}
-            />;
+        const attributes = {
+            mode: type,
+            dateTime: value,
+            format: format,
+            inputFormat: format,
+            onChange: this.onChange.bind(this)
+        };
+        const className = classNames('row', { 'col-sm-5': 'datetime' === type, 'col-sm-4': 'date' === type });
+
+        return (
+            <div className={className}>
+                <DateTimePicker {...attributes} />
+            </div>
+        );
     }
 }
 
-InputField.propTypes = {
+DateField.propTypes = {
     field: React.PropTypes.object.isRequired,
     name: React.PropTypes.object.isRequired,
     value: React.PropTypes.any,
     updateField: React.PropTypes.func
 };
 
-export default InputField;
+export default DateField;

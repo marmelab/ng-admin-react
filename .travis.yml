@@ -17,7 +17,6 @@ before_install:
 - "npm install -g grunt-cli bower"
 - make
 - make install-blog
-- make build
 branches:
   only:
   - master

@@ -148,11 +148,11 @@ class EntityStore extends EventEmitter {
             }, this.emitResponseFailure.bind(this));
     }
 
-    loadCreateData(configuration, view) {
+    loadCreateData(restful, configuration, view) {
         this.initData();
         this.emitChange();
 
-        new EntryRequester(configuration)
+        this.getEntryRequester(restful, configuration)
             .createEntry(view)
             .then((dataStore) => {
                 this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
@@ -303,7 +303,7 @@ AppDispatcher.register((action) => {
             store.loadEditData(action.restful, action.configuration, action.view, action.id, action.sortField, action.sortDir);
             break;
         case 'load_create_data':
-            store.loadCreateData(action.configuration, action.view);
+            store.loadCreateData(action.restful, action.configuration, action.view);
             break;
         case 'load_delete_data':
             store.loadDeleteData(action.restful, action.configuration, action.view, action.id);

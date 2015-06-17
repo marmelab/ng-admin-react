@@ -46,4 +46,31 @@ describe('CreationView', function () {
         });
     });
 
+    describe('SelectField', function() {
+
+        beforeEach(function() {
+            browser.get(browser.baseUrl + '#/comments/create').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-post_id input'));
+                }, 10000); // wait 10s
+            });
+        });
+
+        it('should render as a dropdown with reference choices', function () {
+            expect($('.react-admin-field-post_id input').getAttribute('value')).toBe('');
+            expect($('.react-admin-field-post_id div.Select-placeholder').getText()).toBe('Select...');
+
+            $('.react-admin-field-post_id span.Select-arrow').click().then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-post_id div.Select-menu-outer'));
+                }, 5000); // wait 5s
+
+                $$('.react-admin-field-post_id .Select-option').then(function (options) {
+                    expect(options.length).toBe(12);
+                });
+            });
+        });
+
+    });
+
 });

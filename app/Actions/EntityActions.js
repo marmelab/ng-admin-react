@@ -43,7 +43,7 @@ export default {
         });
     },
 
-    loadCreateData(configuration, view, id) {
+    loadCreateData(configuration, view) {
         AppDispatcher.dispatch({
             actionType: 'load_create_data',
             configuration,

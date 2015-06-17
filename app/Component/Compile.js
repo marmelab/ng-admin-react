@@ -4,12 +4,12 @@ import jsx from 'jsx-transform';
 import objectAssign from 'object-assign';
 
 import { MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton } from './Button';
-import { StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList } from './Column';
+import { StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList, WysiwygColumn } from './Column';
 import { InputField, CheckboxField, ButtonField } from './Field';
 
 const Components = {
     MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton,
-    StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList,
+    StringColumn, BooleanColumn, DateColumn, NumberColumn, ReferenceColumn, ReferenceManyColumn, TemplateColumn, JsonColumn, ReferencedList, WysiwygColumn,
     InputField, CheckboxField, ButtonField,
     Link, React
 };

@@ -4,7 +4,7 @@ import WysiwygField from '../Component/Field/WysiwygField';
 
 class WysiwygFieldView {
     static getReadWidget() {
-        return <StringColumn value={this.props.value} />;
+        return <WysiwygColumn value={this.props.value} />;
     }
 
     static getLinkWidget() {

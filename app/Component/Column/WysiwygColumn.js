@@ -4,12 +4,14 @@ class WysiwygColumn extends React.Component {
     render() {
         let {value} = this.props;
 
-        return <span dangerouslySetInnerHTML={value} />;
+        return <div dangerouslySetInnerHTML={{__html: value}} />;
     }
 }
 
 WysiwygColumn.propTypes = {
     value: React.PropTypes.any
 };
+
+require('../../autoloader')('WysiwygColumn', WysiwygColumn);
 
 export default WysiwygColumn;

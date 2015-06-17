@@ -44,11 +44,11 @@ class DateField extends React.Component {
     }
 }
 
-InputField.propTypes = {
+DateField.propTypes = {
     field: React.PropTypes.object.isRequired,
     name: React.PropTypes.object.isRequired,
     value: React.PropTypes.any,
     updateField: React.PropTypes.func
 };
 
-export default InputField;
+export default DateField;

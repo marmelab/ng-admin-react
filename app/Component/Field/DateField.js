@@ -46,7 +46,7 @@ class DateField extends React.Component {
 
 DateField.propTypes = {
     field: React.PropTypes.object.isRequired,
-    name: React.PropTypes.object.isRequired,
+    name: React.PropTypes.string.isRequired,
     value: React.PropTypes.any,
     updateField: React.PropTypes.func
 };

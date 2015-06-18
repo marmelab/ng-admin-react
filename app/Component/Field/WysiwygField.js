@@ -22,8 +22,7 @@ class WysiwygField extends React.Component {
 }
 
 WysiwygField.propTypes = {
-    field: React.PropTypes.object.isRequired,
-    name: React.PropTypes.object.isRequired,
+    name: React.PropTypes.string.isRequired,
     value: React.PropTypes.any,
     updateField: React.PropTypes.func
 };

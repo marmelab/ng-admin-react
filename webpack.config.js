@@ -15,6 +15,8 @@ function getEntrySources() {
     sources.push('react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
     sources.push('medium-editor/dist/css/medium-editor.css');
     sources.push('medium-editor/dist/css/themes/default.css');
+    sources.push('codemirror/lib/codemirror.css');
+    sources.push('codemirror/addon/lint/lint.css');
 
     // react-admin sources
     sources.push('./styles/react-select-bootstrap.css');
@@ -49,11 +51,11 @@ module.exports = {
     },
     output: {
         path: __dirname + '/build',
-        filename: "[name].min.js",
-        library: "ReactAdmin"
+        filename: '[name].min.js',
+        library: 'ReactAdmin'
     },
     externals: {
-        "react": "React"
+        'react': 'React'
     },
     module: {
         loaders: [
@@ -63,11 +65,11 @@ module.exports = {
             { test: /react-medium-editor\/.*\.js$/, loader: 'babel'},
             { test: /\.css$/, loader: ExtractTextPlugin.extract('css') },
             { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
-            { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: "url" }
+            { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: 'url' }
         ]
     },
     plugins: getPlugins(),
     node: {
-        fs: "empty"
+        fs: 'empty'
     }
 };

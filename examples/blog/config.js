@@ -60,6 +60,11 @@
                 nga.field('title'), // the default list field type is 'string', and displays as a string
                 nga.field('published_at', 'date'), // Date field type allows date formatting
                 nga.field('views', 'number'),
+                nga.field('category', 'choice')
+                   .choices([ // List the choice as object literals
+                       { label: 'Tech', value: 'tech' },
+                       { label: 'Lifestyle', value: 'lifestyle' }
+                   ]),
                 nga.field('tags', 'reference_many') // a Reference is a particular type of field that references another entity
                     .targetEntity(tag) // the tag entity is defined later in this file
                     .targetField(nga.field('name')) // the field to be displayed in this list
@@ -88,18 +93,17 @@
             .actions(['list', 'show', 'delete']) // choose which buttons appear in the top action bar. Show is disabled by default
             .fields([
                 post.views['CreateView'].fields(), // fields() without arguments returns the list of fields. That way you can reuse fields from another view to avoid repetition
-                // @TODO : decomment after choice field implementation
-                //nga.field('category', 'choice') // a choice field is rendered as a dropdown in the edition view
-                //    .choices([ // List the choice as object literals
-                //        { label: 'Tech', value: 'tech' },
-                //        { label: 'Lifestyle', value: 'lifestyle' }
-                //    ]),
-                //nga.field('subcategory', 'choice')
-                //    .choices(function(entry) { // choices also accepts a function to return a list of choices based on the current entry
-                //        return subCategories.filter(function (c) {
-                //            return c.category === entry.values.category
-                //        });
-                //    }),
+                nga.field('category', 'choice') // a choice field is rendered as a dropdown in the edition view
+                   .choices([ // List the choice as object literals
+                       { label: 'Tech', value: 'tech' },
+                       { label: 'Lifestyle', value: 'lifestyle' }
+                   ]),
+                nga.field('subcategory', 'choice')
+                   .choices(function(entry) { // choices also accepts a function to return a list of choices based on the current entry
+                       return subCategories.filter(function (c) {
+                           return c.category === entry.values.category;
+                       });
+                   }),
                 nga.field('tags', 'reference_many') // ReferenceMany translates to a select multiple
                     .targetEntity(tag)
                     .targetField(nga.field('name'))
@@ -153,7 +157,12 @@
                     .map(truncate)
                     .targetEntity(post)
                     .targetField(nga.field('title').map(truncate)),
-                nga.field('author')
+                nga.field('author'),
+                nga.field('note', 'choices')
+                   .choices([
+                       { label: 'Usefull', value: 'usefull' },
+                       { label: 'Useless', value: 'useless' }
+                   ])
             ])
             .filters([
                 nga.field('q', 'string').label('').attributes({'placeholder': 'Global Search'}),
@@ -194,7 +203,14 @@
             ]);
 
         comment.views['EditView']
-            .fields(comment.views['CreateView'].fields())
+            .fields([
+                comment.views['CreateView'].fields(),
+                nga.field('note', 'choices')
+                   .choices([
+                       { label: 'Usefull', value: 'usefull' },
+                       { label: 'Useless', value: 'useless' }
+                   ])
+            ]);
             // .fields([nga.field(null, 'template')
             //     .label('')
             //     .template('<post-link entry="entry"></post-link>') // template() can take a function or a string

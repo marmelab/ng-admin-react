@@ -25,6 +25,7 @@ var apiData = {
                 }
             },
             "published_at": "2012-08-06",
+            "category": "tech",
             "tags": [
                 1,
                 3
@@ -227,7 +228,8 @@ var apiData = {
             "post_id": 1,
             "author": "Logan Schowalter",
             "body": "I don't want to be?' it asked. 'Oh, I'm not Ada,' she said, 'and see whether it's marked \"poison\" or not'; for she had asked it aloud; and in despair she put her hand on the end of the.",
-            "created_at": "2012-08-05"
+            "created_at": "2012-08-05",
+            "note": ["useless"]
         }
     ],
     "tags": [

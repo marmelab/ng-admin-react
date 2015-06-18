@@ -186,8 +186,34 @@ class EntityStore extends EventEmitter {
             }, this.emitResponseFailure.bind(this));
     }
 
-    updateData(fieldName, value) {
+    updateData(fieldName, value, choiceFields=[]) {
         this.data = this.data.updateIn(['values', fieldName], v => value);
+
+        // Handle related values between choice fields
+        if (choiceFields.length) {
+            choiceFields.map((field) => {
+                if (fieldName === field.name()) {
+                    return;
+                }
+
+                let choices = field.choices();
+                if (typeof(choices) === 'function') {
+                    choices = choices({ values: this.data.get('values').toJS() });
+                }
+
+                let valueInChoices = false;
+                choices.map((v) => {
+                    if (v.value === this.data.getIn(['values', field.name()])) {
+                        valueInChoices = true;
+                    }
+                });
+
+                if (!valueInChoices) {
+                    this.data = this.data.updateIn(['values', field.name()], v => null);
+                }
+            });
+        }
+
         this.emitChange();
     }
 
@@ -309,7 +335,7 @@ AppDispatcher.register((action) => {
             store.loadDeleteData(action.restful, action.configuration, action.view, action.id);
             break;
         case 'update_data':
-            store.updateData(action.fieldName, action.value);
+            store.updateData(action.fieldName, action.value, action.choiceFields);
             break;
         case 'delete_data':
             store.deleteData(action.restful, action.configuration, action.id, action.view);

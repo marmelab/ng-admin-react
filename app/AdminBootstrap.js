@@ -18,6 +18,8 @@ import ReferenceManyFieldView from './Field/ReferenceManyFieldView';
 import TextFieldView from './Field/TextFieldView';
 import TemplateFieldView from './Field/TemplateFieldView';
 import WysiwygFieldView from './Field/WysiwygFieldView';
+import ChoiceFieldView from './Field/ChoiceFieldView';
+import ChoicesFieldView from './Field/ChoicesFieldView';
 
 FieldViewConfiguration.registerFieldView('boolean', BooleanFieldView);
 FieldViewConfiguration.registerFieldView('date', DateFieldView);
@@ -25,6 +27,8 @@ FieldViewConfiguration.registerFieldView('datetime', DateFieldView);
 FieldViewConfiguration.registerFieldView('email', EmailFieldView);
 FieldViewConfiguration.registerFieldView('json', JsonFieldView);
 FieldViewConfiguration.registerFieldView('number', NumberFieldView);
+FieldViewConfiguration.registerFieldView('choice', ChoiceFieldView);
+FieldViewConfiguration.registerFieldView('choices', ChoicesFieldView);
 FieldViewConfiguration.registerFieldView('referenced_list', ReferencedListFieldView);
 FieldViewConfiguration.registerFieldView('reference', ReferenceFieldView);
 FieldViewConfiguration.registerFieldView('reference_many', ReferenceManyFieldView);

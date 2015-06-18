@@ -66,11 +66,12 @@ export default {
         });
     },
 
-    updateData(fieldName, value) {
+    updateData(fieldName, value, choiceFields=[]) {
         AppDispatcher.dispatch({
             actionType: 'update_data',
             fieldName,
-            value
+            value,
+            choiceFields
         });
     },
 

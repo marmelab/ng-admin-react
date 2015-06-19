@@ -104,6 +104,7 @@
                            return c.category === entry.values.category;
                        });
                    }),
+                nga.field('picture', 'file').uploadInformation({ 'url': 'http://localhost:3000/upload'}),
                 nga.field('tags', 'reference_many') // ReferenceMany translates to a select multiple
                     .targetEntity(tag)
                     .targetField(nga.field('name'))

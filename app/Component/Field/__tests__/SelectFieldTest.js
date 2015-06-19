@@ -35,4 +35,21 @@ describe('SelectField', () => {
 
         expect(values).toEqual({ 'my_field': '2' });
     });
+
+    it('should get a multi select with correct props and state', () => {
+        const choices = [
+            { value: 1, label: 'First choice' },
+            { value: 2, label: 'Second choice' },
+            { value: 3, label: 'Third choice' }
+        ];
+        const value = [2, 3];
+        const instance = TestUtils.renderIntoDocument(<SelectField name="my_field" value={value} multiple={true} choices={choices} updateField={onChange}/>);
+        const select = TestUtils.findRenderedComponentWithType(instance, Select);
+
+        expect(select.state.value).toBe('2,3');
+
+        select.selectValue('1');
+
+        expect(values).toEqual({ 'my_field': ['2', '3', '1'] });
+    });
 });

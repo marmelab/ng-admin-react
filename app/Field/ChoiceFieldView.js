@@ -1,6 +1,6 @@
 import React from 'react';
 import StringColumn from '../Component/Column/StringColumn';
-import SelectField from '../Component/Field/SelectField';
+import ChoiceField from '../Component/Field/ChoiceField';
 
 class ChoiceFieldView {
     static getReadWidget() {
@@ -18,13 +18,9 @@ class ChoiceFieldView {
     }
 
     static getWriteWidget() {
-        let choices = this.props.field.choices();
-        if (typeof(choices) === 'function') {
-            choices = choices({ values: this.props.values.toJS() });
-        }
-
-        return <SelectField name={this.props.fieldName}
-                            choices={choices} value={this.props.value}
+        return <ChoiceField field={this.props.field}
+                            fieldName={this.props.fieldName}
+                            values={this.props.values} value={this.props.value}
                             updateField={this.props.updateField} />;
     }
 }

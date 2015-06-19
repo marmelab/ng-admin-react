@@ -48,12 +48,7 @@
     "test": "make test"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/jest-preprocessor.js",
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react",
-      "<rootDir>/node_modules/admin-config",
-      "autoloader"
-    ]
+    "scriptPreprocessor": "<rootDir>/jest-preprocessor.js"
   },
   "keywords": [
     "react",

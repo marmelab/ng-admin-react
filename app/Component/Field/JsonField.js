@@ -2,13 +2,6 @@ import React from 'react';
 import formatJson from 'format-json';
 import Codemirror from 'react-codemirror';
 
-require('codemirror/addon/edit/closebrackets');
-require('codemirror/addon/edit/matchbrackets');
-require('codemirror/addon/lint/lint');
-require('codemirror/addon/lint/json-lint');
-require('codemirror/addon/selection/active-line');
-require('codemirror/mode/javascript/javascript');
-
 class JsonField extends React.Component {
     onChange(code) {
         if (code && typeof(code) === 'string') {

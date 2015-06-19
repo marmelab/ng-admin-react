@@ -21,6 +21,12 @@ function getEntrySources() {
     // react-admin sources
     sources.push('./styles/react-select-bootstrap.css');
     sources.push('./styles/app.scss');
+    sources.push('codemirror/addon/edit/closebrackets');
+    sources.push('codemirror/addon/edit/matchbrackets');
+    sources.push('codemirror/addon/lint/lint');
+    sources.push('codemirror/addon/lint/json-lint');
+    sources.push('codemirror/addon/selection/active-line');
+    sources.push('codemirror/mode/javascript/javascript');
     sources.push('./app/ReactAdmin.js'); // must be the last one
 
     return sources;

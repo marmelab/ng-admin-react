@@ -1,13 +1,11 @@
 jest.autoMockOff();
-jest.dontMock('../BooleanColumn');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
 
 describe('BooleanColumn', () => {
-    let BooleanColumn;
+    let React, TestUtils, BooleanColumn;
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         BooleanColumn = require('../BooleanColumn');
     });
 

@@ -1,27 +1,23 @@
-/* global jest,describe,beforeEach,it,expect */
-
 jest.autoMockOff();
-jest.dontMock('../DatagridActions');
-jest.dontMock('../../../Test/RouterWrapper');
 jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
 
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
-const DatagridActions = require('../DatagridActions');
-const routerWrapper = require('../../../Test/RouterWrapper');
-
-const Entry = require('admin-config/lib/Entry');
-
-function getActions(entityName, listActions, entry, size=null) {
-    return routerWrapper(() => {
-        return <DatagridActions entityName={entityName} listActions={listActions} entry={entry} size={size} />
-    });
-}
-
 describe('DatagridActions', () => {
-    let myEntry;
+    let React, TestUtils, DatagridActions, routerWrapper, Entry, myEntry;
+
+    function getActions(entityName, listActions, entry, size=null) {
+        return routerWrapper(() => {
+            return <DatagridActions entityName={entityName} listActions={listActions} entry={entry} size={size} />
+        });
+    }
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
+        DatagridActions = require('../DatagridActions');
+        routerWrapper = require('../../../Test/RouterWrapper');
+
+        Entry = require('admin-config/lib/Entry');
+
         myEntry = new Entry('posts', { 'id': 1, 'title': 'First Post' }, 1);
     });
 

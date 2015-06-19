@@ -1,14 +1,12 @@
 jest.autoMockOff();
-jest.dontMock('../InputField');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
 
 describe('InputField', () => {
-    let InputField, values = {};
+    let InputField, React, TestUtils, values = {};
     const onChange = (name, value) => { values[name] = value; };
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         InputField = require('../InputField');
     });
 

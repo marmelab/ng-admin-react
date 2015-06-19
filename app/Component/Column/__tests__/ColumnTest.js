@@ -1,30 +1,29 @@
 jest.autoMockOff();
-jest.dontMock('../../../Field/FieldViewConfiguration');
-jest.dontMock('../../../Field/StringFieldView');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
-
-import Field from 'admin-config/lib/Field/Field';
-import NumberField from 'admin-config/lib/Field/NumberField';
-import Entity from 'admin-config/lib/Entity/Entity';
-
-const Column = require('../Column');
-const FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
-const StringFieldView = require('../../../Field/StringFieldView');
-const NumberFieldView = require('../../../Field/NumberFieldView');
-
-FieldViewConfiguration.registerFieldView('string', StringFieldView);
-FieldViewConfiguration.registerFieldView('number', NumberFieldView);
-
-function getColumn(field, entity, entry, dataStore, configuration) {
-    const col = TestUtils.renderIntoDocument(<Column field={field} entity={entity} entry={entry}
-                                                         dataStore={dataStore} configuration={configuration} />);
-
-    return React.findDOMNode(col);
-}
 
 describe('Column', () => {
+    let React, TestUtils, Column, Field, NumberField, Entity, FieldViewConfiguration, StringFieldView, NumberFieldView;
+
+    function getColumn(field, entity, entry, dataStore, configuration) {
+        const col = TestUtils.renderIntoDocument(<Column field={field} entity={entity} entry={entry}
+                                                             dataStore={dataStore} configuration={configuration} />);
+
+        return React.findDOMNode(col);
+    }
+
+    beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
+        Column = require('../Column');
+        Field = require('admin-config/lib/Field/Field');
+        NumberField = require('admin-config/lib/Field/NumberField');
+        Entity = require('admin-config/lib/Entity/Entity');
+        FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
+        StringFieldView = require('../../../Field/StringFieldView');
+        NumberFieldView = require('../../../Field/NumberFieldView');
+
+        FieldViewConfiguration.registerFieldView('string', StringFieldView);
+        FieldViewConfiguration.registerFieldView('number', NumberFieldView);
+    });
 
     it('should display a string field', () => {
         const field = new Field('name');

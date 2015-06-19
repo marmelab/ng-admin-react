@@ -1,12 +1,11 @@
-jest.dontMock('../MaBackButton');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
+jest.autoMockOff();
 
 describe('MaBackButton', () => {
-    let MaBackButton;
+    let React, TestUtils, MaBackButton;
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         MaBackButton = require('../MaBackButton');
     });
 

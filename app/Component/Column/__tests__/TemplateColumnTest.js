@@ -1,13 +1,11 @@
 jest.autoMockOff();
-jest.dontMock('../TemplateColumn');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
 
 describe('TemplateColumn', () => {
-    let TemplateColumn;
+    let React, TestUtils, TemplateColumn;
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         TemplateColumn = require('../TemplateColumn');
     });
 

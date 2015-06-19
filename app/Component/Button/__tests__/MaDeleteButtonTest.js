@@ -1,19 +1,17 @@
 jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../__mocks__/Link')});
 
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
-
 describe('MaDeleteButton', () => {
-    let MaDeleteButton;
-    let entry;
+    let React, TestUtils, MaDeleteButton, entry;
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         MaDeleteButton = require('../MaDeleteButton');
 
         entry = {
             identifierValue: 23
-        }
+        };
     });
 
     describe('With good props', () => {

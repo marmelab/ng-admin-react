@@ -51,4 +51,6 @@ DateField.propTypes = {
     updateField: React.PropTypes.func
 };
 
+require('../../autoloader')('DateField', DateField);
+
 export default DateField;

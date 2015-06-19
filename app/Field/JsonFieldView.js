@@ -1,6 +1,6 @@
 import React from 'react';
 import JsonColumn from '../Component/Column/JsonColumn';
-import InputField from '../Component/Field/InputField';
+import JsonField from '../Component/Field/JsonField';
 
 class JsonFieldView {
     static getReadWidget() {
@@ -17,8 +17,7 @@ class JsonFieldView {
     }
 
     static getWriteWidget() {
-        // @TODO : use json input when implemented
-        return <InputField type={"text"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
+        return <JsonField name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 }
 

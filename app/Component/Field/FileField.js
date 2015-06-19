@@ -12,14 +12,32 @@ class FileField extends React.Component {
         };
     }
 
-    onChange(err, file) {
-        this.props.updateField(this.props.name, file.name);
+    onChange(response, file) {
+        const setState = this.setState.bind(this);
+        const field = this.props.field;
+        const uploadInformation = field.uploadInformation();
+        const apiFilename = uploadInformation.hasOwnProperty('apifilename') ? uploadInformation.apifilename : false;
+        let fileName = file.name;
 
-        this.setState({
-            progression: 0,
+        if (response && apiFilename) {
+            if (typeof(response) === 'string') {
+                response = JSON.parse(response);
+            }
+
+            fileName = response[apiFilename];
+        }
+
+        this.props.updateField(this.props.name, fileName);
+
+        setState({
+            progression: 100,
             error: false,
             message: `${file.name} uploaded correctly.`
         });
+
+        setTimeout(() => (
+            setState({progression: null})
+        ), 1000);
     }
 
     onProgress(step) {
@@ -36,14 +54,23 @@ class FileField extends React.Component {
 
     render() {
         const {field, value} = this.props;
+        const {progression, message, error} = this.state;
         const uploadInformation = field.uploadInformation();
         if (!uploadInformation.hasOwnProperty('url')) {
             throw new Error('You must provide a URL property to allow the upload of files.');
         }
 
-        const completed = +this.state.completed;
+        const completed = +progression;
         let accept = '*';
-        let message = null;
+        let messageBlock = null;
+        const progressBarStyles = {
+            width: completed + '%'
+        };
+
+        if (progression === null){
+            progressBarStyles.display = 'none';
+        }
+
         if (uploadInformation.hasOwnProperty('accept')) {
             accept = typeof uploadInformation.accept === 'function' ? uploadInformation.accept() : "'" + uploadInformation.accept + "'";
         }
@@ -56,24 +83,26 @@ class FileField extends React.Component {
             onError: this.onError.bind(this)
         };
 
-        if (this.state.message) {
-            const className = `text-${this.state.error ? 'warning' : 'success'}`;
+        if (message) {
+            const className = `text-${error ? 'warning' : 'success'}`;
 
-            message = <div className={className}>{this.state.message}</div>
+            messageBlock = <div className={className}>{message}</div>
         } else if (value) {
-            message = <div>Current file: {value}</div>
+            messageBlock = <div>Current file: {value}</div>
         }
 
         return <div className="upload-field">
-            <Upload {...attributes} className="form-control">
-                <a className="btn btn-default">Browse</a>
-            </Upload>
-
-            {message}
+            <div>
+                <Upload {...attributes} className="form-control">
+                    <a className="btn btn-default">Browse</a>
+                </Upload>
+            </div>
 
             <div className="progressbar-container" >
-                <div className="progressbar-progress" style={{width: completed + '%'}} />
+                <div className="progressbar-progress" style={progressBarStyles} />
             </div>
+
+            {messageBlock}
         </div>;
     }
 }

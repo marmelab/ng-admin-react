@@ -3,11 +3,13 @@ import FileField from '../Component/Field/FileField';
 
 class FileFieldView {
     static getReadWidget() {
-        return 'error: cannot display file field as readable';
+        console.warn('error: cannot display file field as readable');
+        return null;
     }
 
     static getLinkWidget() {
-        return 'error: cannot display file field as linkable';
+        console.warn('error: cannot display file field as linkable');
+        return null;
     }
 
     static getFilterWidget() {

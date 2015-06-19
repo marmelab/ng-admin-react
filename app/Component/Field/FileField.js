@@ -44,6 +44,16 @@ class FileField extends React.Component {
         this.setState({progression: step});
     }
 
+    empty() {
+        this.setState({
+            progression: 0,
+            error: false,
+            message: null
+        });
+
+        this.props.updateField(this.props.name, null);
+    }
+
     onError(error) {
         this.setState({
             progression: 0,
@@ -61,6 +71,7 @@ class FileField extends React.Component {
         }
 
         const completed = +progression;
+        const empty = this.empty.bind(this);
         let accept = '*';
         let messageBlock = null;
         const progressBarStyles = {
@@ -88,7 +99,7 @@ class FileField extends React.Component {
 
             messageBlock = <div className={className}>{message}</div>
         } else if (value) {
-            messageBlock = <div>Current file: {value}</div>
+            messageBlock = <div>Current file: {value} - <a onClick={empty}>Remove</a></div>
         }
 
         return <div className="upload-field">

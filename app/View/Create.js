@@ -88,13 +88,16 @@ class CreateView extends React.Component {
 
     buildFields(view, entry, dataStore) {
         let fields = [];
+        const values = this.state.data.get('values');
 
         for (let field of view.getFields()) {
             const value = this.state.data.getIn(['values', field.name()]);
 
             fields.push(
                 <div className="form-field form-group" key={field.order()}>
-                    <Field field={field} value={value} entity={view.entity} entry={entry} dataStore={dataStore} updateField={this.updateField} />
+                    <Field field={field} value={value} entity={view.entity}
+                           values={values} entry={entry}
+                           dataStore={dataStore} updateField={this.updateField} />
                 </div>
             );
         }

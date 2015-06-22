@@ -1,12 +1,11 @@
-jest.dontMock('../JsonColumn');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
+jest.autoMockOff();
 
 describe('JsonColumn', () => {
-    let JsonColumn;
+    let React, TestUtils, JsonColumn;
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils
         JsonColumn = require('../JsonColumn');
     });
 

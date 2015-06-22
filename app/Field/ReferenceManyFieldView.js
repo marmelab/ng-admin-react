@@ -1,5 +1,6 @@
 import React from 'react';
 import ReferenceManyColumn from '../Component/Column/ReferenceManyColumn';
+import SelectField from '../Component/Field/SelectField';
 
 class ReferenceManyFieldView {
     static getReadWidget() {
@@ -20,8 +21,10 @@ class ReferenceManyFieldView {
     }
 
     static getWriteWidget() {
-        // @TODO: change it when choice input will be implemented
-        return null;
+        return <SelectField name={this.props.fieldName} value={this.props.value}
+                            choices={this.props.dataStore.getChoices(this.props.field)}
+                            multiple={true}
+                            updateField={this.props.updateField} />;
     }
 }
 

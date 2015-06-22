@@ -6,7 +6,7 @@ import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
 
 class Field extends React.Component {
     render() {
-        const {field, value, entity} = this.props;
+        const {field, value, values, entry, entity} = this.props;
         const fieldName = field.name();
 
         const fieldView = FieldViewConfiguration.getFieldView(field.type());
@@ -21,7 +21,8 @@ class Field extends React.Component {
 
                 <div className={className}>
                     <Compile field={field} updateField={this.props.updateField} dataStore={this.props.dataStore}
-                             entity={entity} value={value} fieldName={fieldName} configuration={this.props.configuration}>
+                             entity={entity} value={value} values={values} fieldName={fieldName} entry={entry}
+                             configuration={this.props.configuration}>
                         {fieldTemplate}
                     </Compile>
                 </div>

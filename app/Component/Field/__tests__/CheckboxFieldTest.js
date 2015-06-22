@@ -1,15 +1,12 @@
 jest.autoMockOff();
-jest.dontMock('../CheckboxField');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
 
 describe('CheckboxField', () => {
-    let CheckboxField;
-    let values = {};
+    let React, TestUtils, CheckboxField, values = {};
     const onChange = (name, value) => { values[name] = value; };
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         CheckboxField = require('../CheckboxField');
     });
 

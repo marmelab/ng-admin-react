@@ -1,12 +1,11 @@
-jest.dontMock('../StringColumn');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
+jest.autoMockOff();
 
 describe('StringColumn', () => {
-    let StringColumn;
+    let React, TestUtils, StringColumn;
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         StringColumn = require('../StringColumn');
     });
 

@@ -1,13 +1,12 @@
 jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../__mocks__/Link')});
 
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
-
 describe('MaListButton', () => {
-    let MaListButton;
+    let React, TestUtils, MaListButton;
 
     beforeEach(() => {
+        React = require('react/addons');
+        TestUtils = React.addons.TestUtils;
         MaListButton = require('../MaListButton');
     });
 

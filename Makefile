@@ -10,6 +10,9 @@ postinstall:
 	./node_modules/babel/bin/babel/index.js node_modules/react-medium-editor_es6 --out-dir node_modules/react-medium-editor --stage 1 --compact false > /dev/null
 	mv node_modules/admin-config node_modules/admin-config_es6
 	./node_modules/babel/bin/babel/index.js node_modules/admin-config_es6 --out-dir node_modules/admin-config --stage 1 --compact false > /dev/null
+	rm -rf node_modules/rc-upload/examples/
+	mv node_modules/rc-upload node_modules/rc-upload_jsx
+	./node_modules/babel/bin/babel/index.js node_modules/rc-upload_jsx --out-dir node_modules/rc-upload
 	rm -rf node_modules/react-medium-editor_es6
 	rm -rf node_modules/admin-config_es6
 

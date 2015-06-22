@@ -1,12 +1,11 @@
 jest.autoMockOff();
 
-import AdminFileField from 'admin-config/lib/Field/FileField';
-
 describe('FileField', () => {
-    let React, TestUtils, FileField, AjaxUpload, values = {}, uploadCb;
+    let AdminFileField, React, TestUtils, FileField, AjaxUpload, values = {}, uploadCb;
     const onChange = (name, value) => { values[name] = value; };
 
     beforeEach(() => {
+        AdminFileField = require('admin-config/lib/Field/FileField');
         const empty = function () {
             return this;
         };

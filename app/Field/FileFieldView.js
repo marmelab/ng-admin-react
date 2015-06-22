@@ -1,10 +1,10 @@
 import React from 'react';
+import StringColumn from '../Component/Column/StringColumn';
 import FileField from '../Component/Field/FileField';
 
 class FileFieldView {
     static getReadWidget() {
-        console.warn('error: cannot display file field as readable');
-        return null;
+        return <StringColumn value={this.props.value} />;
     }
 
     static getLinkWidget() {

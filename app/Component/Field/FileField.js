@@ -95,11 +95,13 @@ class FileField extends React.Component {
         };
 
         if (message) {
-            const className = `text-${error ? 'warning' : 'success'}`;
-
-            messageBlock = <div className={className}>{message}</div>
+            if (error) {
+                messageBlock = <div className="text-error">{message}</div>
+            } else {
+                messageBlock = <div className="text-success">{message} <a onClick={empty}>Remove</a></div>
+            }
         } else if (value) {
-            messageBlock = <div>Current file: {value} - <a onClick={empty}>Remove</a></div>
+            messageBlock = <div className="current">Current file: {value}. <a onClick={empty}>Remove</a></div>
         }
 
         return <div className="upload-field">

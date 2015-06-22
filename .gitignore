@@ -3,3 +3,5 @@ node_modules/
 bower_components/
 build/*
 examples/blog/build/*
+src/
+jest.lastrun

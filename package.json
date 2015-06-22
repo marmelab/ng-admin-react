@@ -46,6 +46,7 @@
     "webpack-dev-server": "^1.9.0"
   },
   "scripts": {
+    "postinstall": "make postinstall",
     "test": "make test"
   },
   "keywords": [

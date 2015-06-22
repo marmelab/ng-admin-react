@@ -5,6 +5,14 @@ install:
 	@./node_modules/protractor/bin/webdriver-manager update
 	mkdir -p examples/blog/build/
 
+postinstall:
+	mv node_modules/react-medium-editor node_modules/react-medium-editor_es6
+	./node_modules/babel/bin/babel/index.js node_modules/react-medium-editor_es6 --out-dir node_modules/react-medium-editor --stage 1 --compact false > /dev/null
+	mv node_modules/admin-config node_modules/admin-config_es6
+	./node_modules/babel/bin/babel/index.js node_modules/admin-config_es6 --out-dir node_modules/admin-config --stage 1 --compact false > /dev/null
+	rm -rf node_modules/react-medium-editor_es6
+	rm -rf node_modules/admin-config_es6
+
 build:
 	@NODE_ENV=production ./node_modules/webpack/bin/webpack.js -p --optimize-minimize --optimize-occurence-order --optimize-dedupe --progress
 	@cp -Rf build/* examples/blog/build/
@@ -28,17 +36,9 @@ run-test-e2e: start-test-server test-e2e stop-test-server
 
 test-unit-init:
 	./node_modules/babel/bin/babel/index.js app --out-dir src --stage 1 --compact false > /dev/null
-	mv node_modules/react-medium-editor node_modules/react-medium-editor_es6
-	./node_modules/babel/bin/babel/index.js node_modules/react-medium-editor_es6 --out-dir node_modules/react-medium-editor --stage 1 --compact false > /dev/null
-	mv node_modules/admin-config node_modules/admin-config_es6
-	./node_modules/babel/bin/babel/index.js node_modules/admin-config_es6 --out-dir node_modules/admin-config --stage 1 --compact false > /dev/null
 
 test-unit-clean:
-	rm -rf node_modules/react-medium-editor
-	rm -rf node_modules/admin-config
 	rm -rf ./src
-	mv node_modules/react-medium-editor_es6 node_modules/react-medium-editor
-	mv node_modules/admin-config_es6 node_modules/admin-config
 
 test-unit-run:
 	@./node_modules/jest-cli/bin/jest.js src

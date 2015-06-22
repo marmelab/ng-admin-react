@@ -113,8 +113,14 @@ Launch the entire tests suite by calling:
 make test
 ```
 
+Run only unit tests suite:
+
+```sh
+make test-unit
+```
+
 Run only one unit test by calling, for example:
 
 ```
-./node_modules/jest-cli/bin/jest.js -c jest.json app/__tests__/autoloaderTest.js
+./test-unit-single.sh __tests__/autoloaderTest.js
 ```

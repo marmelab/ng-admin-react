@@ -20,6 +20,7 @@ build:
 
 install-blog:
 	cd ./examples/blog && bower install && cd ../..
+	cp ./node_modules/babel-core/browser.min.js ./examples/blog/build/babel.min.js
 
 run-blog:
 	@./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --hot --content-base examples/blog

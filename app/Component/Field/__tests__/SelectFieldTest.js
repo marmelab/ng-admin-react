@@ -1,15 +1,13 @@
 jest.autoMockOff();
 
 describe('SelectField', () => {
-    let React, TestUtils, SelectField, Select, values = {};
-    const onChange = (name, value) => { values[name] = value; };
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const SelectField = require('../SelectField');
+    const Select = require('react-select');
 
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        SelectField = require('../SelectField');
-        Select = require('react-select');
-    });
+    let values = {};
+    const onChange = (name, value) => { values[name] = value; };
 
     it('should get a select with correct props and state', () => {
         const choices = [

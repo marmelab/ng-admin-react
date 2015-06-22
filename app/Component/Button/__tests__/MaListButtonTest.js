@@ -2,13 +2,9 @@ jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../__mocks__/Link')});
 
 describe('MaListButton', () => {
-    let React, TestUtils, MaListButton;
-
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        MaListButton = require('../MaListButton');
-    });
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const MaListButton = require('../MaListButton');
 
     describe('With good props', () => {
         it('Should display label', () => {

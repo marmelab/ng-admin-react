@@ -1,13 +1,9 @@
 jest.autoMockOff();
 
 describe('BooleanColumn', () => {
-    let React, TestUtils, BooleanColumn;
-
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        BooleanColumn = require('../BooleanColumn');
-    });
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const BooleanColumn = require('../BooleanColumn');
 
     it('should get a span with correct class depending of Column value', () => {
         [true, false].forEach((booleanValue) => {

@@ -1,24 +1,23 @@
 jest.autoMockOff();
-jest.dontMock('../Compile');
 
 const Link = require('../Button/__mocks__/Link');
-jest.setMock('react-router', {Link : Link});
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
-const Compile = require('../Compile');
-const routerWrapper = require('../../Test/RouterWrapper');
-const StringColumn = require('../Column/StringColumn');
-
-function getCompiledLinkFromString(strElement) {
-    return routerWrapper(() => <Compile>{strElement}</Compile>);
-}
-
-function getCompiledLink(to, params) {
-    return routerWrapper(() => <Compile><Link to={to} params={params}></Link></Compile>);
-}
+jest.setMock('react-router', { Link : Link });
 
 describe('Compile', () => {
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const Compile = require('../Compile');
+    const routerWrapper = require('../../Test/RouterWrapper');
+    const StringColumn = require('../Column/StringColumn');
+
+    function getCompiledLinkFromString(strElement) {
+        return routerWrapper(() => <Compile>{strElement}</Compile>);
+    }
+
+    function getCompiledLink(to, params) {
+        return routerWrapper(() => <Compile><Link to={to} params={params}></Link></Compile>);
+    }
+
     describe('With simple string', () => {
         it('Should wrap text inside a span', () => {
             let compiled = TestUtils.renderIntoDocument(<Compile>Hello</Compile>);

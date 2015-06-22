@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "admin-config": "^0.1.10",
+    "babel": "^5.6.2",
     "babel-loader": "^5.1.4",
     "babel-runtime": "^5.5.8",
     "bootstrap-sass": "^3.3.4",
@@ -46,9 +47,6 @@
   },
   "scripts": {
     "test": "make test"
-  },
-  "jest": {
-    "scriptPreprocessor": "<rootDir>/jest-preprocessor.js"
   },
   "keywords": [
     "react",

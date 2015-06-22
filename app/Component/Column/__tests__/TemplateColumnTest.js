@@ -1,13 +1,9 @@
 jest.autoMockOff();
 
 describe('TemplateColumn', () => {
-    let React, TestUtils, TemplateColumn;
-
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        TemplateColumn = require('../TemplateColumn');
-    });
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const TemplateColumn = require('../TemplateColumn');
 
     it('should execute template function with current entry if is a function', () => {
         const template = (e => e.first_name + " " + e.last_name.toUpperCase());

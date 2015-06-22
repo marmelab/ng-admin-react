@@ -1,16 +1,13 @@
 jest.autoMockOff();
 
 describe('WysiwygField', () => {
-    let React, WysiwygField, Editor, TestUtils, values = {};
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const WysiwygField = require('../WysiwygField');
+    const Editor = require('react-medium-editor/lib/editor');
+
+    let values = {};
     const onChange = (name, value) => { values[name] = value; };
-
-    beforeEach(() => {
-        React = require('react/addons');
-        WysiwygField = require('../WysiwygField');
-        Editor = require('react-medium-editor/lib/editor');
-
-        TestUtils = React.addons.TestUtils;
-    });
 
     it('should get a div with correct default value and editable', () => {
         const html = '<p>Para</p>';

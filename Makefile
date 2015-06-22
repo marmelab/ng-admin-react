@@ -26,8 +26,24 @@ stop-test-server: test-server.PID
 
 run-test-e2e: start-test-server test-e2e stop-test-server
 
-test-unit:
-	@./node_modules/jest-cli/bin/jest.js
+test-unit-init:
+	./node_modules/babel/bin/babel/index.js app --out-dir src --stage 1 --compact false > /dev/null
+	mv node_modules/react-medium-editor node_modules/react-medium-editor_es6
+	./node_modules/babel/bin/babel/index.js node_modules/react-medium-editor_es6 --out-dir node_modules/react-medium-editor --stage 1 --compact false > /dev/null
+	mv node_modules/admin-config node_modules/admin-config_es6
+	./node_modules/babel/bin/babel/index.js node_modules/admin-config_es6 --out-dir node_modules/admin-config --stage 1 --compact false > /dev/null
+
+test-unit-clean:
+	rm -rf node_modules/react-medium-editor
+	rm -rf node_modules/admin-config
+	rm -rf ./src
+	mv node_modules/react-medium-editor_es6 node_modules/react-medium-editor
+	mv node_modules/admin-config_es6 node_modules/admin-config
+
+test-unit-run:
+	@./node_modules/jest-cli/bin/jest.js src
+
+test-unit: test-unit-init test-unit-run test-unit-clean
 
 test-e2e:
 	@./node_modules/protractor/bin/protractor protractor.conf.js

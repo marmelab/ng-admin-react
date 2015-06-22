@@ -1,13 +1,9 @@
 jest.autoMockOff();
 
 describe('MaBackButton', () => {
-    let React, TestUtils, MaBackButton;
-
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        MaBackButton = require('../MaBackButton');
-    });
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const MaBackButton = require('../MaBackButton');
 
     describe('With good props', () => {
         it('Should display label and size', () => {

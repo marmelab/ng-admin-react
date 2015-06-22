@@ -1,22 +1,17 @@
 jest.autoMockOff();
-jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
+jest.setMock('react-router', { Link: require('../../Button/__mocks__/Link') });
 
 describe('MaDatagridPagination', () => {
-
-    let React, TestUtils, MaDatagridPagination, routerWrapper;
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const MaDatagridPagination = require('../MaDatagridPagination');
+    const routerWrapper = require('../../../Test/RouterWrapper');
 
     function getPagination(items, page, perPage, entity = null) {
         return routerWrapper(() => {
             return <MaDatagridPagination totalItems={items} entity={entity} page={page} perPage={perPage} />
         });
     }
-
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        MaDatagridPagination = require('../MaDatagridPagination');
-        routerWrapper = require('../../../Test/RouterWrapper');
-    });
 
     describe('Without items', () => {
         it('Should display "No record found"', () => {

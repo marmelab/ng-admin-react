@@ -1,16 +1,14 @@
 jest.autoMockOff();
-jest.dontMock('../ViewActions');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
-const ViewActions = require('../ViewActions');
-const routerWrapper = require('../../Test/RouterWrapper');
-
-function getActions(buttons, entry, view) {
-    return routerWrapper(() => <ViewActions buttons={buttons} entry={entry} entityName={view.entity.name()} />);
-}
 
 describe('ViewActions', () => {
+    const React = require('react/addons');
+    const ViewActions = require('../ViewActions');
+    const routerWrapper = require('../../Test/RouterWrapper');
+
+    function getActions(buttons, entry, view) {
+        return routerWrapper(() => <ViewActions buttons={buttons} entry={entry} entityName={view.entity.name()} />);
+    }
+
     let view;
     let entry;
 
@@ -22,7 +20,7 @@ describe('ViewActions', () => {
             entity: {
                 name: () => 'MyEntity'
             }
-        }
+        };
     });
 
     describe('With buttons prop', () => {

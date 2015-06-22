@@ -1,50 +1,45 @@
-/* global jest,describe,it,beforeEach,expect */
-
 jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../Button/__mocks__/Link')});
-jest.dontMock('../../Field/FieldViewConfiguration');
-jest.dontMock('../../Field/StringFieldView');
-jest.dontMock('react');
-
-const React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
-const DashboardPanel = require('../DashboardPanel');
-const routerWrapper = require('../../Test/RouterWrapper');
-
-const Entity = require('admin-config/lib/Entity/Entity');
-const Entry = require('admin-config/lib/Entry');
-const NumberField = require('admin-config/lib/Field/NumberField');
-const Field = require('admin-config/lib/Field/Field');
-const DateField = require('admin-config/lib/Field/DateField');
-
-const FieldViewConfiguration = require('../../Field/FieldViewConfiguration');
-const StringFieldView = require('../../Field/StringFieldView');
-const NumberFieldView = require('../../Field/NumberFieldView');
-const DateFieldView = require('../../Field/DateFieldView');
-
-FieldViewConfiguration.registerFieldView('string', StringFieldView);
-FieldViewConfiguration.registerFieldView('number', NumberFieldView);
-FieldViewConfiguration.registerFieldView('date', DateFieldView);
-
-function getPanel(view, label, dataStore, sortDir, sortField, configuration) {
-    if (!configuration) {
-        configuration = {
-            getEntity: () => new Entity()
-        };
-    }
-
-    return routerWrapper(() => <DashboardPanel
-        view={view}
-        label={label}
-        dataStore={dataStore}
-        sortDir={sortDir}
-        sortField={sortField}
-        configuration={configuration}
-        />
-    );
-}
 
 describe('DashboardPanel', () => {
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const DashboardPanel = require('../DashboardPanel');
+    const routerWrapper = require('../../Test/RouterWrapper');
+
+    const Entity = require('admin-config/lib/Entity/Entity');
+    const Entry = require('admin-config/lib/Entry');
+    const NumberField = require('admin-config/lib/Field/NumberField');
+    const Field = require('admin-config/lib/Field/Field');
+    const DateField = require('admin-config/lib/Field/DateField');
+
+    const FieldViewConfiguration = require('../../Field/FieldViewConfiguration');
+    const StringFieldView = require('../../Field/StringFieldView');
+    const NumberFieldView = require('../../Field/NumberFieldView');
+    const DateFieldView = require('../../Field/DateFieldView');
+
+    FieldViewConfiguration.registerFieldView('string', StringFieldView);
+    FieldViewConfiguration.registerFieldView('number', NumberFieldView);
+    FieldViewConfiguration.registerFieldView('date', DateFieldView);
+
+    function getPanel(view, label, dataStore, sortDir, sortField, configuration) {
+        if (!configuration) {
+            configuration = {
+                getEntity: () => new Entity()
+            };
+        }
+
+        return routerWrapper(() => <DashboardPanel
+            view={view}
+            label={label}
+            dataStore={dataStore}
+            sortDir={sortDir}
+            sortField={sortField}
+            configuration={configuration}
+            />
+        );
+    }
+
     let entity;
     let view;
     let dataStore;
@@ -55,10 +50,10 @@ describe('DashboardPanel', () => {
         view = entity
             .listView('myView')
             .fields([
-            new NumberField('id').label('#'),
-            new Field('title').label('Title'),
-            new DateField('created_at').label('Creation date')
-        ]);
+                new NumberField('id').label('#'),
+                new Field('title').label('Title'),
+                new DateField('created_at').label('Creation date')
+            ]);
 
         dataStore = {
             getEntries: () => [

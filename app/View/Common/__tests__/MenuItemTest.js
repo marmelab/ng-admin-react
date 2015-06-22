@@ -1,34 +1,32 @@
 jest.autoMockOff();
-jest.setMock('react-router', {Link : require('../../../Component/Button/__mocks__/Link')});
-jest.dontMock('../MenuItem');
-
-let React = require('react/addons');
-let TestUtils = React.addons.TestUtils;
-let MenuItem = require('../MenuItem');
-let routerWrapper = require('../../../Test/RouterWrapper');
-
-function getMenuItem(menu) {
-    return routerWrapper(() => {
-        return <MenuItem menu={menu} />;
-    });
-}
-
-function getMenu(title, link, children = [], icon = null, isActive = false, isChildActive = false) {
-    const uuid =  Math.random();
-
-    return {
-        uuid: uuid,
-        title: () => title,
-        isActive: () => isActive,
-        isChildActive: () => isChildActive,
-        link: () => link,
-        icon: () => icon,
-        hasChild: () => !!children.length,
-        children: () => children
-    }
-}
+jest.setMock('react-router', { Link: require('../../../Component/Button/__mocks__/Link') });
 
 describe('MenuItem', () => {
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const MenuItem = require('../MenuItem');
+    const routerWrapper = require('../../../Test/RouterWrapper');
+
+    function getMenuItem(menu) {
+        return routerWrapper(() => {
+            return <MenuItem menu={menu} />;
+        });
+    }
+
+    function getMenu(title, link, children = [], icon = null, isActive = false, isChildActive = false) {
+        const uuid =  Math.random();
+
+        return {
+            uuid: uuid,
+            title: () => title,
+            isActive: () => isActive,
+            isChildActive: () => isChildActive,
+            link: () => link,
+            icon: () => icon,
+            hasChild: () => !!children.length,
+            children: () => children
+        };
+    }
 
     describe('With simple menu without child', () => {
         it('Should display desired menu', () => {

@@ -1,14 +1,14 @@
 jest.autoMockOff();
-jest.setMock('react-router', {Link : require('../__mocks__/Link')});
+jest.setMock('react-router', { Link : require('../__mocks__/Link') });
 
 describe('MaDeleteButton', () => {
-    let React, TestUtils, MaDeleteButton, entry;
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const MaDeleteButton = require('../MaDeleteButton');
+
+    let entry;
 
     beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        MaDeleteButton = require('../MaDeleteButton');
-
         entry = {
             identifierValue: 23
         };
@@ -25,7 +25,7 @@ describe('MaDeleteButton', () => {
 
         it('Should redirect to the create route', () => {
             let deleteButton = TestUtils.renderIntoDocument(<MaDeleteButton entityName={'MyEntity'} entry={entry} label={'Hello'} size={'xs'} />);
-            deleteButtonNode = React.findDOMNode(deleteButton);
+            let deleteButtonNode = React.findDOMNode(deleteButton);
 
             expect(deleteButtonNode.attributes['data-click-to'].value).toEqual('');
 

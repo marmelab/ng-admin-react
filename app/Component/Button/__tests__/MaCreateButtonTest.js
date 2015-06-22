@@ -2,13 +2,9 @@ jest.autoMockOff();
 jest.setMock('react-router', {Link : require('../__mocks__/Link')});
 
 describe('MaCreateButton', () => {
-    let React, TestUtils, MaCreateButton;
-
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        MaCreateButton = require('../MaCreateButton');
-    });
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const MaCreateButton = require('../MaCreateButton');
 
     describe('With good props', () => {
         it('Should display label and size', () => {
@@ -21,7 +17,7 @@ describe('MaCreateButton', () => {
 
         it('Should redirect to the create route', () => {
             let createButton = TestUtils.renderIntoDocument(<MaCreateButton entityName={'MyEntity'} label={'Hello'} size={'xs'} />);
-            createButtonNode = React.findDOMNode(createButton);
+            let createButtonNode = React.findDOMNode(createButton);
 
             expect(createButtonNode.attributes['data-click-to'].value).toEqual('');
 

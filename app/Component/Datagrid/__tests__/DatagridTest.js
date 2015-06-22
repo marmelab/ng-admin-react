@@ -1,9 +1,28 @@
 jest.autoMockOff();
-jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
+jest.setMock('react-router', { Link: require('../../Button/__mocks__/Link') });
 
 describe('Datagrid', () => {
-    let React, TestUtils, Datagrid, routerWrapper, ListView, Entry, Entity, NumberField, Field, DateField;
-    let FieldViewConfiguration, StringFieldView, NumberFieldView, DateFieldView;
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const Datagrid = require('../Datagrid');
+    const routerWrapper = require('../../../Test/RouterWrapper');
+
+    const ListView = require('admin-config/lib/View/ListView');
+    const Entry = require('admin-config/lib/Entry');
+    const Entity = require('admin-config/lib/Entity/Entity');
+    const NumberField = require('admin-config/lib/Field/NumberField');
+    const Field = require('admin-config/lib/Field/Field');
+    const DateField = require('admin-config/lib/Field/DateField');
+
+    const FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
+    const StringFieldView = require('../../../Field/StringFieldView');
+    const NumberFieldView = require('../../../Field/NumberFieldView');
+    const DateFieldView = require('../../../Field/DateFieldView');
+
+    FieldViewConfiguration.registerFieldView('string', StringFieldView);
+    FieldViewConfiguration.registerFieldView('number', NumberFieldView);
+    FieldViewConfiguration.registerFieldView('date', DateFieldView);
+
     let view, router, fields;
 
     function getDatagrid(name, entityName, fields, view, router, entries, sortDir, sortField, configuration) {
@@ -28,27 +47,6 @@ describe('Datagrid', () => {
     }
 
     beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        Datagrid = require('../Datagrid');
-        routerWrapper = require('../../../Test/RouterWrapper');
-
-        ListView = require('admin-config/lib/View/ListView');
-        Entry = require('admin-config/lib/Entry');
-        Entity = require('admin-config/lib/Entity/Entity');
-        NumberField = require('admin-config/lib/Field/NumberField');
-        Field = require('admin-config/lib/Field/Field');
-        DateField = require('admin-config/lib/Field/DateField');
-
-        FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
-        StringFieldView = require('../../../Field/StringFieldView');
-        NumberFieldView = require('../../../Field/NumberFieldView');
-        DateFieldView = require('../../../Field/DateFieldView');
-
-        FieldViewConfiguration.registerFieldView('string', StringFieldView);
-        FieldViewConfiguration.registerFieldView('number', NumberFieldView);
-        FieldViewConfiguration.registerFieldView('date', DateFieldView);
-
         view = new ListView('myView');
 
         router = {

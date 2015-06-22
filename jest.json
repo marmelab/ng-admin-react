@@ -1,0 +1,3 @@
+{
+    "scriptPreprocessor": "<rootDir>/jest-preprocessor.js"
+}

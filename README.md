@@ -112,3 +112,9 @@ Launch the entire tests suite by calling:
 ```sh
 make test
 ```
+
+Run only one unit test by calling, for example:
+
+```
+./node_modules/jest-cli/bin/jest.js -c jest.json app/__tests__/autoloaderTest.js
+```

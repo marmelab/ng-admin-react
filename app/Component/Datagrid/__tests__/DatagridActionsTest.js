@@ -1,8 +1,14 @@
 jest.autoMockOff();
-jest.setMock('react-router', {Link : require('../../Button/__mocks__/Link')});
+jest.setMock('react-router', { Link: require('../../Button/__mocks__/Link') });
 
 describe('DatagridActions', () => {
-    let React, TestUtils, DatagridActions, routerWrapper, Entry, myEntry;
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const DatagridActions = require('../DatagridActions');
+    const routerWrapper = require('../../../Test/RouterWrapper');
+    const Entry = require('admin-config/lib/Entry');
+
+    let myEntry;
 
     function getActions(entityName, listActions, entry, size=null) {
         return routerWrapper(() => {
@@ -11,13 +17,6 @@ describe('DatagridActions', () => {
     }
 
     beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        DatagridActions = require('../DatagridActions');
-        routerWrapper = require('../../../Test/RouterWrapper');
-
-        Entry = require('admin-config/lib/Entry');
-
         myEntry = new Entry('posts', { 'id': 1, 'title': 'First Post' }, 1);
     });
 

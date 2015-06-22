@@ -1,14 +1,12 @@
 jest.autoMockOff();
 
 describe('CheckboxField', () => {
-    let React, TestUtils, CheckboxField, values = {};
-    const onChange = (name, value) => { values[name] = value; };
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const CheckboxField = require('../CheckboxField');
 
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        CheckboxField = require('../CheckboxField');
-    });
+    let values = {};
+    const onChange = (name, value) => { values[name] = value; };
 
     it('should get an input with correct default value and editable', () => {
         [true, false, 1, 0].forEach((booleanValue) => {

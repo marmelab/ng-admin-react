@@ -1,15 +1,13 @@
 jest.autoMockOff();
 
 describe('JsonField', () => {
-    let React, TestUtils, JsonField, Codemirror, values = {};
-    const onChange = (name, value) => { values[name] = value; };
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const JsonField = require('../JsonField');
+    const Codemirror = require('react-codemirror');
 
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        JsonField = require('../JsonField');
-        Codemirror = require('react-codemirror');
-    });
+    let values = {};
+    const onChange = (name, value) => { values[name] = value; };
 
     it('should get a code mirror field with correct props and state', () => {
         const value = 'var code;';

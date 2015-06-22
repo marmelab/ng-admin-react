@@ -1,13 +1,9 @@
 jest.autoMockOff();
 
 describe('StringColumn', () => {
-    let React, TestUtils, StringColumn;
-
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        StringColumn = require('../StringColumn');
-    });
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const StringColumn = require('../StringColumn');
 
     it('should display given value', () => {
         let field = TestUtils.renderIntoDocument(<StringColumn value={'Hello'} />);

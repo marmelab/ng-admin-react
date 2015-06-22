@@ -1,7 +1,18 @@
 jest.autoMockOff();
 
 describe('Column', () => {
-    let React, TestUtils, Column, Field, NumberField, Entity, FieldViewConfiguration, StringFieldView, NumberFieldView;
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const Column = require('../Column');
+    const Field = require('admin-config/lib/Field/Field');
+    const NumberField = require('admin-config/lib/Field/NumberField');
+    const Entity = require('admin-config/lib/Entity/Entity');
+    const FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
+    const StringFieldView = require('../../../Field/StringFieldView');
+    const NumberFieldView = require('../../../Field/NumberFieldView');
+
+    FieldViewConfiguration.registerFieldView('string', StringFieldView);
+    FieldViewConfiguration.registerFieldView('number', NumberFieldView);
 
     function getColumn(field, entity, entry, dataStore, configuration) {
         const col = TestUtils.renderIntoDocument(<Column field={field} entity={entity} entry={entry}
@@ -10,20 +21,6 @@ describe('Column', () => {
         return React.findDOMNode(col);
     }
 
-    beforeEach(() => {
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        Column = require('../Column');
-        Field = require('admin-config/lib/Field/Field');
-        NumberField = require('admin-config/lib/Field/NumberField');
-        Entity = require('admin-config/lib/Entity/Entity');
-        FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
-        StringFieldView = require('../../../Field/StringFieldView');
-        NumberFieldView = require('../../../Field/NumberFieldView');
-
-        FieldViewConfiguration.registerFieldView('string', StringFieldView);
-        FieldViewConfiguration.registerFieldView('number', NumberFieldView);
-    });
 
     it('should display a string field', () => {
         const field = new Field('name');

@@ -1,4 +1,5 @@
 jest.autoMockOff();
+jest.mock('react-select', jest.genMockFromModule('react-select'));
 
 describe('SelectField', () => {
     const React = require('react/addons');
@@ -8,6 +9,10 @@ describe('SelectField', () => {
 
     let values = {};
     const onChange = (name, value) => { values[name] = value; };
+
+    beforeEach(() => {
+        Select.mockClear();
+    });
 
     it('should get a select with correct props and state', () => {
         const choices = [
@@ -19,17 +24,19 @@ describe('SelectField', () => {
         const instance = TestUtils.renderIntoDocument(<SelectField name="my_field" value={value} choices={choices} updateField={onChange}/>);
         const select = TestUtils.findRenderedComponentWithType(instance, Select);
 
+        Select.mock.instances[0].fireChangeEvent.mockImplementation(function (value) {
+            this.props.onChange(value, value);
+        });
+
         expect(select.props.name).toBe('my_field');
-        expect(select.state.value).toBe('1');
-        expect(select.state.placeholder).toBe('First choice');
-        expect(select.state.isFocused).toBeFalsy();
-        expect(select.state.options).toEqual([
+        expect(select.props.value).toBe('1');
+        expect(select.props.options).toEqual([
             { value: '1', label: 'First choice' },
             { value: '2', label: 'Second choice' },
             { value: '3', label: 'Third choice' }
         ]);
 
-        select.selectValue('2');
+        select.fireChangeEvent('2');
 
         expect(values).toEqual({ 'my_field': '2' });
     });
@@ -44,9 +51,13 @@ describe('SelectField', () => {
         const instance = TestUtils.renderIntoDocument(<SelectField name="my_field" value={value} multiple={true} choices={choices} updateField={onChange}/>);
         const select = TestUtils.findRenderedComponentWithType(instance, Select);
 
-        expect(select.state.value).toBe('2,3');
+        Select.mock.instances[0].fireChangeEvent.mockImplementation(function (value) {
+            this.props.onChange(value, []);
+        });
 
-        select.selectValue('1');
+        expect(select.props.value).toBe('2,3');
+
+        select.fireChangeEvent('2,3,1');
 
         expect(values).toEqual({ 'my_field': ['2', '3', '1'] });
     });

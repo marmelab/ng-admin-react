@@ -164,7 +164,7 @@ describe('EditionView', function () {
             });
         });
 
-        it('allows to upload a file', function () {
+        it('allows to upload a file and remove an uploaded one', function () {
             $('.upload-field input').sendKeys(filePath).then(function () {
                 // Wait for text to display
                 utils.waitElementWithText('.upload-field .text-success');
@@ -178,26 +178,29 @@ describe('EditionView', function () {
                         }, 10000); // wait 10s
 
                         expect($('.react-admin-field-picture').getText()).toBe('my-resume.txt');
+
+                        $('.btn-edit').click().then(function () {
+                            utils.waitElementWithText('.upload-field .current');
+
+                            expect($('.upload-field .current').getText()).toBe('Current file: my-resume.txt. Remove');
+
+                            // Remove file
+                            $('.upload-field .current a').click().then(function () {
+                                // Submit form
+                                $('#edit-view button[type="submit"]').click().then(function () {
+                                    $('.btn-show').click().then(function () {
+                                        browser.driver.wait(function () {
+                                            return browser.driver.isElementPresent(by.css('.react-admin-field-picture'));
+                                        }, 10000); // wait 10s
+
+                                        expect($('.react-admin-field-picture').getText()).toBe('');
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
         });
-
-        it('allows to remove uploaded file', function () {
-            // Remove file
-            $('.upload-field .current a').click().then(function () {
-                // Submit form
-                $('#edit-view button[type="submit"]').click().then(function () {
-                    $('.btn-show').click().then(function () {
-                        browser.driver.wait(function () {
-                            return browser.driver.isElementPresent(by.css('.react-admin-field-picture'));
-                        }, 10000); // wait 10s
-
-                        expect($('.react-admin-field-picture').getText()).toBe('');
-                    });
-                });
-            });
-        });
-
     });
 });

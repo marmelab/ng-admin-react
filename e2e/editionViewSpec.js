@@ -1,4 +1,5 @@
 var utils = require('./utils');
+var fs = require('fs');
 
 describe('EditionView', function () {
     'use strict';
@@ -149,4 +150,57 @@ describe('EditionView', function () {
         });
     });
 
+    describe('FileField', function() {
+        var filePath = "/tmp/my-resume.txt";
+
+        beforeEach(function() {
+            // Create dump file
+            fs.writeFileSync(filePath, "It's me", {flag: 'w+'});
+
+            browser.get(browser.baseUrl + '#/posts/edit/12').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.upload-field input'));
+                }, 10000); // wait 10s
+            });
+        });
+
+        it('allows to upload a file and remove an uploaded one', function () {
+            $('.upload-field input').sendKeys(filePath).then(function () {
+                // Wait for text to display
+                utils.waitElementWithText('.upload-field .text-success');
+                expect($('.upload-field .text-success').getText()).toBe('my-resume.txt uploaded correctly. Remove');
+
+                // Submit form
+                $('#edit-view button[type="submit"]').click().then(function () {
+                    $('.btn-show').click().then(function () {
+                        browser.driver.wait(function () {
+                            return browser.driver.isElementPresent(by.css('.react-admin-field-picture'));
+                        }, 10000); // wait 10s
+
+                        expect($('.react-admin-field-picture').getText()).toBe('my-resume.txt');
+
+                        $('.btn-edit').click().then(function () {
+                            utils.waitElementWithText('.upload-field .current');
+
+                            expect($('.upload-field .current').getText()).toBe('Current file: my-resume.txt. Remove');
+
+                            // Remove file
+                            $('.upload-field .current a').click().then(function () {
+                                // Submit form
+                                $('#edit-view button[type="submit"]').click().then(function () {
+                                    $('.btn-show').click().then(function () {
+                                        browser.driver.wait(function () {
+                                            return browser.driver.isElementPresent(by.css('.react-admin-field-picture'));
+                                        }, 10000); // wait 10s
+
+                                        expect($('.react-admin-field-picture').getText()).toBe('');
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

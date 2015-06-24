@@ -84,6 +84,9 @@ module.exports = {
             { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: 'url' }
         ]
     },
+    resolve: {
+        extensions: ['', '.js', '.jsx']
+    },
     plugins: getPlugins(),
     node: {
         fs: 'empty'

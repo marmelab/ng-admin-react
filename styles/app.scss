@@ -272,4 +272,14 @@ a {
     .wysiwyg-field {
         margin-top: 10px;
     }
+  
+    .progressbar-container {
+      height: 10px;
+
+      .progressbar-progress {
+        transition: width 0.5s;
+        background-color: green;
+        height: 100%;
+      }
+    }
 }

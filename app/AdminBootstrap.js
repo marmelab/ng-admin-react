@@ -42,14 +42,14 @@ class AdminBootstrap extends React.Component {
         return (
             <div>
                 <Header title={this.props.configuration.title()}/>
-                <Sidebar menuViews={this.props.configuration.menu()}/>
-                <div className="view-wrapper">
-                    <RouteHandler configuration={this.props.configuration}/>
-                </div>
             </div>
         );
     }
 }
+
+AdminBootstrap.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
 
 require('./autoloader')('AdminBootstrap', AdminBootstrap);
 require('./autoloader')('Link', Link);

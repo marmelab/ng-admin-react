@@ -16,6 +16,10 @@ class Header extends React.Component {
     }
 }
 
+Header.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
+
 require('../../autoloader')('Header', Header);
 
 export default Header;

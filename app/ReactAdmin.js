@@ -89,7 +89,8 @@ class ReactAdmin extends React.Component {
 }
 
 ReactAdmin.childContextTypes = {
-    restful: React.PropTypes.func.isRequired
+    restful: React.PropTypes.func.isRequired,
+    router: React.PropTypes.func.isRequired
 };
 
 ReactAdmin.propTypes = {

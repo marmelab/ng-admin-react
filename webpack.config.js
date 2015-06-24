@@ -9,7 +9,7 @@ function getEntrySources() {
         sources.push('webpack/hot/dev-server');
     }
 
-    // vendor sources
+    // vendor css sources
     sources.push('pace/themes/blue/pace-theme-flash.css');
     sources.push('humane-js/themes/flatty.css');
     sources.push('react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
@@ -18,15 +18,17 @@ function getEntrySources() {
     sources.push('codemirror/lib/codemirror.css');
     sources.push('codemirror/addon/lint/lint.css');
 
-    // react-admin sources
-    sources.push('./styles/react-select-bootstrap.css');
-    sources.push('./styles/app.scss');
+    // vendor js sources
     sources.push('codemirror/addon/edit/closebrackets');
     sources.push('codemirror/addon/edit/matchbrackets');
     sources.push('codemirror/addon/lint/lint');
     sources.push('codemirror/addon/lint/json-lint');
     sources.push('codemirror/addon/selection/active-line');
     sources.push('codemirror/mode/javascript/javascript');
+
+    // react-admin sources
+    sources.push('./styles/react-select-bootstrap.css');
+    sources.push('./styles/app.scss');
     sources.push('./app/ReactAdmin.js'); // must be the last one
 
     return sources;
@@ -83,9 +85,6 @@ module.exports = {
             { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
             { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: 'url' }
         ]
-    },
-    resolve: {
-        extensions: ['', '.js', '.jsx']
     },
     plugins: getPlugins(),
     node: {

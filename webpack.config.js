@@ -58,7 +58,8 @@ module.exports = {
     output: {
         path: __dirname + '/build',
         filename: '[name].min.js',
-        library: 'ReactAdmin'
+        library: 'ReactAdmin',
+        libraryTarget: 'umd'
     },
     externals: {
         'react': 'React'

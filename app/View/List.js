@@ -10,6 +10,8 @@ import Compile from '../Component/Compile';
 import EntityActions from '../Actions/EntityActions';
 import EntityStore from '../Stores/EntityStore';
 
+import Filters from '../Component/Datagrid/Filters';
+
 class ListView extends React.Component {
     constructor() {
         super();
@@ -95,12 +97,14 @@ class ListView extends React.Component {
 
         return (
             <div className="view list-view">
-                <ViewActions entityName={view.entity.name()} buttons={actions} />
+                <ViewActions entityName={view.entity.name()} buttons={actions} view={view} />
 
                 <div className="page-header">
                     <h1><Compile>{view.title() || entityName + " list"}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
+
+                <Filters view={view} configuration={configuration} dataStore={dataStore} />
 
                 <Datagrid
                     name={view.name()}

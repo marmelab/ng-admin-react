@@ -175,6 +175,7 @@
         comment.views['ListView']
             .title('Comments')
             .perPage(10) // limit the number of elements displayed per page. Default is 30.
+            .actions(['filters', 'create'])
             .fields([
                 nga.field('created_at', 'date').label('Posted'),
                 nga.field('body').isDetailLink(true).map(truncate),

@@ -33,6 +33,7 @@
     "pace": "HubSpot/pace",
     "protractor": "^2.1.0",
     "rc-upload": "^1.2.1",
+    "react-bootstrap": "^0.23.5",
     "react-bootstrap-datetimepicker": "0.0.17",
     "react-codemirror": "^0.1.2",
     "react-hot-loader": "^1.2.7",

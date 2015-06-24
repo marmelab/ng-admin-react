@@ -28,7 +28,7 @@ run-blog:
 start-test-server: test-server.PID
 
 test-server.PID:
-	cd ./examples/blog && { python -m SimpleHTTPServer 8080 & echo $$! > ../../$@; } && cd ../..
+	cd ./examples/blog && { python -m SimpleHTTPServer 8081 & echo $$! > ../../$@; } && cd ../..
 
 stop-test-server: test-server.PID
 	@kill `cat $<` && rm $<

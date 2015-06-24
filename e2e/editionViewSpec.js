@@ -122,24 +122,31 @@ describe('EditionView', function () {
 
     });
 
-    xdescribe('ChoiceField', function() {
-
-        it('should render as a dropdown when choices is an array', function () {
-            $$('.ng-admin-field-category select option').then(function (options) {
-                expect(options[1].getText()).toBe('Tech');
-                expect(options[1].getAttribute('selected')).toBe('true');
-                expect(options[2].getText()).toBe('Lifestyle');
+    describe('ChoiceField', function() {
+        beforeEach(function() {
+            browser.get(browser.baseUrl + '#/posts/edit/1').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-category input'));
+                }, 10000); // wait 10s
             });
         });
 
-        it('should render as a dropdown when choices is a function', function () {
-            $$('.ng-admin-field-subcategory select option').then(function (options) {
-                expect(options[1].getText()).toBe('Computers');
-                expect(options[1].getAttribute('selected')).toBe('true');
-                expect(options[2].getText()).toBe('Gadgets');
-            });
-        });
+        it('should render filtered list when choice depends on another choice', function () {
+            $('#edit-view .react-admin-field-subcategory .Select-input input')
+                .sendKeys('Computers')
+                .sendKeys(protractor.Key.ENTER)
+                .then(function () {
+                    expect($('.react-admin-field-subcategory input').getAttribute('value')).toBe('computers');
 
+                    $('#edit-view .react-admin-field-category .Select-input input')
+                        .sendKeys('Lifestyle')
+                        .sendKeys(protractor.Key.ENTER)
+                        .then(function () {
+                            expect($('.react-admin-field-category input').getAttribute('value')).toBe('lifestyle');
+                            expect($('.react-admin-field-subcategory input').getAttribute('value')).toBe('');
+                        });
+                });
+        });
     });
 
 });

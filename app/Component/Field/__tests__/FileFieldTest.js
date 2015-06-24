@@ -1,29 +1,18 @@
 jest.autoMockOff();
+jest.mock('rc-upload/lib/IframeUploader', jest.genMockFromModule('rc-upload/lib/IframeUploader'));
 
 describe('FileField', () => {
-    let AdminFileField, React, TestUtils, FileField, AjaxUpload, values = {}, uploadCb;
+    const React = require('react/addons');
+    const TestUtils = React.addons.TestUtils;
+    const AdminFileField = require('admin-config/lib/Field/FileField');
+    const FileField = require('../FileField');
+    const IframeUploader = require('rc-upload/lib/IframeUploader');
+
+    let values = {};
     const onChange = (name, value) => { values[name] = value; };
 
     beforeEach(() => {
-        AdminFileField = require('admin-config/lib/Field/FileField');
-        const empty = function () {
-            return this;
-        };
-
-        jest.setMock('superagent', {
-            post: empty,
-            on: empty,
-            off: empty,
-            attach: empty,
-            end: function (cb) {
-                uploadCb = cb;
-            }
-        });
-
-        React = require('react/addons');
-        TestUtils = React.addons.TestUtils;
-        FileField = require('../FileField');
-        AjaxUpload = require('rc-upload/lib/AjaxUploader.jsx');
+        IframeUploader.mockClear();
     });
 
     it('should display a upload button and change value on upload', () => {
@@ -35,11 +24,11 @@ describe('FileField', () => {
         });
 
         const instance = TestUtils.renderIntoDocument(<FileField name="my_field" field={field} value={null} updateField={onChange}/>);
-        const upload = TestUtils.findRenderedComponentWithType(instance, AjaxUpload);
+        const upload = TestUtils.findRenderedComponentWithType(instance, IframeUploader);
 
-        upload._post({name: 'cat.jpg'});
+        upload.props.onSuccess('{ "name": "my-cat.jpeg" }', { name: 'cat.jpg' });
 
-        uploadCb(null, {status: 200, body: JSON.stringify({name: "my-cat.jpeg"})});
+        jest.clearAllTimers(); // to avoid waiting for the end of setTimout calls
 
         expect(values).toEqual({ 'my_field': 'my-cat.jpeg' });
     });

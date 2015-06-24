@@ -1,5 +1,5 @@
 import React from 'react';
-const Upload = require('rc-upload/lib/AjaxUploader.jsx');
+const Upload = require('rc-upload');
 
 class FileField extends React.Component {
     constructor() {

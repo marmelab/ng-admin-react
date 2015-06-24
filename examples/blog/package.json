@@ -1,0 +1,17 @@
+{
+  "name": "react-admin-blog",
+  "version": "0.0.1",
+  "description": "React.js blog example",
+  "dependencies": {
+    "react": "0.13.*",
+    "react-router": "0.13.*"
+  },
+  "devDependencies": {
+    "babel": "^5.6.2",
+    "babel-loader": "^5.1.4",
+    "webpack": "^1.9.11",
+    "webpack-dev-server": "^1.9.0"
+  },
+  "author": "marmelab <info@marmelab.com>",
+  "license": "MIT"
+}

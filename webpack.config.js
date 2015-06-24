@@ -58,10 +58,22 @@ module.exports = {
     output: {
         path: __dirname + '/build',
         filename: '[name].min.js',
-        library: 'ReactAdmin'
+        library: 'ReactAdmin',
+        libraryTarget: 'umd'
     },
     externals: {
-        'react': 'React'
+        "react": {
+            root: "React",
+            commonjs2: "react",
+            commonjs: "react",
+            amd: "react"
+        },
+        "react-router": {
+            root: "ReactRouter",
+            commonjs2: "react-router",
+            commonjs: "react-router",
+            amd: "react-router"
+        }
     },
     module: {
         loaders: [

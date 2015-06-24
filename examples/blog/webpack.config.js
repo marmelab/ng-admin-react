@@ -9,8 +9,7 @@ module.exports = {
     },
     output: {
         path: __dirname + '/build',
-        filename: '[name].min.js',
-        library: 'App'
+        filename: '[name].min.js'
     },
     module: {
         loaders: [

@@ -219,7 +219,7 @@ var apiData = {
         {
             "id": 10,
             "post_id": 3,
-            "author": "Logan Schowalter",
+            "author": "Manu",
             "body": "I'd been the whiting,' said the Hatter, it woke up again with a T!' said the Gryphon. '--you advance twice--' 'Each with a growl, And concluded the banquet--] 'What IS the fun?' said.",
             "created_at": "2012-12-07"
         },

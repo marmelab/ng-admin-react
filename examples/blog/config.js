@@ -192,7 +192,7 @@
                    ])
             ])
             .filters([
-                nga.field('q', 'string').label('').attributes({'placeholder': 'Global Search'}),
+                nga.field('author', 'string').label('Author search').attributes({'placeholder': 'Author Search'}),
                 nga.field('created_at', 'date')
                     .label('Posted')
                     .attributes({'placeholder': 'Filter by date'})

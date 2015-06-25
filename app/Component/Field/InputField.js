@@ -2,6 +2,7 @@ import React from 'react';
 
 class InputField extends React.Component {
     onChange(e) {
+        console.log('changed');
         this.props.updateField(this.props.name, e.target.value);
     }
 

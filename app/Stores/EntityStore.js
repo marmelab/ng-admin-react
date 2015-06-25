@@ -27,7 +27,8 @@ class EntityStore extends EventEmitter {
             totalItems: 0,
             page: 1,
             sortDir: null,
-            sortField: null
+            sortField: null,
+            filters: null
         });
     }
 
@@ -91,19 +92,21 @@ class EntityStore extends EventEmitter {
             });
     }
 
-    loadListData(restful, configuration, view, page = 1, sortField = null, sortDir = null) {
+    loadListData(restful, configuration, view, page = 1, sortField = null, sortDir = null, filters = null) {
         this.initData();
         this.emitChange();
 
         this.data = this.data.update('page', v => page);
         this.data = this.data.update('sortField', v => sortField);
         this.data = this.data.update('sortDir', v => sortDir);
+        this.data = this.data.update('filters', v => filters);
 
         this.getEntryRequester(restful, configuration)
             .getEntries(new DataStore(), view, page, {
                 references: true,
                 sortField,
-                sortDir
+                sortDir,
+                filters
             }).then((collection) => {
                 this.data = this.data.updateIn(['dataStore', 'object'], v => collection.dataStore);
                 this.data = this.data.update('totalItems', v => collection.totalItems);
@@ -320,7 +323,7 @@ AppDispatcher.register((action) => {
             store.loadDashbordPanels(action.restful, action.configuration, action.sortField, action.sortDir);
             break;
         case 'load_list_data':
-            store.loadListData(action.restful, action.configuration, action.view, action.page, action.sortField, action.sortDir);
+            store.loadListData(action.restful, action.configuration, action.view, action.page, action.sortField, action.sortDir, action.search);
             break;
         case 'load_show_data':
             store.loadShowData(action.restful, action.configuration, action.view, action.id, action.sortField, action.sortDir);

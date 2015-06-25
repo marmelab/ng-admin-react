@@ -11,7 +11,7 @@ export default {
         });
     },
 
-    loadListData(restful, configuration, view, page, sortField, sortDir) {
+    loadListData(restful, configuration, view, page, sortField, sortDir, search) {
         AppDispatcher.dispatch({
             actionType: 'load_list_data',
             restful,
@@ -19,7 +19,8 @@ export default {
             view,
             page,
             sortField,
-            sortDir
+            sortDir,
+            search
         });
     },
 

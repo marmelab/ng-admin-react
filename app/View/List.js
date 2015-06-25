@@ -55,9 +55,9 @@ class ListView extends React.Component {
     }
 
     refreshData() {
-        const {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+        const {page, sortField, sortDir, search} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadListData(this.context.restful, this.props.configuration, this.getView(), page, sortField, sortDir);
+        EntityActions.loadListData(this.context.restful, this.props.configuration, this.getView(), page, sortField, sortDir, search);
     }
 
     onLoadFailure(response) {
@@ -90,32 +90,38 @@ class ListView extends React.Component {
         const dataStore = this.state.data.getIn(['dataStore', 'object']);
         const entries = dataStore.getEntries(view.entity.uniqueId);
         const actions = view.actions() || ['create'];
+        let datagrid = null;
 
-        if (!entries || !entries.length) {
-            return null;
+        if (entries && entries.length) {
+            datagrid = <Datagrid
+                name={view.name()}
+                entityName={view.entity.name()}
+                configuration={configuration}
+                listActions={view.listActions()}
+                fields={view.getFields()}
+                entries={entries}
+                sortDir={sortDir}
+                sortField={sortField}
+            />;
         }
 
         return (
             <div className="view list-view">
-                <ViewActions entityName={view.entity.name()} buttons={actions} view={view} />
+                <ViewActions entityName={view.entity.name()} buttons={actions} view={view}  />
 
                 <div className="page-header">
                     <h1><Compile>{view.title() || entityName + " list"}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
-                <Filters view={view} configuration={configuration} dataStore={dataStore} />
-
-                <Datagrid
-                    name={view.name()}
-                    entityName={view.entity.name()}
+                <Filters
+                    view={view}
                     configuration={configuration}
-                    listActions={view.listActions()}
-                    fields={view.getFields()}
-                    entries={entries}
+                    dataStore={dataStore}
                     sortDir={sortDir}
-                    sortField={sortField}
-                    />
+                    sortField={sortField} />
+
+                {datagrid}
 
                 {this.buildPagination(view)}
             </div>

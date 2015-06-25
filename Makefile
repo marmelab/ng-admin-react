@@ -4,8 +4,6 @@ install:
 	@npm install
 	@./node_modules/protractor/bin/webdriver-manager update
 	mkdir -p examples/blog/build/
-
-postinstall:
 	mv node_modules/react-medium-editor node_modules/react-medium-editor_es6
 	./node_modules/babel/bin/babel/index.js node_modules/react-medium-editor_es6 --out-dir node_modules/react-medium-editor --stage 1 --compact false > /dev/null
 	mv node_modules/admin-config node_modules/admin-config_es6

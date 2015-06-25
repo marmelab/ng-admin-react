@@ -17,7 +17,8 @@ class StringFieldView {
     }
 
     static getWriteWidget() {
-        return <InputField type={"text"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
+        return <InputField type={"text"} name={this.props.fieldName}
+            value={this.props.value} updateField={this.props.updateField} autoFocus={this.props.autoFocus} />;
     }
 }
 

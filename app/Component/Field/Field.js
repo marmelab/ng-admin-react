@@ -22,7 +22,7 @@ class Field extends React.Component {
                 <div className={className}>
                     <Compile field={field} updateField={this.props.updateField} dataStore={this.props.dataStore}
                              entity={entity} value={value} values={values} fieldName={fieldName} entry={entry}
-                             configuration={this.props.configuration}>
+                             configuration={this.props.configuration} autoFocus={this.props.autoFocus}>
                         {fieldTemplate}
                     </Compile>
                 </div>

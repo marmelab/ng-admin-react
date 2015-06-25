@@ -16,12 +16,14 @@ class Filters extends React.Component {
         const viewFilters = this.props.view.filters();
         const {search} = this.context.router.getCurrentQuery() || {};
 
-        for (let i in viewFilters) {
-            let filter = viewFilters[i];
-            let filterName = filter.name();
+        if (search) {
+            for (let i in viewFilters) {
+                let filter = viewFilters[i];
+                let filterName = filter.name();
 
-            if (filterName in search) {
-                this.addFilter(filter);
+                if (filterName in search) {
+                    this.addFilter(filter);
+                }
             }
         }
     }
@@ -39,11 +41,9 @@ class Filters extends React.Component {
     }
 
     removeFilter(filter) {
-        const updateField = this.updateField.bind(this);
-
         return () => {
             ApplicationActions.removeFilter(filter);
-            updateField(filter.name(), null);
+            this.updateField(filter.name(), null);
         };
     }
 
@@ -110,6 +110,7 @@ class Filters extends React.Component {
                 <a className="remove" onClick={removeFilter(filter)}><span className="glyphicon glyphicon-remove"></span></a>
 
                 <Field field={filter}
+                    autoFocus={true}
                     entity={view.getEntity()}
                     value={value}
                     configuration={configuration}

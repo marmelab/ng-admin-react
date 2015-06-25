@@ -192,7 +192,9 @@
                    ])
             ])
             .filters([
-                nga.field('author', 'string').label('Author search').attributes({'placeholder': 'Author Search'}),
+                nga.field('author', 'string').label('Author search')
+                    .attributes({'placeholder': 'Author Search'})
+                    .pinned(true),
                 nga.field('created_at', 'date')
                     .label('Posted')
                     .attributes({'placeholder': 'Filter by date'})

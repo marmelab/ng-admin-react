@@ -11,6 +11,16 @@ class FilterButton extends React.Component {
         ApplicationStore.addFilterListener(this.boundedFilterUpdated);
 
         this.setState(ApplicationStore.getState());
+
+        // Add pinned filters
+        let {filters} = this.props;
+        for (let i in filters) {
+            let filter = filters[i];
+
+            if (filter.pinned()) {
+                ApplicationActions.displayFilter(filter);
+            }
+        }
     }
 
     componentWillUnmount() {

@@ -105,12 +105,22 @@ class Filters extends React.Component {
         const rows = filters.map((filter, i) => {
             const filterName = filter.name();
             const value = search && filterName in search ? search[filterName] : null;
+            const autoFocus = !filter.pinned();
+            let deleteLink = null;
+
+            if (!filter.pinned()) {
+                deleteLink = <a className="remove col-sm-1 col-xs-1" onClick={removeFilter(filter)}>
+                    <span className="glyphicon glyphicon-remove"></span>
+                </a>;
+            }
 
             return <div className="form-field form-group" key={i}>
-                <a className="remove" onClick={removeFilter(filter)}><span className="glyphicon glyphicon-remove"></span></a>
+                {deleteLink}
 
                 <Field field={filter}
-                    autoFocus={true}
+                    labelClass={"col-sm-3 col-md-3"}
+                    fieldClass={"col-sm-8 col-md-8"}
+                    autoFocus={autoFocus}
                     entity={view.getEntity()}
                     value={value}
                     configuration={configuration}
@@ -119,7 +129,7 @@ class Filters extends React.Component {
             </div>;
         });
 
-        return <div className="filters form-horizontal">{rows}</div>;
+        return <div className="filters form-horizontal col-md-offset-6 col-md-6 col-lg-6">{rows}</div>;
     }
 }
 

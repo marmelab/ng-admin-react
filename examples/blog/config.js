@@ -197,8 +197,7 @@
                     .pinned(true),
                 nga.field('created_at', 'date')
                     .label('Posted')
-                    .attributes({'placeholder': 'Filter by date'})
-                    .format('yyyy-MM-dd'),
+                    .attributes({'placeholder': 'Filter by date'}),
                 nga.field('today', 'boolean').map(function () {
                     var now = new Date(),
                         year = now.getFullYear(),

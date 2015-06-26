@@ -12,8 +12,7 @@ class DateFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return <DateField type={this.props.field.type()} name={this.props.fieldName} field={this.props.field} value={this.props.value} updateField={this.props.updateField} />;
     }
 
     static getWriteWidget() {

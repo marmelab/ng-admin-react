@@ -12,12 +12,10 @@ class NumberFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return <InputField type={"number"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 
     static getWriteWidget() {
-        // @TODO: use number input when implemented
         return <InputField type={"number"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 }

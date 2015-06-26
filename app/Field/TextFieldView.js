@@ -12,8 +12,7 @@ class TextFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return 'error: cannot display text field as filter';
     }
 
     static getWriteWidget() {

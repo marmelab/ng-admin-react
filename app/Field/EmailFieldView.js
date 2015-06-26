@@ -12,12 +12,10 @@ class EmailFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return <InputField type={"email"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 
     static getWriteWidget() {
-        // @TODO : use email input when implemented
         return <InputField type={"email"} name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 }

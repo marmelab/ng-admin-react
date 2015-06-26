@@ -13,8 +13,10 @@ class ChoiceFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : change when reference filter will be implemented
-        return null;
+        return <ChoiceField field={this.props.field}
+            fieldName={this.props.fieldName}
+            values={this.props.values} value={this.props.value}
+            updateField={this.props.updateField} />;
     }
 
     static getWriteWidget() {

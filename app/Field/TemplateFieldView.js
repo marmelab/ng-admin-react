@@ -13,8 +13,7 @@ class TemplateFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return <TemplateColumn type={"text"} name={this.props.fieldName} value={this.props.value} />;
     }
 
     static getWriteWidget() {

@@ -12,12 +12,10 @@ class BooleanFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return <CheckboxField name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 
     static getWriteWidget() {
-        // @TODO: use boolean input when implemented
         return <CheckboxField name={this.props.fieldName} value={this.props.value} updateField={this.props.updateField} />;
     }
 }

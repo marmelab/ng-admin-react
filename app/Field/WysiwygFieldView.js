@@ -12,8 +12,7 @@ class WysiwygFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return 'error: cannot display wysiwyg field as filter';
     }
 
     static getWriteWidget() {

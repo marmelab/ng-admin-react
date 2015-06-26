@@ -1,11 +1,11 @@
 import React from 'react';
 import Compile from './Compile';
 
-import { MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton } from './Button';
+import { FilterButton, MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton } from './Button';
 
 class ViewActions extends React.Component {
     render() {
-        const {size, entityName, buttons, entry} = this.props;
+        const {size, entityName, buttons, entry, view} = this.props;
         let results;
         let i = 0;
 
@@ -16,6 +16,8 @@ class ViewActions extends React.Component {
 
         results = buttons.map(button => {
             switch (button) {
+                case 'filters':
+                    return <FilterButton key={i++} entityName={entityName} filters={view.filters()} />;
                 case 'create':
                     return <MaCreateButton key={i++} entityName={entityName} size={size} />;
                 case 'show':
@@ -54,7 +56,8 @@ ViewActions.propTypes = {
     entityName: React.PropTypes.string,
     entry: React.PropTypes.object,
     buttons: React.PropTypes.array.isRequired,
-    size: React.PropTypes.string
+    size: React.PropTypes.string,
+    view: React.PropTypes.object
 };
 
 ViewActions.defaultProps = { view: null };

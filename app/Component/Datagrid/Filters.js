@@ -4,6 +4,7 @@ import ApplicationActions from '../../Actions/ApplicationActions';
 import EntityActions from '../../Actions/EntityActions';
 
 import ApplicationStore from '../../Stores/ApplicationStore';
+import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
 
 class Filters extends React.Component {
     componentDidMount() {
@@ -106,26 +107,33 @@ class Filters extends React.Component {
             const filterName = filter.name();
             const value = search && filterName in search ? search[filterName] : null;
             const autoFocus = !filter.pinned();
+            const fieldName = filter.name();
+            const fieldView = FieldViewConfiguration.getFieldView(filter.type());
+            const className = `filter-value react-admin-field-${filter.name()} col-sm-8 col-md-8`;
+            const fieldTemplate = fieldView ? fieldView.getFilterWidget : null;
+            const values = null;
             let deleteLink = null;
 
             if (!filter.pinned()) {
-                deleteLink = <a className="remove col-sm-1 col-xs-1" onClick={removeFilter(filter)}>
+                deleteLink = <a className="remove" onClick={removeFilter(filter)}>
                     <span className="glyphicon glyphicon-remove"></span>
                 </a>;
             }
 
             return <div className="form-field form-group" key={i}>
-                {deleteLink}
+                <span className="col-sm-1 col-xs-1">{deleteLink}</span>
 
-                <Field field={filter}
-                    labelClass={"col-sm-3 col-md-3"}
-                    fieldClass={"col-sm-8 col-md-8"}
-                    autoFocus={autoFocus}
-                    entity={view.getEntity()}
-                    value={value}
-                    configuration={configuration}
-                    dataStore={dataStore}
-                    updateField={updateField} />
+                <div>
+                    <label htmlFor={fieldName} className={"control-label col-sm-3 col-md-3"}>{ filter.label() }</label>
+
+                    <div className={className}>
+                        <Compile field={filter} updateField={updateField} dataStore={dataStore}
+                            entity={view.getEntity()} value={value} values={values} fieldName={fieldName} entry={null}
+                            configuration={configuration} autoFocus={autoFocus}>
+                        {fieldTemplate}
+                        </Compile>
+                    </div>
+                </div>
             </div>;
         });
 

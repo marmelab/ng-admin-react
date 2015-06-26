@@ -3,7 +3,6 @@ import React from 'react';
 import Compile from '../Compile';
 import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
 
-
 class Field extends React.Component {
     render() {
         const {field, value, values, entry, entity, labelClass, fieldClass} = this.props;

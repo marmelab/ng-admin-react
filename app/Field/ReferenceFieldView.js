@@ -15,8 +15,24 @@ class ReferenceFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : change when reference filter will be implemented
-        return null;
+        const choices = this.props.dataStore.getChoices(this.props.field);
+        let value = this.props.value;
+
+        // ui-select doesn't handle direct value so we have to pass the label
+        if (value && choices) {
+            for (let i in choices) {
+                let choice = choices[i];
+
+                if (choice.value == value) {
+                    value = choice.label;
+                    break;
+                }
+            }
+        }
+
+        return <SelectField name={this.props.fieldName} value={value}
+            choices={choices}
+            updateField={this.props.updateField} />;
     }
 
     static getWriteWidget() {

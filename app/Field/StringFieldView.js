@@ -12,8 +12,8 @@ class StringFieldView {
     }
 
     static getFilterWidget() {
-        // @TODO : Add filter
-        return null;
+        return <InputField type={"text"} name={this.props.fieldName}
+            value={this.props.value} updateField={this.props.updateField} autoFocus={this.props.autoFocus} />;
     }
 
     static getWriteWidget() {

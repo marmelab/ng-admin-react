@@ -104,6 +104,7 @@ class EntityStore extends EventEmitter {
         this.getEntryRequester(restful, configuration)
             .getEntries(new DataStore(), view, page, {
                 references: true,
+                choices: true,
                 sortField,
                 sortDir,
                 filters

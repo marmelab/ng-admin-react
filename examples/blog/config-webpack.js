@@ -11,7 +11,7 @@ function truncate(value) {
 }
 
 function configureApp(nga, fieldViewConfiguration, components, routes, restful, autoload) {
-    restful.addFullRequestInterceptor(function (url, params) {
+    restful.addFullRequestInterceptor(function (params) {
         if (params._page) {
             var start = (params._page - 1) * params._perPage;
             var end = params._page * params._perPage - 1;

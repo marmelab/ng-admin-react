@@ -1,7 +1,11 @@
 npm-debug.log
 node_modules/
 bower_components/
-build/*
+build/*.woff2
+build/*.svg
+build/*.ttf
+build/*.eot
+build/*.woff
 examples/blog/build/*
 src/
 jest.lastrun

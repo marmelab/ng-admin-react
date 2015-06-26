@@ -2,6 +2,7 @@ import React from 'react';
 
 import ApplicationActions from '../../Actions/ApplicationActions';
 import EntityActions from '../../Actions/EntityActions';
+import Compile from '../../Component/Compile';
 
 import ApplicationStore from '../../Stores/ApplicationStore';
 import FieldViewConfiguration from '../../Field/FieldViewConfiguration';

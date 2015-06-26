@@ -56,7 +56,7 @@ describe('Filters', function () {
             });
 
             browser.driver.wait(function () {
-                return browser.driver.isElementPresent(by.css('.filter-value  input'));
+                return browser.driver.isElementPresent(by.css('.filter-value input'));
             }, 5000); // wait 5s
         });
 
@@ -80,6 +80,10 @@ describe('Filters', function () {
                 $('.dropdown-menu li:nth-child(3)').click().then(function () {
                     $('.filter-post_id .is-searchable').click().then(function () {
                         $('.Select-menu-outer .Select-option:nth-child(1)').click().then(function () {
+                            browser.driver.wait(function () {
+                                return browser.driver.isElementPresent(by.css('table tbody tr:nth-child(1)'));
+                            }, 5000); // wait 5s
+
                             expect($('.pagination-bar .total').getText()).toBe('1 - 2 on 2');
 
                             $$('table tbody tr').then(function(elements) {

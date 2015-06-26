@@ -17,7 +17,7 @@ class EntityStore extends EventEmitter {
 
     initData() {
         this.data = Map({
-            panels: List([]),
+            panels: List(),
             originEntityId: null,
             dataStore: Map({
                 object: new DataStore(),

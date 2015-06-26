@@ -1,5 +1,4 @@
-// @TODO : activate these tests after implementation of filters
-xdescribe('Global filter', function () {
+describe('Filters', function () {
     'use strict';
 
     beforeEach(function () {
@@ -11,92 +10,102 @@ xdescribe('Global filter', function () {
         });
     });
 
-    beforeEach(function() {
-        browser.get(browser.baseUrl + '#/comments/list');
-    });
+    describe('Pinned filter', function () {
 
-    it('should display filters uppon the listview', function () {
-        $$('.filters .filter input').then(function (inputs) {
-            expect(inputs.length).toBe(2);
+        beforeEach(function () {
+            browser.get(browser.baseUrl + '#/comments/list').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('table tr:nth-child(1) td:nth-child(2)'));
+                }, 10000); // wait 10s
+            });
 
-            expect(inputs[0].getAttribute('placeholder')).toBe('Global Search');
-            expect(inputs[1].getAttribute('placeholder')).toBe('Filter by date');
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('.filter-value  input'));
+            }, 5000); // wait 5s
         });
-    });
 
-    it('should filter globally', function () {
-        // Filter globally for 'rabbit'
-        $$('.filters .filter:nth-child(1) input').sendKeys('rabbit');
-        $$('.filters button[type="submit"]').click();
-        $$('.grid tr td:nth-child(4)').then(function (tdElements) {
-            expect(tdElements.length).toBe(1);
-            expect(tdElements[0].getText()).toBe('White Rabbit: it was indeed: she was out of the gr...');
+        it('should display a pinned filter', function () {
+            expect($('.filter-value input').getAttribute('name')).toBe('author');
         });
-    });
 
-    it('should update the pagination total', function () {
-        // Filter globally for 'rabbit'
-        $$('.filters .filter:nth-child(1) input').sendKeys('rabbit');
-        $$('.filters button[type="submit"]').click();
-        $$('ma-datagrid-pagination .total').then(function (totalElements) {
-            expect(totalElements[0].getText()).toBe('1 - 1 on 1');
-        });
-    });
+        it('should filter by author', function () {
+            $('.filter-value input').sendKeys('Manu').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('table tr:nth-child(1) td:nth-child(2)'));
+                }, 10000); // wait 10s
 
-    it('should reset all filters', function () {
-        // Filter globally for 'rabbit'
-        $$('.filters .filter:nth-child(1) input').sendKeys('rabbit');
-        $$('.filters button[type="submit"]').click();
+                $$('.pagination-bar .total').then(function (totalElements) {
+                    expect(totalElements[0].getText()).toBe('1 - 1 on 1');
 
-        browser.wait(function () {
-            return $('.filters > button[type="button"]').isDisplayed().then(function (result) {
-                return result;
+                    $$('table tbody tr').then(function(elements) {
+                        expect($('table tbody tr td:nth-child(4)').getText()).toBe('Manu');
+                        expect(elements.length).toBe(1);
+                    });
+                });
             });
         });
-        $('.filters > button[type="button"]').click();
-
-        $$('ma-datagrid-pagination .total').then(function (totalElements) {
-            expect(totalElements[0].getText()).toBe('1 - 10 on 11');
-        });
     });
 
-    it('should filter on reference', function () {
-        // Filter on post_id '3' (Perspiciatis adipisci vero qui ipsam iure porro)
-        $$('.filters .filter select option[value="2"]').click();
-        $$('.filters button[type="submit"]').click();
-        $$('.grid tr td:nth-child(4)').then(function (tdElements) {
-            expect(tdElements.length).toBe(2);
-            expect(tdElements[0].getText()).toBe('I\'d been the whiting,\' said the Hatter, it woke up...');
-            expect(tdElements[1].getText()).toBe('I\'m not Ada,\' she said, \'and see whether it\'s mark...');
-        });
-    });
+    describe('Reference filter', function () {
 
-    it('should update the pagination total', function () {
-        // Filter on post id '3' (Perspiciatis adipisci vero qui ipsam iure porro)
-        $$('.filters .filter select option[value="2"]').click();
-        $$('.filters button[type="submit"]').click();
-        $$('ma-datagrid-pagination .total').then(function (totalElements) {
-            expect(totalElements[0].getText()).toBe('1 - 2 on 2');
-        });
-    });
+        beforeEach(function () {
+            browser.get(browser.baseUrl + '#/comments/list').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('table tr:nth-child(1) td:nth-child(2)'));
+                }, 10000); // wait 10s
+            });
 
-    it('should reset page number', function () {
-        // Filter globally for 'I'
-        $$('.filters .filter:nth-child(1) input').sendKeys('I');
-        $$('.filters button[type="submit"]').click();
-        $$('ma-datagrid-pagination .total').then(function (totalElements) {
-            expect(totalElements[0].getText()).toBe('1 - 10 on 11');
+            browser.driver.wait(function () {
+                return browser.driver.isElementPresent(by.css('.filter-value  input'));
+            }, 5000); // wait 5s
         });
-        $$('ma-datagrid-pagination li:nth-child(3) a').click();
-        $$('ma-datagrid-pagination .total').then(function (totalElements) {
-            expect(totalElements[0].getText()).toBe('11 - 11 on 11');
+
+        it('should display a non pinned filter', function () {
+            $('.dropdown-toggle').click().then(function () {
+                $('.dropdown-menu li:nth-child(3)').click().then(function () {
+                    expect($('.filter-post_id label').getText()).toBe('Post');
+
+                    // Filter should be removed from dropdown
+                    $('.dropdown-toggle').click().then(function () {
+                        $$('.dropdown-menu li').then(function (filters) {
+                            expect(filters.length).toBe(2);
+                        });
+                    });
+                });
+            });
         });
-        // Filter globally for 'be'
-        $$('.filters .filter:nth-child(1) input').clear();
-        $$('.filters .filter:nth-child(1) input').sendKeys('be');
-        $$('.filters button[type="submit"]').click();
-        $$('ma-datagrid-pagination .total').then(function (totalElements) {
-            expect(totalElements[0].getText()).toBe('1 - 5 on 5');
+
+        it('should filter with a select', function () {
+            $('.dropdown-toggle').click().then(function () {
+                $('.dropdown-menu li:nth-child(3)').click().then(function () {
+                    $('.filter-post_id .is-searchable').click().then(function () {
+                        $('.Select-menu-outer .Select-option:nth-child(1)').click().then(function () {
+                            expect($('.pagination-bar .total').getText()).toBe('1 - 2 on 2');
+
+                            $$('table tbody tr').then(function(elements) {
+                                expect($('table tbody tr td:nth-child(3)').getText()).toBe('Accusantium qui nihil voluptatum quia voluptas max...');
+                                expect(elements.length).toBe(2);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        it('should remove a filter', function () {
+            $('.dropdown-toggle').click().then(function () {
+                $('.dropdown-menu li:nth-child(3)').click().then(function () {
+                    $('.filter-post_id a.remove').click().then(function () {
+
+                        // Filter should be added to the dropdown
+                        $('.dropdown-toggle').click().then(function () {
+                            $$('.dropdown-menu li').then(function (filters) {
+                                expect(filters.length).toBe(3);
+                            });
+                        });
+                    });
+                });
+            });
         });
     });
 });

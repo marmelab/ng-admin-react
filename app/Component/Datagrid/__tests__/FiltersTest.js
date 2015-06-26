@@ -57,7 +57,7 @@ describe('Filters', () => {
             const label = filters.querySelector('label');
 
             expect(field.attributes.name.value).toEqual('author');
-            expect(field.attributes.name.type).toEqual('text');
+            expect(field.attributes.type.value).toEqual('text');
             expect(label.innerHTML).toEqual('Author');
         });
 

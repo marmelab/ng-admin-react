@@ -23,7 +23,7 @@ class Filters extends React.Component {
                 let filter = viewFilters[i];
                 let filterName = filter.name();
 
-                if (filterName in search) {
+                if (!filter.pinned() && filterName in search) {
                     this.addFilter(filter);
                 }
             }
@@ -121,7 +121,7 @@ class Filters extends React.Component {
                 </a>;
             }
 
-            return <div className="form-field form-group" key={i}>
+            return <div className={`form-field form-group filter-${fieldName}`} key={i}>
                 <span className="col-sm-1 col-xs-1">{deleteLink}</span>
 
                 <div>

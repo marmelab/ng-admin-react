@@ -13,8 +13,8 @@ import EntityStore from '../Stores/EntityStore';
 import Filters from '../Component/Datagrid/Filters';
 
 class ListView extends React.Component {
-    constructor() {
-        super();
+    constructor(props, context) {
+        super(props, context);
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
@@ -29,11 +29,6 @@ class ListView extends React.Component {
         this.refreshData();
     }
 
-    componentWillUnmount() {
-        EntityStore.removeChangeListener(this.boundedOnChange);
-        EntityStore.removeFailureListener(this.boundedOnFailure);
-    }
-
     componentWillReceiveProps(nextProps) {
         if (nextProps.params.entity !== this.props.params.entity ||
             nextProps.query.page !== this.props.query.page ||
@@ -42,6 +37,11 @@ class ListView extends React.Component {
 
             this.refreshData();
         }
+    }
+
+    componentWillUnmount() {
+        EntityStore.removeChangeListener(this.boundedOnChange);
+        EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
     getView(entityName) {
@@ -55,14 +55,14 @@ class ListView extends React.Component {
     }
 
     refreshData() {
-        const {page, sortField, sortDir, search} = this.context.router.getCurrentQuery() || {};
+        const { page, sortField, sortDir, search } = this.context.router.getCurrentQuery() || {};
 
         EntityActions.loadListData(this.context.restful, this.props.configuration, this.getView(), page, sortField, sortDir, search);
     }
 
     onLoadFailure(response) {
         let body = response.data;
-        if (typeof message === 'object') {
+        if ('object' === typeof message) {
             body = JSON.stringify(body);
         }
 
@@ -93,24 +93,26 @@ class ListView extends React.Component {
         let datagrid = null;
 
         if (entries && entries.length) {
-            datagrid = <Datagrid
-                name={view.name()}
-                entityName={view.entity.name()}
-                configuration={configuration}
-                listActions={view.listActions()}
-                fields={view.getFields()}
-                entries={entries}
-                sortDir={sortDir}
-                sortField={sortField}
-            />;
+            datagrid = (
+                <Datagrid
+                    name={view.name()}
+                    entityName={view.entity.name()}
+                    configuration={configuration}
+                    listActions={view.listActions()}
+                    fields={view.getFields()}
+                    entries={entries}
+                    sortDir={sortDir}
+                    sortField={sortField}
+                />
+            );
         }
 
         return (
             <div className="view list-view">
-                <ViewActions entityName={view.entity.name()} buttons={actions} view={view}  />
+                <ViewActions entityName={view.entity.name()} buttons={actions} view={view} />
 
                 <div className="page-header">
-                    <h1><Compile>{view.title() || entityName + " list"}</Compile></h1>
+                    <h1><Compile>{view.title() || entityName + ' list'}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
@@ -125,7 +127,7 @@ class ListView extends React.Component {
 
                 {this.buildPagination(view)}
             </div>
-        )
+        );
     }
 }
 

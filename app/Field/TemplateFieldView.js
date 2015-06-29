@@ -7,9 +7,11 @@ class TemplateFieldView {
     }
 
     static getLinkWidget() {
-        return <a onClick={this.props.detailAction}>
-            <TemplateColumn template={this.props.field.template()} entry={this.props.entry} />
-        </a>;
+        return (
+            <a onClick={this.props.detailAction}>
+                <TemplateColumn template={this.props.field.template()} entry={this.props.entry} />
+            </a>
+        );
     }
 
     static getFilterWidget() {

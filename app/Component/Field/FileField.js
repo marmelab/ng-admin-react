@@ -2,8 +2,8 @@ import React from 'react';
 const Upload = require('rc-upload');
 
 class FileField extends React.Component {
-    constructor() {
-        super();
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             progression: 0,
@@ -20,7 +20,7 @@ class FileField extends React.Component {
         let fileName = file.name;
 
         if (response && apiFilename) {
-            if (typeof(response) === 'string') {
+            if ('string' === typeof response) {
                 response = JSON.parse(response);
             }
 
@@ -78,12 +78,12 @@ class FileField extends React.Component {
             width: completed + '%'
         };
 
-        if (progression === null){
+        if (!progression){
             progressBarStyles.display = 'none';
         }
 
         if (uploadInformation.hasOwnProperty('accept')) {
-            accept = typeof uploadInformation.accept === 'function' ? uploadInformation.accept() : "'" + uploadInformation.accept + "'";
+            accept = 'function' === typeof uploadInformation.accept ? uploadInformation.accept() : "'" + uploadInformation.accept + "'";
         }
 
         const attributes = {
@@ -96,27 +96,29 @@ class FileField extends React.Component {
 
         if (message) {
             if (error) {
-                messageBlock = <div className="text-error">{message}</div>
+                messageBlock = <div className="text-error">{message}</div>;
             } else {
-                messageBlock = <div className="text-success">{message} <a onClick={empty}>Remove</a></div>
+                messageBlock = <div className="text-success">{message} <a onClick={empty}>Remove</a></div>;
             }
         } else if (value) {
-            messageBlock = <div className="current">Current file: {value}. <a onClick={empty}>Remove</a></div>
+            messageBlock = <div className="current">Current file: {value}. <a onClick={empty}>Remove</a></div>;
         }
 
-        return <div className="upload-field">
-            <div>
-                <Upload {...attributes} className="form-control">
-                    <a className="btn btn-default">Browse</a>
-                </Upload>
-            </div>
+        return (
+            <div className="upload-field">
+                <div>
+                    <Upload {...attributes} className="form-control">
+                        <a className="btn btn-default">Browse</a>
+                    </Upload>
+                </div>
 
-            <div className="progressbar-container" >
-                <div className="progressbar-progress" style={progressBarStyles} />
-            </div>
+                <div className="progressbar-container" >
+                    <div className="progressbar-progress" style={progressBarStyles} />
+                </div>
 
-            {messageBlock}
-        </div>;
+                {messageBlock}
+            </div>
+        );
     }
 }
 

@@ -5,12 +5,12 @@ import { FilterButton, MaBackButton, MaCreateButton, MaShowButton, MaEditButton,
 
 class ViewActions extends React.Component {
     render() {
-        const {size, entityName, buttons, entry, view} = this.props;
+        const { size, entityName, buttons, entry, view } = this.props;
         let results;
         let i = 0;
 
         // Direct template
-        if (typeof (listActions) === 'string') {
+        if ('string' === typeof listActions) {
             return <Compile entityName={entityName} entry={entry}>listActions</Compile>;
         }
 

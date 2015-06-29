@@ -1,6 +1,5 @@
 import React from 'react';
 import Datagrid from '../Datagrid/Datagrid';
-import PathUtils from 'react-router/lib/PathUtils';
 
 class ReferencedList extends React.Component {
     render() {
@@ -26,7 +25,8 @@ class ReferencedList extends React.Component {
 ReferencedList.propTypes = {
     entityName: React.PropTypes.string.isRequired,
     entries: React.PropTypes.array.isRequired,
-    field: React.PropTypes.object.isRequired
+    field: React.PropTypes.object.isRequired,
+    configuration: React.PropTypes.object.isRequired
 };
 
 ReferencedList.contextTypes = {

@@ -29,6 +29,12 @@ class CreateView extends React.Component {
         this.refreshData();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.params.entity !== this.props.params.entity) {
+            this.refreshData();
+        }
+    }
+
     componentWillUnmount() {
         EntityStore.removeCreateListener(this.boundedOnCreate);
         EntityStore.removeChangeListener(this.boundedOnChange);
@@ -47,13 +53,6 @@ class CreateView extends React.Component {
 
     refreshData() {
         EntityActions.loadCreateData(this.context.restful, this.props.configuration, this.getView());
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity) {
-
-            this.refreshData();
-        }
     }
 
     updateField(name, value) {
@@ -78,7 +77,7 @@ class CreateView extends React.Component {
 
     onFailure(response) {
         let body = response.data;
-        if (typeof message === 'object') {
+        if ('object' === typeof message) {
             body = JSON.stringify(body);
         }
 
@@ -125,7 +124,7 @@ class CreateView extends React.Component {
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
 
                 <div className="page-header">
-                    <h1><Compile entry={entry}>{view.title() || "Create new " + Inflector.singularize(entityName)}</Compile></h1>
+                    <h1><Compile entry={entry}>{view.title() || 'Create new ' + Inflector.singularize(entityName)}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
@@ -142,7 +141,7 @@ class CreateView extends React.Component {
                     </form>
                 </div>
             </div>
-        )
+        );
     }
 }
 

@@ -29,6 +29,16 @@ class EditView extends React.Component {
         this.refreshData();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.params.entity !== this.props.params.entity ||
+            nextProps.params.id !== this.props.params.id ||
+            nextProps.query.sortField !== this.props.query.sortField ||
+            nextProps.query.sortDir !== this.props.query.sortDir) {
+
+            this.refreshData();
+        }
+    }
+
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeUpdateListener(this.boundedOnUpdate);
@@ -56,16 +66,6 @@ class EditView extends React.Component {
         EntityActions.loadEditData(this.context.restful, this.props.configuration, this.getView(), id, sortField, sortDir);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity ||
-            nextProps.params.id !== this.props.params.id ||
-            nextProps.query.sortField !== this.props.query.sortField ||
-            nextProps.query.sortDir !== this.props.query.sortDir) {
-
-            this.refreshData();
-        }
-    }
-
     updateField(name, value) {
         const choiceFields = this.getView().getFieldsOfType('choice');
 
@@ -74,7 +74,7 @@ class EditView extends React.Component {
 
     onFailure(response) {
         let body = response.data;
-        if (typeof message === 'object') {
+        if ('object' === typeof message) {
             body = JSON.stringify(body);
         }
 
@@ -128,7 +128,7 @@ class EditView extends React.Component {
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
 
                 <div className="page-header">
-                    <h1><Compile entry={entry}>{view.title() || "Edit one " + Inflector.singularize(entityName)}</Compile></h1>
+                    <h1><Compile entry={entry}>{view.title() || 'Edit one ' + Inflector.singularize(entityName)}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
@@ -145,7 +145,7 @@ class EditView extends React.Component {
                     </form>
                 </div>
             </div>
-        )
+        );
     }
 }
 

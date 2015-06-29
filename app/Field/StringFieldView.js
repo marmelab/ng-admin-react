@@ -12,13 +12,25 @@ class StringFieldView {
     }
 
     static getFilterWidget() {
-        return <InputField type={"text"} name={this.props.fieldName}
-            value={this.props.value} updateField={this.props.updateField} autoFocus={this.props.autoFocus} />;
+        return (
+            <InputField
+                type={"text"}
+                name={this.props.fieldName}
+                value={this.props.value}
+                updateField={this.props.updateField}
+                autoFocus={this.props.autoFocus} />
+            );
     }
 
     static getWriteWidget() {
-        return <InputField type={"text"} name={this.props.fieldName}
-            value={this.props.value} updateField={this.props.updateField} autoFocus={this.props.autoFocus} />;
+        return (
+            <InputField
+                type={"text"}
+                name={this.props.fieldName}
+                value={this.props.value}
+                updateField={this.props.updateField}
+                autoFocus={this.props.autoFocus} />
+            );
     }
 }
 

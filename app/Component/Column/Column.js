@@ -15,16 +15,18 @@ class Column extends React.Component {
     }
 
     isDetailLink(field) {
-        if (field.isDetailLink() === false) {
+        if (false === field.isDetailLink()) {
             return false;
         }
-        if (field.type() !== 'reference' && field.type() !== 'reference_many') {
+
+        if (-1 === field.type().indexOf('reference')) {
             return true;
         }
+
         const referenceEntity = field.targetEntity().name();
         const relatedEntity = this.props.configuration.getEntity(referenceEntity);
 
-        if (!relatedEntity) return false;
+        if (!relatedEntity) { return false; }
 
         return relatedEntity.isReadOnly ? relatedEntity.showView().enabled : relatedEntity.editionView().enabled;
     }
@@ -43,17 +45,21 @@ class Column extends React.Component {
             column = isDetailLink ? fieldView.getLinkWidget : fieldView.getReadWidget;
         }
 
-        return <Compile detailAction={detailAction} field={field} configuration={this.props.configuration}
-                        dataStore={this.props.dataStore} entity={entity} entry={entry} value={value}>
+        return (
+            <Compile detailAction={detailAction} field={field} configuration={this.props.configuration}
+                dataStore={this.props.dataStore} entity={entity} entry={entry} value={value}>
                 {column}
-        </Compile>;
+            </Compile>
+        );
     }
 }
 
 Column.propTypes = {
     field: React.PropTypes.object.isRequired,
     entry: React.PropTypes.object.isRequired,
-    entity: React.PropTypes.object.isRequired
+    entity: React.PropTypes.object.isRequired,
+    configuration: React.PropTypes.object.isRequired,
+    dataStore: React.PropTypes.object
 };
 
 Column.contextTypes = {

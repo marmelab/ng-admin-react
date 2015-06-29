@@ -11,7 +11,7 @@ class ColumnHeader extends React.Component {
 
         const query = {
             sortField: `${name}.${fieldName}`,
-            sortDir: sort === 'ASC' ? 'DESC' : 'ASC'
+            sortDir: 'ASC' === sort ? 'DESC' : 'ASC'
         };
 
         if (currentQuery.page) {
@@ -19,7 +19,7 @@ class ColumnHeader extends React.Component {
         }
 
         if (sort) {
-            sort = <span className={`sorted sorted-${sort.toLowerCase()}`}></span>
+            sort = <span className={`sorted sorted-${sort.toLowerCase()}`}></span>;
         }
 
         return (

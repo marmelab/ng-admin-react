@@ -80,14 +80,14 @@ class EntityStore extends EventEmitter {
 
         PromisesResolver.allEvenFailed(promises)
             .then((responses) => {
-                if (responses.length === 0) {
+                if (0 === responses.length) {
                     return;
                 }
 
-                this.data = this.data.update('panels', v => panels);
-                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
-                this.data = this.data.update('sortDir', v => sortDir);
-                this.data = this.data.update('sortField', v => sortField);
+                this.data = this.data.update('panels', () => panels);
+                this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
+                this.data = this.data.update('sortDir', () => sortDir);
+                this.data = this.data.update('sortField', () => sortField);
                 this.emitChange();
             });
     }
@@ -96,10 +96,10 @@ class EntityStore extends EventEmitter {
         this.initData();
         this.emitChange();
 
-        this.data = this.data.update('page', v => page);
-        this.data = this.data.update('sortField', v => sortField);
-        this.data = this.data.update('sortDir', v => sortDir);
-        this.data = this.data.update('filters', v => filters);
+        this.data = this.data.update('page', () => page);
+        this.data = this.data.update('sortField', () => sortField);
+        this.data = this.data.update('sortDir', () => sortDir);
+        this.data = this.data.update('filters', () => filters);
 
         this.getEntryRequester(restful, configuration)
             .getEntries(new DataStore(), view, page, {
@@ -109,8 +109,8 @@ class EntityStore extends EventEmitter {
                 sortDir,
                 filters
             }).then((collection) => {
-                this.data = this.data.updateIn(['dataStore', 'object'], v => collection.dataStore);
-                this.data = this.data.update('totalItems', v => collection.totalItems);
+                this.data = this.data.updateIn(['dataStore', 'object'], () => collection.dataStore);
+                this.data = this.data.update('totalItems', () => collection.totalItems);
                 this.emitChange();
             }, this.emitResponseFailure.bind(this));
     }
@@ -122,7 +122,7 @@ class EntityStore extends EventEmitter {
         this.getEntryRequester(restful, configuration)
             .getEntry(view, identifierValue, { references: true, referencesList: true, sortField, sortDir })
             .then((dataStore) => {
-                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
                 this.emitChange();
             }, this.emitResponseFailure.bind(this));
     }
@@ -134,9 +134,9 @@ class EntityStore extends EventEmitter {
         this.getEntryRequester(restful, configuration)
             .getEntry(view, identifierValue, { references: true, referencesList: true, choices: true, sortField, sortDir })
             .then((dataStore) => {
-                this.data = this.data.update('originEntityId', v => identifierValue);
-                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
-                this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
+                this.data = this.data.update('originEntityId', () => identifierValue);
+                this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'version'], () => 0);
                 this.data = this.data.update('values', v => {
                     v = v.clear();
 
@@ -159,7 +159,7 @@ class EntityStore extends EventEmitter {
         this.getEntryRequester(restful, configuration)
             .createEntry(view)
             .then((dataStore) => {
-                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
                 this.data = this.data.update('values', v => {
                     v = v.clear();
 
@@ -182,16 +182,16 @@ class EntityStore extends EventEmitter {
         this.getEntryRequester(restful, configuration)
             .getEntry(view, identifierValue, { references: true, referencesList: false, choices: false })
             .then((dataStore) => {
-                this.data = this.data.update('originEntityId', v => identifierValue);
-                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
-                this.data = this.data.updateIn(['dataStore', 'version'], v => 0);
+                this.data = this.data.update('originEntityId', () => identifierValue);
+                this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'version'], () => 0);
 
                 this.emitChange();
             }, this.emitResponseFailure.bind(this));
     }
 
     updateData(fieldName, value, choiceFields=[]) {
-        this.data = this.data.updateIn(['values', fieldName], v => value);
+        this.data = this.data.updateIn(['values', fieldName], () => value);
 
         // Handle related values between choice fields
         if (choiceFields.length) {
@@ -201,7 +201,7 @@ class EntityStore extends EventEmitter {
                 }
 
                 let choices = field.choices();
-                if (typeof(choices) === 'function') {
+                if ('function' === typeof choices) {
                     choices = choices({ values: this.data.get('values').toJS() });
                 }
 
@@ -213,7 +213,7 @@ class EntityStore extends EventEmitter {
                 });
 
                 if (!valueInChoices) {
-                    this.data = this.data.updateIn(['values', field.name()], v => null);
+                    this.data = this.data.updateIn(['values', field.name()], () => null);
                 }
             });
         }
@@ -233,7 +233,7 @@ class EntityStore extends EventEmitter {
         this.getEntryRequester(restful, configuration)
             .saveEntry(this.data.getIn(['dataStore', 'object']), view, rawEntry, id)
             .then((dataStore) => {
-                this.data = this.data.updateIn(['dataStore', 'object'], v => dataStore);
+                this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
                 this.data = this.data.updateIn(['dataStore', 'version'], v => v + 1);
 
                 if (id) {

@@ -17,7 +17,7 @@ class FileFieldView {
     }
 
     static getWriteWidget() {
-        return <FileField name={this.props.fieldName} field={this.props.field}  value={this.props.value} updateField={this.props.updateField} />;
+        return <FileField name={this.props.fieldName} field={this.props.field} value={this.props.value} updateField={this.props.updateField} />;
     }
 }
 

@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 class MenuItem extends React.Component {
     componentDidMount() {
         this.setState({
-            openMenus : []
+            openMenus: []
         });
     }
 
@@ -68,24 +68,30 @@ class MenuItem extends React.Component {
                 childrenElements.push(<MenuItem key={child.uuid} menu={child} />);
             }
 
-            childrenContainer = <ul className={containerClass}>
-                {childrenElements}
-            </ul>
+            childrenContainer = (
+                <ul className={containerClass}>
+                    {childrenElements}
+                </ul>
+            );
         }
 
         // No link provided
-        if (link === null) {
-            content = <a href="#" onClick={this.toggleChildren.bind(this)}>
-                { icon }
-                &nbsp;{ menu.title() }
-                {arrow}
-            </a>;
+        if (!link) {
+            content = (
+                <a href="#" onClick={this.toggleChildren.bind(this)}>
+                    { icon }
+                    &nbsp;{ menu.title() }
+                    {arrow}
+                </a>
+            );
         } else {
-            content = <Link to={link}>
-                { icon }
-                { menu.title() }
-                {arrow}
-            </Link>
+            content = (
+                <Link to={link}>
+                    { icon }
+                    { menu.title() }
+                    {arrow}
+                </Link>
+            );
         }
 
         return (
@@ -97,6 +103,10 @@ class MenuItem extends React.Component {
         );
     }
 }
+
+MenuItem.propTypes = {
+    menu: React.PropTypes.object.isRequired
+};
 
 require('../../autoloader')('MenuItem', MenuItem);
 

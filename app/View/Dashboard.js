@@ -20,20 +20,20 @@ class DashboardView extends React.Component {
         this.refreshData();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.query.sortField !== this.props.query.sortField ||
+            nextProps.query.sortDir !== this.props.query.sortDir) {
+
+            this.refreshData();
+        }
+    }
+
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
     }
 
     onChange() {
         this.setState(EntityStore.getState());
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.query.sortField !== this.props.query.sortField
-            || nextProps.query.sortDir !== this.props.query.sortDir) {
-
-            this.refreshData();
-        }
     }
 
     refreshData() {
@@ -101,7 +101,7 @@ class DashboardView extends React.Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

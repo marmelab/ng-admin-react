@@ -20,7 +20,7 @@ class ApplicationStore extends EventEmitter {
         let filters = this.data.get('filters');
         filters = filters.push(filter);
 
-        this.data = this.data.update('filters', v => filters);
+        this.data = this.data.update('filters', () => filters);
 
         this.emitFilterChange();
     }
@@ -35,7 +35,7 @@ class ApplicationStore extends EventEmitter {
             filters = filters.delete(position);
         }
 
-        this.data = this.data.update('filters', v => filters);
+        this.data = this.data.update('filters', () => filters);
 
         this.emitFilterChange();
     }

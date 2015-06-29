@@ -12,9 +12,13 @@ class Header extends React.Component {
                     </Link>
                 </h1>
             </header>
-        )
+        );
     }
 }
+
+Header.propTypes = {
+    title: React.PropTypes.string.isRequired
+};
 
 require('../../autoloader')('Header', Header);
 

@@ -54,7 +54,7 @@ class EntryRequester {
     createEntry(view) {
         let dataStore = new DataStore();
 
-        let promise = new Promise((resolve, reject) => {
+        let promise = new Promise((resolve) => {
             let entry = dataStore.createEntry(view.entity.name(), view.identifier(), view.getFields());
 
             resolve({
@@ -113,12 +113,12 @@ class EntryRequester {
             promise = this.getChoicesEntries(promise, view, dataStore);
         }
 
-        return promise.then((response) => {
+        return promise.then((r) => {
             if (options.references || options.referencesList) {
-                dataStore.fillReferencesValuesFromEntry(response.entries[0], view.getReferences(), true);
+                dataStore.fillReferencesValuesFromEntry(r.entries[0], view.getReferences(), true);
             }
 
-            dataStore.addEntry(view.entity.uniqueId, response.entries[0]);
+            dataStore.addEntry(view.entity.uniqueId, r.entries[0]);
 
             return dataStore;
         });

@@ -11,7 +11,7 @@ class DatagridActions extends React.Component {
         let i = 0;
 
         // Direct template
-        if (typeof (listActions) === 'string') {
+        if ('string' === typeof listActions) {
             return <Compile entityName={entityName} entry={entry}>{listActions}</Compile>;
         }
 

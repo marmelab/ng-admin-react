@@ -2,8 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 class ButtonField extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.value = !!props.value;
     }
@@ -31,6 +31,7 @@ class ButtonField extends React.Component {
 
 ButtonField.propTypes = {
     name: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
     type: React.PropTypes.string,
     updateField: React.PropTypes.func

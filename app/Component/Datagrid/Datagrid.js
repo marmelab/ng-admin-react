@@ -6,27 +6,33 @@ import DatagridActions from '../../Component/Datagrid/DatagridActions';
 import Column from '../Column/Column';
 
 class Datagrid extends React.Component {
-    getDetailAction (entry) {
-        return function() {
+    constructor(props) {
+        super(props);
+    }
+
+    getDetailAction(entry) {
+        return () => {
             const entityName = this.props.entityName;
             const entity = this.props.configuration.getEntity(entityName);
             const route = entity.editionView().enabled ? 'edit' : 'show';
 
             this.context.router.transitionTo(route, {entity: entityName, id: entry.identifierValue});
-        }.bind(this);
+        };
     }
 
     isDetailLink(field) {
-        if (field.isDetailLink() === false) {
+        if (false === field.isDetailLink()) {
             return false;
         }
-        if (field.type() !== 'reference' && field.type() !== 'reference_many') {
+
+        if (-1 === field.type().indexOf('reference')) {
             return true;
         }
+
         const referenceEntity = field.targetEntity().name();
         const relatedEntity = this.props.configuration.getEntity(referenceEntity);
 
-        if (!relatedEntity) return false;
+        if (!relatedEntity) { return false; }
 
         return relatedEntity.isReadOnly ? relatedEntity.showView().enabled : relatedEntity.editionView().enabled;
     }

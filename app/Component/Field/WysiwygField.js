@@ -7,17 +7,19 @@ class WysiwygField extends React.Component {
     }
 
     render() {
-        const {value} = this.props;
+        const { value } = this.props;
         const onChange = this.onChange.bind(this);
 
-        return <Editor className="wysiwyg-field"
-            text={value}
-            onChange={onChange}
-            options={{
-                buttons: ['bold', 'italic', 'underline', 'anchor', 'header1', 'header2', 'quote'],
-                anchor: {customClassOptionText: 'Button', placeholderText: 'Paste or type a link'}
-                }}
-            />;
+        return (
+            <Editor className="wysiwyg-field"
+                text={value}
+                onChange={onChange}
+                options={{
+                    buttons: ['bold', 'italic', 'underline', 'anchor', 'header1', 'header2', 'quote'],
+                    anchor: { customClassOptionText: 'Button', placeholderText: 'Paste or type a link' }
+                    }}
+                />
+            );
     }
 }
 

@@ -89,7 +89,8 @@ class EntityStore extends EventEmitter {
                 this.data = this.data.update('sortDir', () => sortDir);
                 this.data = this.data.update('sortField', () => sortField);
                 this.emitChange();
-            });
+            })
+            .catch(this.throwPromiseError);
     }
 
     loadListData(restful, configuration, view, page = 1, sortField = null, sortDir = null, filters = null) {
@@ -112,7 +113,8 @@ class EntityStore extends EventEmitter {
                 this.data = this.data.updateIn(['dataStore', 'object'], () => collection.dataStore);
                 this.data = this.data.update('totalItems', () => collection.totalItems);
                 this.emitChange();
-            }, this.emitResponseFailure.bind(this));
+            }, this.emitResponseFailure.bind(this))
+            .catch(this.throwPromiseError);
     }
 
     loadShowData(restful, configuration, view, identifierValue, sortField, sortDir) {
@@ -124,7 +126,8 @@ class EntityStore extends EventEmitter {
             .then((dataStore) => {
                 this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
                 this.emitChange();
-            }, this.emitResponseFailure.bind(this));
+            }, this.emitResponseFailure.bind(this))
+            .catch(this.throwPromiseError);
     }
 
     loadEditData(restful, configuration, view, identifierValue, sortField, sortDir) {
@@ -149,7 +152,8 @@ class EntityStore extends EventEmitter {
                     return v;
                 });
                 this.emitChange();
-            }, this.emitResponseFailure.bind(this));
+            }, this.emitResponseFailure.bind(this))
+            .catch(this.throwPromiseError);
     }
 
     loadCreateData(restful, configuration, view) {
@@ -172,7 +176,8 @@ class EntityStore extends EventEmitter {
                     return v;
                 });
                 this.emitChange();
-            });
+            })
+            .catch(this.throwPromiseError);
     }
 
     loadDeleteData(restful, configuration, view, identifierValue) {
@@ -242,13 +247,15 @@ class EntityStore extends EventEmitter {
                 } else {
                     this.emitCreate();
                 }
-            }, this.emitResponseFailure.bind(this));
+            }, this.emitResponseFailure.bind(this))
+            .catch(this.throwPromiseError);
     }
 
     deleteData(restful, configuration, id, view) {
         this.getEntryRequester(restful, configuration)
             .deleteEntry(view, id)
-            .then(this.emitDelete.bind(this), this.emitResponseFailure.bind(this));
+            .then(this.emitDelete.bind(this), this.emitResponseFailure.bind(this))
+            .catch(this.throwPromiseError);
     }
 
     getState() {
@@ -313,6 +320,12 @@ class EntityStore extends EventEmitter {
 
     removeFailureListener(callback) {
         this.removeListener('action_failure', callback);
+    }
+
+    throwPromiseError(e) {
+        if (console) {
+            console.error(e);
+        }
     }
 }
 

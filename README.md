@@ -87,12 +87,24 @@ post.showView() // a showView displays one entry in full page - allows to displa
 
 ## Running blog bakend admin demo locally
 
+### Using browser package
+
 ``` sh
 make install-blog
 make run-blog
 ```
 
 The application is now available at `http://localhost:8080/`.
+
+### Using server package
+
+``` sh
+cd examples/blog
+make install
+make run
+```
+
+The application is now available at `http://localhost:8088/`.
 
 ## Rebuilding the Compiled JS and CSS Files
 
@@ -106,7 +118,7 @@ All build files will then be updated and minified, ready for production.
 
 ## Testing
 
-react-admin has unit tests (powered by jest) and end to end tests (powered by protractor). 
+react-admin has unit tests (powered by jest) and end to end tests (powered by protractor).
 Launch the entire tests suite by calling:
 
 ```sh

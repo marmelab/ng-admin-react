@@ -2,7 +2,7 @@
 module.exports = {
     entry: {
         'app': [
-            'webpack-dev-server/client?http://0.0.0.0:8080',
+            'webpack-dev-server/client?http://0.0.0.0:8088',
             'webpack/hot/dev-server',
             './config-webpack.js'
         ]

@@ -85,7 +85,7 @@ post.showView() // a showView displays one entry in full page - allows to displa
     ]);
 ```
 
-## Running blog bakend admin demo locally
+## Running blog backend admin demo locally
 
 ### Using browser package
 

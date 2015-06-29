@@ -4,14 +4,22 @@ import SelectField from '../Component/Field/SelectField';
 
 class ReferenceFieldView {
     static getReadWidget() {
-        return <ReferenceColumn value={this.props.entry.listValues[this.props.field.name()]}
-            field={this.props.field} entry={this.props.entry} />;
+        return (
+            <ReferenceColumn
+                value={this.props.entry.listValues[this.props.field.name()]}
+                field={this.props.field}
+                entry={this.props.entry} />
+            );
     }
 
     static getLinkWidget() {
         // Due to a scope issue, we can't call ReferenceFieldView.getReadWidget() here
-        return <ReferenceColumn value={this.props.entry.listValues[this.props.field.name()]}
-                                field={this.props.field} entry={this.props.entry} />;
+        return (
+            <ReferenceColumn
+                value={this.props.entry.listValues[this.props.field.name()]}
+                field={this.props.field}
+                entry={this.props.entry} />
+            );
     }
 
     static getFilterWidget() {
@@ -30,15 +38,23 @@ class ReferenceFieldView {
             }
         }
 
-        return <SelectField name={this.props.fieldName} value={value}
-            choices={choices}
-            updateField={this.props.updateField} />;
+        return (
+            <SelectField
+                name={this.props.fieldName}
+                value={value}
+                choices={choices}
+                updateField={this.props.updateField} />
+            );
     }
 
     static getWriteWidget() {
-        return <SelectField name={this.props.fieldName} value={this.props.value}
-                            choices={this.props.dataStore.getChoices(this.props.field)}
-                            updateField={this.props.updateField} />;
+        return (
+            <SelectField
+                name={this.props.fieldName}
+                value={this.props.value}
+                choices={this.props.dataStore.getChoices(this.props.field)}
+                updateField={this.props.updateField} />
+            );
     }
 }
 

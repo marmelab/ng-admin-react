@@ -1,8 +1,8 @@
 import React from 'react';
 import {RouteHandler, Link} from 'react-router';
 
-import Header from "./View/Common/Header";
-import Sidebar from "./View/Common/Sidebar";
+import Header from './View/Common/Header';
+import Sidebar from './View/Common/Sidebar';
 
 import FieldViewConfiguration from './Field/FieldViewConfiguration';
 
@@ -52,6 +52,10 @@ class AdminBootstrap extends React.Component {
         );
     }
 }
+
+AdminBootstrap.propTypes = {
+    configuration: React.PropTypes.object.isRequired
+};
 
 require('./autoloader')('AdminBootstrap', AdminBootstrap);
 require('./autoloader')('Link', Link);

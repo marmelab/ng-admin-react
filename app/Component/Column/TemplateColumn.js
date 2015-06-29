@@ -6,7 +6,7 @@ class TemplateColumn extends React.Component {
         const template = this.props.template;
 
         let computedTemplate = template;
-        if (typeof(template) === 'function') {
+        if ('function' === typeof template) {
             computedTemplate = template.apply(this, [this.props.entry]);
         }
 
@@ -20,7 +20,8 @@ TemplateColumn.propTypes = {
     template: React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.func
-    ]).isRequired
+    ]).isRequired,
+    entry: React.PropTypes.object
 };
 
 require('../../autoloader')('TemplateColumn', TemplateColumn);

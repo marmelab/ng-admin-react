@@ -4,7 +4,7 @@ import Codemirror from 'react-codemirror';
 
 class JsonField extends React.Component {
     onChange(code) {
-        if (code && typeof(code) === 'string') {
+        if (code && 'string' === typeof code) {
             try {
                 code = JSON.parse(code);
             } catch (e) {
@@ -25,13 +25,13 @@ class JsonField extends React.Component {
             lineWrapping: true,
             tabSize: true,
             mode: 'javascript',
-            gutters: ["CodeMirror-lint-markers"],
-            stylesheet: "css/jscolors.css",
+            gutters: ['CodeMirror-lint-markers'],
+            stylesheet: 'css/jscolors.css',
             lint: true,
             styleActiveLine: true
         };
 
-        if (value && typeof(value) === 'object') {
+        if (value && 'object' === typeof value) {
             value = formatJson.plain(value);
         }
 

@@ -24,12 +24,14 @@ class ReferenceManyColumn extends React.Component {
                     };
 
                     if (isDetail) {
-                        return <Link to={to} params={params} key={i} className="label label-default">
-                            {value}
-                        </Link>;
+                        return (
+                            <Link to={to} params={params} key={i} className="label label-default">
+                                {value}
+                            </Link>
+                        );
                     }
 
-                    return <span className="label label-default">{value}</span>
+                    return <span className="label label-default">{value}</span>;
                 })}
             </span>
         );
@@ -37,7 +39,9 @@ class ReferenceManyColumn extends React.Component {
 }
 
 ReferenceManyColumn.propTypes = {
-    values: React.PropTypes.array.isRequired
+    values: React.PropTypes.array.isRequired,
+    field: React.PropTypes.object.isRequired,
+    entry: React.PropTypes.object.isRequired
 };
 
 require('../../autoloader')('ReferenceManyColumn', ReferenceManyColumn);

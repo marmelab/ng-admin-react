@@ -29,6 +29,13 @@ class DeleteView extends React.Component {
         this.refreshData();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.params.entity !== this.props.params.entity ||
+            nextProps.params.id !== this.props.params.id) {
+            this.refreshData();
+        }
+    }
+
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeDeleteListener(this.boundedOnDelete);
@@ -43,13 +50,6 @@ class DeleteView extends React.Component {
         const {id} = this.context.router.getCurrentParams();
 
         EntityActions.loadDeleteData(this.context.restful, this.props.configuration, this.getView(), id);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity ||
-            nextProps.params.id !== this.props.params.id) {
-            this.refreshData();
-        }
     }
 
     deleteEntry() {
@@ -75,7 +75,7 @@ class DeleteView extends React.Component {
 
     onDeletionFailure(response) {
         let body = response.data;
-        if (typeof message === 'object') {
+        if ('object' === typeof message) {
             body = JSON.stringify(body);
         }
 
@@ -108,7 +108,7 @@ class DeleteView extends React.Component {
                         <ViewActions entityName={view.entity.name()} buttons={['back']} />
 
                         <div className="page-header">
-                            <h1><Compile entry={entry}>{view.title()|| "Delete one " + Inflector.singularize(entityName)}</Compile></h1>
+                            <h1><Compile entry={entry}>{view.title() || 'Delete one ' + Inflector.singularize(entityName)}</Compile></h1>
                             <p className="description"><Compile entry={entry}>{view.description()}</Compile></p>
                         </div>
                     </div>
@@ -122,7 +122,7 @@ class DeleteView extends React.Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

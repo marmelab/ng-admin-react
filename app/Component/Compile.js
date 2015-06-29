@@ -24,12 +24,12 @@ class Compile extends React.Component {
             }
         }
 
-        if (typeof(template) === 'function') {
+        if ('function' === typeof template) {
             this.React = React;
             template = template.apply(this, []);
         }
 
-        if (typeof(template) === 'string') {
+        if ('string' === typeof template) {
             return eval(`${variables.join(';')}; ${jsx.fromString(template, context)}`);
         }
 
@@ -55,9 +55,9 @@ class Compile extends React.Component {
             children = children.join('');
         }
 
-        if (typeof(children) === 'string' || typeof(children) === 'function') {
+        if ('string' === typeof children || 'function' === typeof children) {
             // Wrap element without root tag
-            if (typeof(children) === 'string') {
+            if ('string' === typeof children) {
                 if (children.trim()[0] !== '<') {
                     children = `<span>${children}</span>`;
                 }

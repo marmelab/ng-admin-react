@@ -8,7 +8,7 @@ class DateColumn extends React.Component {
         if (field) {
             let format = field.format();
             if (!format) {
-                format = field.type() === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss';
+                format = 'date' === field.type() ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss';
             }
             value = moment(value, format).format(format);
         }

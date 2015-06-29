@@ -13,19 +13,23 @@ class ChoicesFieldView {
     }
 
     static getFilterWidget() {
-        return <ChoiceField field={this.props.field}
-            fieldName={this.props.fieldName}
-            values={this.props.values} value={this.props.value}
-            multiple={true}
-            updateField={this.props.updateField} />;
+        return (
+            <ChoiceField field={this.props.field}
+                fieldName={this.props.fieldName}
+                values={this.props.values} value={this.props.value}
+                multiple={true}
+                updateField={this.props.updateField} />
+            );
     }
 
     static getWriteWidget() {
-        return <ChoiceField field={this.props.field}
-                            fieldName={this.props.fieldName}
-                            values={this.props.values} value={this.props.value}
-                            multiple={true}
-                            updateField={this.props.updateField} />;
+        return (
+            <ChoiceField field={this.props.field}
+                fieldName={this.props.fieldName}
+                values={this.props.values} value={this.props.value}
+                multiple={true}
+                updateField={this.props.updateField} />
+            );
     }
 }
 

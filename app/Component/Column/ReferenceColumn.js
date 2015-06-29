@@ -15,9 +15,11 @@ class ReferenceColumn extends React.Component {
                     id: referenceId
                 };
 
-            return <Link className="reference-column" to={to} params={params}>
-                {value}
-            </Link>;
+            return (
+                <Link className="reference-column" to={to} params={params}>
+                    {value}
+                </Link>
+            );
         }
 
         return (

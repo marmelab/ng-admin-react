@@ -71,7 +71,7 @@ class Filters extends React.Component {
             query.search = {};
         }
 
-        if (typeof(value) === 'string' && !value.length) {
+        if ('string' === typeof value && !value.length) {
             value = null;
         }
 
@@ -81,7 +81,7 @@ class Filters extends React.Component {
             delete query.search[name];
         }
 
-        if (Object.keys(query.search).length === 0) {
+        if (0 === Object.keys(query.search).length) {
             delete query.search;
         }
 
@@ -116,26 +116,30 @@ class Filters extends React.Component {
             let deleteLink = null;
 
             if (!filter.pinned()) {
-                deleteLink = <a className="remove" onClick={removeFilter(filter)}>
-                    <span className="glyphicon glyphicon-remove"></span>
-                </a>;
+                deleteLink = (
+                    <a className="remove" onClick={removeFilter(filter)}>
+                        <span className="glyphicon glyphicon-remove"></span>
+                    </a>
+                );
             }
 
-            return <div className={`form-field form-group filter-${fieldName}`} key={i}>
-                <span className="col-sm-1 col-xs-1">{deleteLink}</span>
+            return (
+                <div className={`form-field form-group filter-${fieldName}`} key={i}>
+                    <span className="col-sm-1 col-xs-1">{deleteLink}</span>
 
-                <div>
-                    <label htmlFor={fieldName} className={"control-label col-sm-3 col-md-3"}>{ filter.label() }</label>
+                    <div>
+                        <label htmlFor={fieldName} className={"control-label col-sm-3 col-md-3"}>{ filter.label() }</label>
 
-                    <div className={className}>
-                        <Compile field={filter} updateField={updateField} dataStore={dataStore}
-                            entity={view.getEntity()} value={value} values={values} fieldName={fieldName} entry={null}
-                            configuration={configuration} autoFocus={autoFocus}>
-                        {fieldTemplate}
-                        </Compile>
+                        <div className={className}>
+                            <Compile field={filter} updateField={updateField} dataStore={dataStore}
+                                entity={view.getEntity()} value={value} values={values} fieldName={fieldName} entry={null}
+                                configuration={configuration} autoFocus={autoFocus}>
+                            {fieldTemplate}
+                            </Compile>
+                        </div>
                     </div>
                 </div>
-            </div>;
+            );
         });
 
         return <div className="filters form-horizontal col-md-offset-6 col-md-6 col-lg-6">{rows}</div>;

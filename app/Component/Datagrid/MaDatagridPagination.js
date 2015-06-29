@@ -14,7 +14,7 @@ class MaDatagridPagination extends React.Component {
         const totalItems = props.totalItems;
         const page = props.page || 1;
         const perPage = props.perPage || 1;
-        const nbPages =  Math.ceil(totalItems / perPage) || 1;
+        const nbPages = Math.ceil(totalItems / perPage) || 1;
         const offsetEnd = Math.min(page * perPage, totalItems);
         const offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
         const displayPagination = perPage < totalItems;
@@ -36,7 +36,7 @@ class MaDatagridPagination extends React.Component {
         if (page > 2) {
             input.push('1');
         }
-        if (page == 4) {
+        if (4 == page) {
             input.push('2');
         }
         if (page > 4) {
@@ -76,44 +76,49 @@ class MaDatagridPagination extends React.Component {
         let pagination = null;
 
         if (totalItems > 0) {
-            itemCount = <div className="total">
-                <strong>{ this.state.offsetBegin }</strong> - <strong>{ this.state.offsetEnd }</strong> on <strong>{ totalItems }</strong>
-            </div>
+            itemCount = (
+                <div className="total">
+                    <strong>{ this.state.offsetBegin }</strong> - <strong>{ this.state.offsetEnd }</strong> on <strong>{ totalItems }</strong>
+                </div>
+            );
         } else {
-            itemCount = <div className="total no-record">
-                <strong>No record found.</strong>
-            </div>
+            itemCount = (
+                <div className="total no-record">
+                    <strong>No record found.</strong>
+                </div>
+            );
         }
 
         if (this.state.displayPagination) {
             let prev = <li></li>;
             let next = <li></li>;
             let items = [];
-            const query = this.context.router.getCurrentQuery() || {};
 
             if (page != 1) {
-                prev = <li><Link className="prev" to="list" params={{entity: entity}} query={{page: page - 1, sortField:sortField, sortDir: sortDir}}>« Prev</Link></li>
+                prev = <li><Link className="prev" to="list" params={{entity: entity}} query={{page: page - 1, sortField: sortField, sortDir: sortDir}}>« Prev</Link></li>;
             }
 
             if (page != this.state.nbPages) {
-                next = <li><Link className="next" to="list" params={{entity: entity}} query={{page: page + 1, sortField:sortField, sortDir: sortDir}}>Next »</Link></li>
+                next = <li><Link className="next" to="list" params={{entity: entity}} query={{page: page + 1, sortField: sortField, sortDir: sortDir}}>Next »</Link></li>;
             }
 
             this.range(page).map(i => {
                 const className = i == page ? 'active' : '';
 
-                if (i == '.') {
-                    items.push(<li key={i} className={className}><span>&hellip;</span></li>)
+                if ('.' == i) {
+                    items.push(<li key={i} className={className}><span>&hellip;</span></li>);
                 } else {
-                    items.push(<li key={i} className={className}><Link to="list" params={{entity: entity}} query={{page: i, sortField:sortField, sortDir: sortDir}}>{i}</Link></li>)
+                    items.push(<li key={i} className={className}><Link to="list" params={{entity: entity}} query={{page: i, sortField: sortField, sortDir: sortDir}}>{i}</Link></li>);
                 }
             });
 
-            pagination = <ul className="pagination pagination-sm pull-right" role="group" aria-label="pagination">
-                {prev}
-                {items}
-                {next}
-            </ul>
+            pagination = (
+                <ul className="pagination pagination-sm pull-right" role="group" aria-label="pagination">
+                    {prev}
+                    {items}
+                    {next}
+                </ul>
+            );
         }
 
         return (
@@ -127,6 +132,7 @@ class MaDatagridPagination extends React.Component {
 }
 
 MaDatagridPagination.propTypes = {
+    entity: React.PropTypes.string.isRequired,
     totalItems: React.PropTypes.number.isRequired,
     perPage: React.PropTypes.number.isRequired
 };

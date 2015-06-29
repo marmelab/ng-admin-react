@@ -4,14 +4,16 @@ import SelectField from './SelectField';
 class ChoiceField extends React.Component {
     render() {
         let choices = this.props.field.choices();
-        if (typeof(choices) === 'function') {
+        if ('function' === typeof choices) {
             choices = choices({ values: this.props.values.toJS() });
         }
 
-        return <SelectField name={this.props.fieldName}
-                            choices={choices} value={this.props.value}
-                            multiple={this.props.multiple}
-                            updateField={this.props.updateField} />;
+        return (
+            <SelectField name={this.props.fieldName}
+                choices={choices} value={this.props.value}
+                multiple={this.props.multiple}
+                updateField={this.props.updateField} />
+            );
     }
 }
 

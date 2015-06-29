@@ -16,7 +16,7 @@ class Field extends React.Component {
 
         return (
             <div>
-                <label htmlFor={fieldName} className={`control-label ${labelClass || "col-sm-2"}`}>{ field.label() }</label>
+                <label htmlFor={fieldName} className={`control-label ${labelClass || 'col-sm-2'}`}>{ field.label() }</label>
 
                 <div className={className}>
                     <Compile field={field} updateField={this.props.updateField} dataStore={this.props.dataStore}
@@ -37,9 +37,11 @@ Field.propTypes = {
     dataStore: React.PropTypes.object.isRequired,
     configuration: React.PropTypes.object,
     value: React.PropTypes.any,
+    values: React.PropTypes.any,
     updateField: React.PropTypes.func.isRequired,
     labelClass: React.PropTypes.string,
-    fieldClass: React.PropTypes.string
+    fieldClass: React.PropTypes.string,
+    autoFocus: React.PropTypes.bool
 };
 
 require('../../autoloader')('Field', Field);

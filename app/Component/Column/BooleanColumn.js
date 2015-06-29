@@ -2,8 +2,7 @@ import React from 'react';
 
 class BooleanColumn extends React.Component {
     render() {
-        const {value} = this.props;
-        const className = !!value ? 'boolean-true' : 'boolean-false';
+        const className = this.props.value ? 'boolean-true' : 'boolean-false';
 
         return (
             <span className={className}></span>

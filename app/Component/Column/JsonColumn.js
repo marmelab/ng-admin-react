@@ -13,13 +13,15 @@ class JsonColumn extends React.Component {
 
     getSubContent(value, key) {
         const type = this.guessType(value);
-        const content = type === 'Literal' ? value : <JsonColumn value={value} />;
-        const keyLabel = key ? <th className="active">{ key }</th>  : null;
+        const content = 'Literal' === type ? value : <JsonColumn value={value} />;
+        const keyLabel = key ? <th className="active">{ key }</th> : null;
 
-        return <tr>
-                    {keyLabel}
-                    <td>{content}</td>
-               </tr>;
+        return (
+            <tr>
+                {keyLabel}
+                <td>{content}</td>
+            </tr>
+        );
     }
 
     render() {

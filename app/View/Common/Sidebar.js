@@ -14,9 +14,13 @@ class Sidebar extends React.Component {
                     </ul>
                 </div>
             </div>
-        )
+        );
     }
 }
+
+Sidebar.propTypes = {
+    menuViews: React.PropTypes.object.isRequired
+};
 
 require('../../autoloader')('Sidebar', Sidebar);
 

@@ -11,7 +11,7 @@ class ChoicesColumn extends React.Component {
         return (
             <span className="choices-column">
                 {values.map((value, i) => {
-                    return <span className="label label-default">{value}</span>
+                    return <span key={i} className="label label-default">{value}</span>;
                 })}
             </span>
         );
@@ -19,7 +19,7 @@ class ChoicesColumn extends React.Component {
 }
 
 ChoicesColumn.propTypes = {
-    values: React.PropTypes.array.isRequired
+    values: React.PropTypes.array
 };
 
 require('../../autoloader')('ChoicesColumn', ChoicesColumn);

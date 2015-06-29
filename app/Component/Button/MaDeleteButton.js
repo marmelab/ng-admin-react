@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 
 class MaDeleteButton extends React.Component {
     render() {
-        const size = !!this.props.size ? ` btn-${this.props.size}` : '';
+        const size = this.props.size ? ` btn-${this.props.size}` : '';
         const className = `btn btn-delete btn-default${size}`;
         const params = {
             entity: this.props.entityName,

@@ -1,5 +1,5 @@
 import React from 'react';
-import Inflector from 'inflected'
+import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 import Notification from '../Services/Notification';
 
@@ -26,6 +26,16 @@ class ShowView extends React.Component {
         this.refreshData();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.params.entity !== this.props.params.entity ||
+            nextProps.params.id !== this.props.params.id ||
+            nextProps.query.sortField !== this.props.query.sortField ||
+            nextProps.query.sortDir !== this.props.query.sortDir) {
+
+            this.refreshData();
+        }
+    }
+
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeFailureListener(this.boundedOnFailure);
@@ -48,19 +58,9 @@ class ShowView extends React.Component {
         EntityActions.loadShowData(this.context.restful, this.props.configuration, this.getView(), id, sortField, sortDir);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity ||
-            nextProps.params.id !== this.props.params.id ||
-            nextProps.query.sortField !== this.props.query.sortField ||
-            nextProps.query.sortDir !== this.props.query.sortDir) {
-
-            this.refreshData();
-        }
-    }
-
     onLoadFailure(response) {
         let body = response.data;
-        if (typeof message === 'object') {
+        if ('object' === typeof message) {
             body = JSON.stringify(body);
         }
 
@@ -89,7 +89,7 @@ class ShowView extends React.Component {
                 <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
 
                 <div className="page-header">
-                    <h1><Compile>{view.title() || Inflector.singularize(entityName) + " detail"}</Compile></h1>
+                    <h1><Compile>{view.title() || Inflector.singularize(entityName) + ' detail'}</Compile></h1>
                     <p className="description"><Compile>{view.description()}</Compile></p>
                 </div>
 
@@ -106,7 +106,7 @@ class ShowView extends React.Component {
                     ))}
                 </div>
             </div>
-        )
+        );
     }
 }
 

@@ -33,8 +33,8 @@ class EntityStore extends EventEmitter {
         });
     }
 
-    flagResourceNotFound(found) {
-        this.data = this.data.update('resourceNotFound', () => !!found);
+    flagResourceNotFound() {
+        this.data = this.data.update('resourceNotFound', () => true);
         this.emitChange();
     }
 

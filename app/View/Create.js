@@ -2,6 +2,8 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
+import { hasEntityAndView, getView } from '../Mixins/MainView';
+
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
 import NotFoundView from './NotFound';
@@ -15,7 +17,11 @@ class CreateView extends React.Component {
     constructor() {
         super();
 
+        this.viewName = 'CreateView';
+
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+        this.hasEntityAndView = hasEntityAndView.bind(this);
+        this.getView = getView.bind(this);
     }
 
     componentDidMount() {
@@ -43,22 +49,6 @@ class CreateView extends React.Component {
         EntityStore.removeCreateListener(this.boundedOnCreate);
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeFailureListener(this.boundedOnFailure);
-    }
-
-    hasEntityAndView(entityName) {
-        try {
-            const view = this.getView(entityName);
-
-            return view.enabled;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    getView(entityName) {
-        entityName = entityName || this.context.router.getCurrentParams().entity;
-
-        return this.props.configuration.getEntity(entityName).creationView();
     }
 
     onChange() {

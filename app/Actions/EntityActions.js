@@ -95,10 +95,9 @@ export default {
         });
     },
 
-    flagResourceNotFound(found) {
+    flagResourceNotFound() {
         AppDispatcher.dispatch({
-            actionType: 'resource_not_found',
-            found
+            actionType: 'resource_not_found'
         });
     }
 };

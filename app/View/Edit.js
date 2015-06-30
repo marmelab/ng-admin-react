@@ -2,6 +2,8 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
+import { hasEntityAndView, getView } from '../Mixins/MainView';
+
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
 import NotFoundView from './NotFound';
@@ -15,7 +17,11 @@ class EditView extends React.Component {
     constructor() {
         super();
 
+        this.viewName = 'EditView';
+
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+        this.hasEntityAndView = hasEntityAndView.bind(this);
+        this.getView = getView.bind(this);
     }
 
     componentDidMount() {
@@ -51,22 +57,6 @@ class EditView extends React.Component {
         EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
-    hasEntityAndView(entityName) {
-        try {
-            const view = this.getView(entityName);
-
-            return view.enabled;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    getView(entityName) {
-        entityName = entityName || this.context.router.getCurrentParams().entity;
-
-        return this.props.configuration.getViewByEntityAndType(entityName, 'EditView');
-    }
-
     onChange() {
         this.setState(EntityStore.getState());
     }
@@ -90,7 +80,7 @@ class EditView extends React.Component {
 
     onFailure(response) {
         if (response.status && 404 === response.status) {
-            EntityActions.flagResourceNotFound(true);
+            EntityActions.flagResourceNotFound();
 
             return;
         }

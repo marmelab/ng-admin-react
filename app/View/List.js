@@ -1,6 +1,8 @@
 import React from 'react';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
+import { hasEntityAndView, getView } from '../Mixins/MainView';
+
 import NotFoundView from './NotFound';
 import Notification from '../Services/Notification';
 
@@ -18,7 +20,11 @@ class ListView extends React.Component {
     constructor(props, context) {
         super(props, context);
 
+        this.viewName = 'ListView';
+
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+        this.hasEntityAndView = hasEntityAndView.bind(this);
+        this.getView = getView.bind(this);
     }
 
     componentDidMount() {

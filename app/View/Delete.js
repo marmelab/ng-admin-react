@@ -3,6 +3,8 @@ import Inflector from 'inflected';
 import {Link} from 'react-router';
 import {shouldComponentUpdate} from 'react-immutable-render-mixin';
 
+import { hasEntityAndView, getView } from '../Mixins/MainView';
+
 import Compile from '../Component/Compile';
 import NotFoundView from './NotFound';
 
@@ -16,7 +18,11 @@ class DeleteView extends React.Component {
     constructor() {
         super();
 
+        this.viewName = 'DeleteView';
+
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+        this.hasEntityAndView = hasEntityAndView.bind(this);
+        this.getView = getView.bind(this);
     }
 
     componentDidMount() {
@@ -65,22 +71,6 @@ class DeleteView extends React.Component {
         EntityActions.deleteData(this.context.restful, this.props.configuration, id, this.getView());
     }
 
-    hasEntityAndView(entityName) {
-        try {
-            const view = this.getView(entityName);
-
-            return view.enabled;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    getView(entityName) {
-        entityName = entityName || this.context.router.getCurrentParams().entity;
-
-        return this.props.configuration.getEntity(entityName).deletionView();
-    }
-
     onDelete() {
         const params = this.context.router.getCurrentParams();
         const entityName = params.entity;
@@ -92,7 +82,7 @@ class DeleteView extends React.Component {
 
     onDeletionFailure(response) {
         if (response.status && 404 === response.status) {
-            EntityActions.flagResourceNotFound(true);
+            EntityActions.flagResourceNotFound();
 
             return;
         }

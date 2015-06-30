@@ -60,14 +60,14 @@ class ListView extends React.Component {
         EntityActions.loadListData(this.context.restful, this.props.configuration, this.getView(), page, sortField, sortDir, search);
     }
 
-    onLoadFailure(response) {
-        let body = response.data;
-        if ('object' === typeof message) {
-            body = JSON.stringify(body);
-        }
+    onLoadFailure(error) {
+        console && console.error(error);
 
-        Notification.log(`Oops, an error occured during data fetching  : (code: ${response.status}) ${body}`,
-            {addnCls: 'humane-flatty-error'});
+        // if error from Restangular request
+        var message = error.message || error.status + ' - ' + error.statusText;
+        Notification.log(`Error while fetching data: ${message}.`, {
+            addnCls: 'humane-flatty-error'
+        });
     }
 
     buildPagination(view) {

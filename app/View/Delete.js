@@ -3,9 +3,12 @@ import Inflector from 'inflected';
 import {Link} from 'react-router';
 import {shouldComponentUpdate} from 'react-immutable-render-mixin';
 
-import ViewActions from '../Component/ViewActions';
 import Compile from '../Component/Compile';
+import NotFoundView from './NotFound';
+
+import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
+
 import EntityStore from '../Stores/EntityStore';
 import Notification from '../Services/Notification';
 
@@ -26,13 +29,17 @@ class DeleteView extends React.Component {
         this.boundedOnFailure = this.onDeletionFailure.bind(this);
         EntityStore.addFailureListener(this.boundedOnFailure);
 
-        this.refreshData();
+        if (this.hasEntityAndView()) {
+            this.refreshData();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.params.entity !== this.props.params.entity ||
             nextProps.params.id !== this.props.params.id) {
-            this.refreshData();
+            if (this.hasEntityAndView(nextProps.params.entity)) {
+                this.refreshData();
+            }
         }
     }
 
@@ -56,6 +63,16 @@ class DeleteView extends React.Component {
         const {id} = this.context.router.getCurrentParams();
 
         EntityActions.deleteData(this.context.restful, this.props.configuration, id, this.getView());
+    }
+
+    hasEntityAndView(entityName) {
+        try {
+            this.getView(entityName);
+
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     getView(entityName) {
@@ -83,19 +100,22 @@ class DeleteView extends React.Component {
     }
 
     render() {
+        const entityName = this.context.router.getCurrentParams().entity;
+        if (!this.hasEntityAndView(entityName)) {
+            return <NotFoundView/>;
+        }
+
         if (!this.state) {
             return null;
         }
 
-        const params = this.context.router.getCurrentParams(),
-            entityName = params.entity,
-            view = this.props.configuration.getEntity(entityName).deletionView(),
-            dataStore = this.state.data.get('dataStore').first(),
-            entry = dataStore.getFirstEntry(view.entity.uniqueId),
-            backParams = {
-                entity: entityName,
-                id: params.id
-            };
+        const view = this.props.configuration.getEntity(entityName).deletionView();
+        const dataStore = this.state.data.get('dataStore').first();
+        const entry = dataStore.getFirstEntry(view.entity.uniqueId);
+        const backParams = {
+            entity: entityName,
+            id: this.context.router.getCurrentParams().id
+        };
 
         if (!entry) {
             return null;

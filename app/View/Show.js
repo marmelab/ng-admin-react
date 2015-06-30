@@ -1,7 +1,9 @@
 import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+
 import Notification from '../Services/Notification';
+import NotFoundView from './NotFound';
 
 import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
@@ -32,13 +34,25 @@ class ShowView extends React.Component {
             nextProps.query.sortField !== this.props.query.sortField ||
             nextProps.query.sortDir !== this.props.query.sortDir) {
 
-            this.refreshData();
+            if (this.hasEntityAndView(nextProps.params.entity)) {
+                this.refreshData();
+            }
         }
     }
 
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeFailureListener(this.boundedOnFailure);
+    }
+
+    hasEntityAndView(entityName) {
+        try {
+            this.getView(entityName);
+
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     getView(entityName) {
@@ -69,12 +83,15 @@ class ShowView extends React.Component {
     }
 
     render() {
+        const entityName = this.context.router.getCurrentParams().entity;
+        if (!this.hasEntityAndView(entityName)) {
+            return <NotFoundView/>;
+        }
+
         if (!this.state) {
             return null;
         }
 
-        const params = this.context.router.getCurrentParams();
-        const entityName = params.entity;
         const view = this.getView();
         const dataStore = this.state.data.getIn(['dataStore', 'object']);
         const entry = dataStore.getFirstEntry(view.getEntity().uniqueId);

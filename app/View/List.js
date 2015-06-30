@@ -1,5 +1,7 @@
 import React from 'react';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+
+import NotFoundView from './NotFound';
 import Notification from '../Services/Notification';
 
 import Datagrid from '../Component/Datagrid/Datagrid';
@@ -26,7 +28,9 @@ class ListView extends React.Component {
         this.boundedOnFailure = this.onLoadFailure.bind(this);
         EntityStore.addFailureListener(this.boundedOnFailure);
 
-        this.refreshData();
+        if (this.hasEntityAndView()) {
+            this.refreshData();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -35,7 +39,9 @@ class ListView extends React.Component {
             nextProps.query.sortField !== this.props.query.sortField ||
             nextProps.query.sortDir !== this.props.query.sortDir) {
 
-            this.refreshData();
+            if (this.hasEntityAndView(nextProps.params.entity)) {
+                this.refreshData();
+            }
         }
     }
 
@@ -44,10 +50,20 @@ class ListView extends React.Component {
         EntityStore.removeFailureListener(this.boundedOnFailure);
     }
 
+    hasEntityAndView(entityName) {
+        try {
+            this.getView(entityName);
+
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
     getView(entityName) {
         entityName = entityName || this.context.router.getCurrentParams().entity;
 
-        return this.props.configuration.getEntity(entityName).views.ListView;
+        return this.props.configuration.getViewByEntityAndType(entityName, 'ListView');
     }
 
     onChange() {
@@ -78,12 +94,16 @@ class ListView extends React.Component {
     }
 
     render() {
+        const entityName = this.context.router.getCurrentParams().entity;
+        if (!this.hasEntityAndView(entityName)) {
+            return <NotFoundView/>;
+        }
+
         if (!this.state) {
             return null;
         }
 
         const configuration = this.props.configuration;
-        const entityName = this.context.router.getCurrentParams().entity;
         const view = this.getView(entityName);
         const sortDir = this.state.data.get('sortDir');
         const sortField = this.state.data.get('sortField');

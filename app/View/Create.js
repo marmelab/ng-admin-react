@@ -1,8 +1,10 @@
 import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
+import NotFoundView from './NotFound';
 
 import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
@@ -26,11 +28,13 @@ class CreateView extends React.Component {
         this.boundedOnFailure = this.onFailure.bind(this);
         EntityStore.addFailureListener(this.boundedOnFailure);
 
-        this.refreshData();
+        if (this.hasEntityAndView()) {
+            this.refreshData();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity) {
+        if (nextProps.params.entity !== this.props.params.entity && this.hasEntityAndView(nextProps.params.entity)) {
             this.refreshData();
         }
     }
@@ -39,6 +43,16 @@ class CreateView extends React.Component {
         EntityStore.removeCreateListener(this.boundedOnCreate);
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeFailureListener(this.boundedOnFailure);
+    }
+
+    hasEntityAndView(entityName) {
+        try {
+            this.getView(entityName);
+
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     getView(entityName) {
@@ -105,11 +119,15 @@ class CreateView extends React.Component {
     }
 
     render() {
+        const entityName = this.context.router.getCurrentParams().entity;
+        if (!this.hasEntityAndView(entityName)) {
+            return <NotFoundView/>;
+        }
+
         if (!this.state) {
             return null;
         }
 
-        const entityName = this.context.router.getCurrentParams().entity;
         const view = this.getView(entityName);
         const dataStore = this.state.data.get('dataStore').first();
         const entry = dataStore.getFirstEntry(view.entity.uniqueId);

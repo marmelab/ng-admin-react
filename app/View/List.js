@@ -65,7 +65,7 @@ class ListView extends React.Component {
 
         // if error from Restangular request
         var message = error.message || error.status + ' - ' + error.statusText;
-        Notification.log(`Error while fecthing data: ${message}.`, {
+        Notification.log(`Error while fetching data: ${message}.`, {
             addnCls: 'humane-flatty-error'
         });
     }

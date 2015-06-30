@@ -36,7 +36,7 @@ function configureApp(nga, fieldViewConfiguration, components, routes, restful, 
 
     restful.addFullResponseInterceptor(function (data, headers) {
         if (headers['content-range']) {
-            headers['x-total-count'] = headers['content-range'].split('/').pop();
+            headers['X-Total-Count'] = headers['content-range'].split('/').pop();
         }
 
         return {

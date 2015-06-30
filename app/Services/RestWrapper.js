@@ -37,7 +37,7 @@ class RestWrapper {
                 return {
                     data: response().data,
                     totalCount: response().data.totalCount,
-                    headers: response.headers
+                    headers: headerName => response.headers()[headerName]
                 };
             });
     }

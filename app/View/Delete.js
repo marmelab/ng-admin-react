@@ -67,9 +67,9 @@ class DeleteView extends React.Component {
 
     hasEntityAndView(entityName) {
         try {
-            this.getView(entityName);
+            const view = this.getView(entityName);
 
-            return true;
+            return view.enabled;
         } catch (e) {
             return false;
         }
@@ -91,6 +91,12 @@ class DeleteView extends React.Component {
     }
 
     onDeletionFailure(response) {
+        if (response.status && 404 === response.status) {
+            EntityActions.flagResourceNotFound(true);
+
+            return;
+        }
+
         let body = response.data;
         if ('object' === typeof message) {
             body = JSON.stringify(body);
@@ -107,6 +113,10 @@ class DeleteView extends React.Component {
 
         if (!this.state) {
             return null;
+        }
+
+        if (this.state.data.get('resourceNotFound')) {
+            return <NotFoundView/>;
         }
 
         const view = this.props.configuration.getEntity(entityName).deletionView();

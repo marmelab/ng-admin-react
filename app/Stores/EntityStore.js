@@ -28,8 +28,14 @@ class EntityStore extends EventEmitter {
             page: 1,
             sortDir: null,
             sortField: null,
-            filters: null
+            filters: null,
+            resourceNotFound: false
         });
+    }
+
+    flagResourceNotFound(found) {
+        this.data = this.data.update('resourceNotFound', () => !!found);
+        this.emitChange();
     }
 
     getEntryRequester(restful, configuration) {
@@ -359,6 +365,9 @@ AppDispatcher.register((action) => {
             break;
         case 'save_data':
             store.saveData(action.restful, action.configuration, action.view);
+            break;
+        case 'resource_not_found':
+            store.flagResourceNotFound(action.found);
             break;
     }
 });

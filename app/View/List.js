@@ -52,9 +52,9 @@ class ListView extends React.Component {
 
     hasEntityAndView(entityName) {
         try {
-            this.getView(entityName);
+            const view = this.getView(entityName);
 
-            return true;
+            return view.enabled;
         } catch (e) {
             return false;
         }

@@ -11,6 +11,11 @@ a {
     cursor: pointer;
 }
 
+pre.ascii {
+    border: none;
+    background: none;
+}
+
 .header {
     @extend .navbar;
     @extend .navbar-default;
@@ -272,7 +277,7 @@ a {
     .wysiwyg-field {
         margin-top: 10px;
     }
-  
+
     .progressbar-container {
       height: 10px;
 

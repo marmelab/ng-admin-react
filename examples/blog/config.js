@@ -247,6 +247,8 @@
         comment.views['DeleteView']
             .title('Deletion confirmation'); // customize the deletion confirmation message
 
+        comment.showView().disable();
+
         tag.views['DashboardView']
             .title('Recent tags')
             .order(3)

@@ -36,7 +36,8 @@ class RestWrapper {
             .then((response) => {
                 return {
                     data: response().data,
-                    totalCount: response.headers()['x-total-count']
+                    totalCount: response().data.totalCount,
+                    headers: response.headers
                 };
             });
     }

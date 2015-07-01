@@ -119,7 +119,7 @@ class EntityStore extends EventEmitter {
                 this.data = this.data.updateIn(['dataStore', 'object'], () => collection.dataStore);
                 this.data = this.data.update('totalItems', () => collection.totalItems);
                 this.emitChange();
-            }, this.emitResponseFailure.bind(this))
+            }, this.emitReadFailure.bind(this))
             .catch(this.throwPromiseError);
     }
 
@@ -132,7 +132,7 @@ class EntityStore extends EventEmitter {
             .then((dataStore) => {
                 this.data = this.data.updateIn(['dataStore', 'object'], () => dataStore);
                 this.emitChange();
-            }, this.emitResponseFailure.bind(this))
+            }, this.emitReadFailure.bind(this))
             .catch(this.throwPromiseError);
     }
 
@@ -158,7 +158,7 @@ class EntityStore extends EventEmitter {
                     return v;
                 });
                 this.emitChange();
-            }, this.emitResponseFailure.bind(this))
+            }, this.emitReadFailure.bind(this))
             .catch(this.throwPromiseError);
     }
 
@@ -182,7 +182,7 @@ class EntityStore extends EventEmitter {
                     return v;
                 });
                 this.emitChange();
-            })
+            }, this.emitReadFailure.bind(this))
             .catch(this.throwPromiseError);
     }
 
@@ -198,7 +198,8 @@ class EntityStore extends EventEmitter {
                 this.data = this.data.updateIn(['dataStore', 'version'], () => 0);
 
                 this.emitChange();
-            }, this.emitResponseFailure.bind(this));
+            }, this.emitReadFailure.bind(this))
+            .catch(this.throwPromiseError);
     }
 
     updateData(fieldName, value, choiceFields=[]) {
@@ -253,14 +254,14 @@ class EntityStore extends EventEmitter {
                 } else {
                     this.emitCreate();
                 }
-            }, this.emitResponseFailure.bind(this))
+            }, this.emitWriteFailure.bind(this))
             .catch(this.throwPromiseError);
     }
 
     deleteData(restful, configuration, id, view) {
         this.getEntryRequester(restful, configuration)
             .deleteEntry(view, id)
-            .then(this.emitDelete.bind(this), this.emitResponseFailure.bind(this))
+            .then(this.emitDelete.bind(this), this.emitWriteFailure.bind(this))
             .catch(this.throwPromiseError);
     }
 
@@ -272,12 +273,12 @@ class EntityStore extends EventEmitter {
         this.emit('entries_loaded');
     }
 
-    emitDelete() {
-        this.emit('entries_deleted');
+    emitReadFailure(response) {
+        this.emit('read_failure', response);
     }
 
-    emitResponseFailure(response) {
-        this.emit('action_failure', response);
+    emitDelete() {
+        this.emit('entries_deleted');
     }
 
     emitCreate() {
@@ -288,12 +289,24 @@ class EntityStore extends EventEmitter {
         this.emit('entries_updated');
     }
 
+    emitWriteFailure(response) {
+        this.emit('write_failure', response);
+    }
+
     addChangeListener(callback) {
         this.on('entries_loaded', callback);
     }
 
     removeChangeListener(callback) {
         this.removeListener('entries_loaded', callback);
+    }
+
+    addReadFailureListener(callback) {
+        this.on('read_failure', callback);
+    }
+
+    removeReadFailureListener(callback) {
+        this.removeListener('read_failure', callback);
     }
 
     addCreateListener(callback) {
@@ -320,12 +333,12 @@ class EntityStore extends EventEmitter {
         this.removeListener('entries_deleted', callback);
     }
 
-    addFailureListener(callback) {
-        this.on('action_failure', callback);
+    addWriteFailureListener(callback) {
+        this.on('write_failure', callback);
     }
 
-    removeFailureListener(callback) {
-        this.removeListener('action_failure', callback);
+    removeWriteFailureListener(callback) {
+        this.removeListener('write_failure', callback);
     }
 
     throwPromiseError(e) {

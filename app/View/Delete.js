@@ -3,7 +3,7 @@ import Inflector from 'inflected';
 import {Link} from 'react-router';
 import {shouldComponentUpdate} from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import NotFoundView from './NotFound';
@@ -15,14 +15,16 @@ import EntityStore from '../Stores/EntityStore';
 import Notification from '../Services/Notification';
 
 class DeleteView extends React.Component {
-    constructor() {
-        super();
-
-        this.viewName = 'DeleteView';
+    constructor(props, context) {
+        super(props, context);
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
+        this.onFailure = onFailure.bind(this);
+
+        this.viewName = 'DeleteView';
+        this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
     }
 
     componentDidMount() {
@@ -32,18 +34,21 @@ class DeleteView extends React.Component {
         this.boundedOnChange = this.onChange.bind(this);
         EntityStore.addChangeListener(this.boundedOnChange);
 
-        this.boundedOnFailure = this.onDeletionFailure.bind(this);
-        EntityStore.addFailureListener(this.boundedOnFailure);
+        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
+        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
 
-        if (this.hasEntityAndView()) {
+        this.boundedOnDeleteFailure = this.onDeleteFailure.bind(this);
+        EntityStore.addWriteFailureListener(this.boundedOnDeleteFailure);
+
+        if (this.isValidEntityAndView) {
             this.refreshData();
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity ||
-            nextProps.params.id !== this.props.params.id) {
-            if (this.hasEntityAndView(nextProps.params.entity)) {
+        if (nextProps.params.entity !== this.props.params.entity || nextProps.params.id !== this.props.params.id) {
+            this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
+            if (this.isValidEntityAndView) {
                 this.refreshData();
             }
         }
@@ -52,7 +57,8 @@ class DeleteView extends React.Component {
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeDeleteListener(this.boundedOnDelete);
-        EntityStore.removeFailureListener(this.boundedOnFailure);
+        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
+        EntityStore.removeWriteFailureListener(this.boundedOnDeleteFailure);
     }
 
     onChange() {
@@ -60,13 +66,13 @@ class DeleteView extends React.Component {
     }
 
     refreshData() {
-        const {id} = this.context.router.getCurrentParams();
+        const { id } = this.context.router.getCurrentParams();
 
         EntityActions.loadDeleteData(this.context.restful, this.props.configuration, this.getView(), id);
     }
 
     deleteEntry() {
-        const {id} = this.context.router.getCurrentParams();
+        const { id } = this.context.router.getCurrentParams();
 
         EntityActions.deleteData(this.context.restful, this.props.configuration, id, this.getView());
     }
@@ -80,24 +86,22 @@ class DeleteView extends React.Component {
         this.context.router.transitionTo('list', {entity: entityName});
     }
 
-    onDeletionFailure(response) {
-        if (response.status && 404 === response.status) {
+    onLoadFailure(error) {
+        if (error.status && 404 === error.status) {
             EntityActions.flagResourceNotFound();
 
             return;
         }
 
-        let body = response.data;
-        if ('object' === typeof message) {
-            body = JSON.stringify(body);
-        }
+        this.onFailure(error, 'read');
+    }
 
-        Notification.log(`Oops, an error occured : (code: ${response.status}) ${body}`, {addnCls: 'humane-flatty-error'});
+    onDeleteFailure(error) {
+        this.onFailure(error, 'write');
     }
 
     render() {
-        const entityName = this.context.router.getCurrentParams().entity;
-        if (!this.hasEntityAndView(entityName)) {
+        if (!this.isValidEntityAndView) {
             return <NotFoundView/>;
         }
 
@@ -109,7 +113,8 @@ class DeleteView extends React.Component {
             return <NotFoundView/>;
         }
 
-        const view = this.props.configuration.getEntity(entityName).deletionView();
+        const entityName = this.context.router.getCurrentParams().entity;
+        const view = this.getView(entityName);
         const dataStore = this.state.data.get('dataStore').first();
         const entry = dataStore.getFirstEntry(view.entity.uniqueId);
         const backParams = {

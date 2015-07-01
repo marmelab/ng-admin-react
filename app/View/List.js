@@ -1,10 +1,9 @@
 import React from 'react';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
 
 import NotFoundView from './NotFound';
-import Notification from '../Services/Notification';
 
 import Datagrid from '../Component/Datagrid/Datagrid';
 import MaDatagridPagination from '../Component/Datagrid/MaDatagridPagination';
@@ -20,21 +19,23 @@ class ListView extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this.viewName = 'ListView';
-
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
+        this.onFailure = onFailure.bind(this);
+
+        this.viewName = 'ListView';
+        this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
     }
 
     componentDidMount() {
         this.boundedOnChange = this.onChange.bind(this);
         EntityStore.addChangeListener(this.boundedOnChange);
 
-        this.boundedOnFailure = this.onLoadFailure.bind(this);
-        EntityStore.addFailureListener(this.boundedOnFailure);
+        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
+        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
 
-        if (this.hasEntityAndView()) {
+        if (this.isValidEntityAndView) {
             this.refreshData();
         }
     }
@@ -45,7 +46,8 @@ class ListView extends React.Component {
             nextProps.query.sortField !== this.props.query.sortField ||
             nextProps.query.sortDir !== this.props.query.sortDir) {
 
-            if (this.hasEntityAndView(nextProps.params.entity)) {
+            this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
+            if (this.isValidEntityAndView) {
                 this.refreshData();
             }
         }
@@ -53,23 +55,7 @@ class ListView extends React.Component {
 
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
-        EntityStore.removeFailureListener(this.boundedOnFailure);
-    }
-
-    hasEntityAndView(entityName) {
-        try {
-            const view = this.getView(entityName);
-
-            return view.enabled;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    getView(entityName) {
-        entityName = entityName || this.context.router.getCurrentParams().entity;
-
-        return this.props.configuration.getViewByEntityAndType(entityName, 'ListView');
+        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
     }
 
     onChange() {
@@ -83,13 +69,13 @@ class ListView extends React.Component {
     }
 
     onLoadFailure(error) {
-        console && console.error(error);
+        if (error.status && 404 === error.status) {
+            EntityActions.flagResourceNotFound();
 
-        // if error from Restangular request
-        var message = error.message || error.status + ' - ' + error.statusText;
-        Notification.log(`Error while fetching data: ${message}.`, {
-            addnCls: 'humane-flatty-error'
-        });
+            return;
+        }
+
+        this.onFailure(error, 'read');
     }
 
     buildPagination(view) {
@@ -100,8 +86,7 @@ class ListView extends React.Component {
     }
 
     render() {
-        const entityName = this.context.router.getCurrentParams().entity;
-        if (!this.hasEntityAndView(entityName)) {
+        if (!this.isValidEntityAndView) {
             return <NotFoundView/>;
         }
 
@@ -109,7 +94,12 @@ class ListView extends React.Component {
             return null;
         }
 
+        if (this.state.data.get('resourceNotFound')) {
+            return <NotFoundView/>;
+        }
+
         const configuration = this.props.configuration;
+        const entityName = this.context.router.getCurrentParams().entity;
         const view = this.getView(entityName);
         const sortDir = this.state.data.get('sortDir');
         const sortField = this.state.data.get('sortField');

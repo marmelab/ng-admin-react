@@ -2,7 +2,7 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
@@ -14,14 +14,16 @@ import EntityStore from '../Stores/EntityStore';
 import Field from '../Component/Field/Field';
 
 class EditView extends React.Component {
-    constructor() {
-        super();
-
-        this.viewName = 'EditView';
+    constructor(props, context) {
+        super(props, context);
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
+        this.onFailure = onFailure.bind(this);
+
+        this.viewName = 'EditView';
+        this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
     }
 
     componentDidMount() {
@@ -31,10 +33,13 @@ class EditView extends React.Component {
         this.boundedOnUpdate = this.onUpdate.bind(this);
         EntityStore.addUpdateListener(this.boundedOnUpdate);
 
-        this.boundedOnFailure = this.onFailure.bind(this);
-        EntityStore.addFailureListener(this.boundedOnFailure);
+        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
+        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
 
-        if (this.hasEntityAndView()) {
+        this.boundedOnEditFailure = this.onEditFailure.bind(this);
+        EntityStore.addWriteFailureListener(this.boundedOnEditFailure);
+
+        if (this.isValidEntityAndView) {
             this.refreshData();
         }
     }
@@ -45,7 +50,8 @@ class EditView extends React.Component {
             nextProps.query.sortField !== this.props.query.sortField ||
             nextProps.query.sortDir !== this.props.query.sortDir) {
 
-            if (this.hasEntityAndView(nextProps.params.entity)) {
+            this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
+            if (this.isValidEntityAndView) {
                 this.refreshData();
             }
         }
@@ -54,7 +60,8 @@ class EditView extends React.Component {
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeUpdateListener(this.boundedOnUpdate);
-        EntityStore.removeFailureListener(this.boundedOnFailure);
+        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
+        EntityStore.removeWriteFailureListener(this.boundedOnEditFailure);
     }
 
     onChange() {
@@ -62,7 +69,7 @@ class EditView extends React.Component {
     }
 
     onUpdate() {
-        Notification.log('Changes successfully saved.', {addnCls: 'humane-flatty-success'});
+        Notification.log('Changes successfully saved.', { addnCls: 'humane-flatty-success' });
     }
 
     refreshData() {
@@ -78,20 +85,19 @@ class EditView extends React.Component {
         EntityActions.updateData(name, value, choiceFields);
     }
 
-    onFailure(response) {
-        if (response.status && 404 === response.status) {
+    onLoadFailure(error) {
+        console.error(error);
+        if (error.status && 404 === error.status) {
             EntityActions.flagResourceNotFound();
 
             return;
         }
 
-        let body = response.data;
-        if ('object' === typeof message) {
-            body = JSON.stringify(body);
-        }
+        this.onFailure(error, 'read');
+    }
 
-        Notification.log(`Oops, an error occured : (code: ${response.status}) ${body}`,
-            {addnCls: 'humane-flatty-error'});
+    onEditFailure(error) {
+        this.onFailure(error, 'write');
     }
 
     save(e) {

@@ -2,7 +2,7 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
@@ -14,14 +14,16 @@ import EntityStore from '../Stores/EntityStore';
 import Field from '../Component/Field/Field';
 
 class CreateView extends React.Component {
-    constructor() {
-        super();
-
-        this.viewName = 'CreateView';
+    constructor(props, context) {
+        super(props, context);
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
+        this.onFailure = onFailure.bind(this);
+
+        this.viewName = 'CreateView';
+        this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
     }
 
     componentDidMount() {
@@ -31,24 +33,31 @@ class CreateView extends React.Component {
         this.boundedOnCreate = this.onCreate.bind(this);
         EntityStore.addCreateListener(this.boundedOnCreate);
 
-        this.boundedOnFailure = this.onFailure.bind(this);
-        EntityStore.addFailureListener(this.boundedOnFailure);
+        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
+        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
 
-        if (this.hasEntityAndView()) {
+        this.boundedOnCreateFailure = this.onCreateFailure.bind(this);
+        EntityStore.addWriteFailureListener(this.boundedOnCreateFailure);
+
+        if (this.isValidEntityAndView) {
             this.refreshData();
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity && this.hasEntityAndView(nextProps.params.entity)) {
-            this.refreshData();
+        if (nextProps.params.entity !== this.props.params.entity) {
+            this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
+            if (this.isValidEntityAndView) {
+                this.refreshData();
+            }
         }
     }
 
     componentWillUnmount() {
         EntityStore.removeCreateListener(this.boundedOnCreate);
         EntityStore.removeChangeListener(this.boundedOnChange);
-        EntityStore.removeFailureListener(this.boundedOnFailure);
+        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
+        EntityStore.removeWriteFailureListener(this.boundedOnCreateFailure);
     }
 
     onChange() {
@@ -79,14 +88,18 @@ class CreateView extends React.Component {
         this.context.router.transitionTo('edit', { entity: entityName, id: entry.identifierValue });
     }
 
-    onFailure(response) {
-        let body = response.data;
-        if ('object' === typeof message) {
-            body = JSON.stringify(body);
+    onLoadFailure(error) {
+        if (error.status && 404 === error.status) {
+            EntityActions.flagResourceNotFound();
+
+            return;
         }
 
-        Notification.log(`Oops, an error occured : (code: ${response.status}) ${body}`,
-            {addnCls: 'humane-flatty-error'});
+        this.onFailure(error, 'read');
+    }
+
+    onCreateFailure(error) {
+        this.onFailure(error, 'write');
     }
 
     buildFields(view, entry, dataStore) {
@@ -109,8 +122,7 @@ class CreateView extends React.Component {
     }
 
     render() {
-        const entityName = this.context.router.getCurrentParams().entity;
-        if (!this.hasEntityAndView(entityName)) {
+        if (!this.isValidEntityAndView) {
             return <NotFoundView/>;
         }
 
@@ -118,6 +130,11 @@ class CreateView extends React.Component {
             return null;
         }
 
+        if (this.state.data.get('resourceNotFound')) {
+            return <NotFoundView/>;
+        }
+
+        const entityName = this.context.router.getCurrentParams().entity;
         const view = this.getView(entityName);
         const dataStore = this.state.data.get('dataStore').first();
         const entry = dataStore.getFirstEntry(view.entity.uniqueId);

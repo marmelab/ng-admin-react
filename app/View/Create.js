@@ -2,7 +2,7 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
@@ -20,7 +20,8 @@ class CreateView extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
-        this.onFailure = onFailure.bind(this);
+        this.onLoadFailure = onLoadFailure.bind(this);
+        this.onSendFailure = onSendFailure.bind(this);
 
         this.viewName = 'CreateView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
@@ -33,11 +34,8 @@ class CreateView extends React.Component {
         this.boundedOnCreate = this.onCreate.bind(this);
         EntityStore.addCreateListener(this.boundedOnCreate);
 
-        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
-        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
-
-        this.boundedOnCreateFailure = this.onCreateFailure.bind(this);
-        EntityStore.addWriteFailureListener(this.boundedOnCreateFailure);
+        EntityStore.addReadFailureListener(this.onLoadFailure);
+        EntityStore.addWriteFailureListener(this.onSendFailure);
 
         if (this.isValidEntityAndView) {
             this.refreshData();
@@ -56,8 +54,8 @@ class CreateView extends React.Component {
     componentWillUnmount() {
         EntityStore.removeCreateListener(this.boundedOnCreate);
         EntityStore.removeChangeListener(this.boundedOnChange);
-        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
-        EntityStore.removeWriteFailureListener(this.boundedOnCreateFailure);
+        EntityStore.removeReadFailureListener(this.onLoadFailure);
+        EntityStore.removeWriteFailureListener(this.onSendFailure);
     }
 
     onChange() {
@@ -86,20 +84,6 @@ class CreateView extends React.Component {
         Notification.log('Element successfully created.', {addnCls: 'humane-flatty-success'});
 
         this.context.router.transitionTo('edit', { entity: entityName, id: entry.identifierValue });
-    }
-
-    onLoadFailure(error) {
-        if (error.status && 404 === error.status) {
-            EntityActions.flagResourceNotFound();
-
-            return;
-        }
-
-        this.onFailure(error, 'read');
-    }
-
-    onCreateFailure(error) {
-        this.onFailure(error, 'write');
     }
 
     buildFields(view, entry, dataStore) {

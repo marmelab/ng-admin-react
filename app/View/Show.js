@@ -2,7 +2,7 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure } from '../Mixins/MainView';
 
 import NotFoundView from './NotFound';
 
@@ -19,7 +19,7 @@ class ShowView extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
-        this.onFailure = onFailure.bind(this);
+        this.onLoadFailure = onLoadFailure.bind(this);
 
         this.viewName = 'ShowView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
@@ -28,9 +28,7 @@ class ShowView extends React.Component {
     componentDidMount() {
         this.boundedOnChange = this.onChange.bind(this);
         EntityStore.addChangeListener(this.boundedOnChange);
-
-        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
-        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
+        EntityStore.addReadFailureListener(this.onLoadFailure);
 
         if (this.isValidEntityAndView) {
             this.refreshData();
@@ -52,7 +50,7 @@ class ShowView extends React.Component {
 
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
-        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
+        EntityStore.removeReadFailureListener(this.onLoadFailure);
     }
 
     onChange() {
@@ -64,16 +62,6 @@ class ShowView extends React.Component {
         const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
         EntityActions.loadShowData(this.context.restful, this.props.configuration, this.getView(), id, sortField, sortDir);
-    }
-
-    onLoadFailure(response) {
-        if (response.status && 404 === response.status) {
-            EntityActions.flagResourceNotFound();
-
-            return;
-        }
-
-        this.onFailure(response, 'read');
     }
 
     render() {

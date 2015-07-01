@@ -2,7 +2,7 @@ import React from 'react';
 import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
@@ -20,7 +20,8 @@ class EditView extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
-        this.onFailure = onFailure.bind(this);
+        this.onLoadFailure = onLoadFailure.bind(this);
+        this.onSendFailure = onSendFailure.bind(this);
 
         this.viewName = 'EditView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
@@ -33,11 +34,8 @@ class EditView extends React.Component {
         this.boundedOnUpdate = this.onUpdate.bind(this);
         EntityStore.addUpdateListener(this.boundedOnUpdate);
 
-        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
-        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
-
-        this.boundedOnEditFailure = this.onEditFailure.bind(this);
-        EntityStore.addWriteFailureListener(this.boundedOnEditFailure);
+        EntityStore.addReadFailureListener(this.onLoadFailure);
+        EntityStore.addWriteFailureListener(this.onSendFailure);
 
         if (this.isValidEntityAndView) {
             this.refreshData();
@@ -60,8 +58,8 @@ class EditView extends React.Component {
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeUpdateListener(this.boundedOnUpdate);
-        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
-        EntityStore.removeWriteFailureListener(this.boundedOnEditFailure);
+        EntityStore.removeReadFailureListener(this.onLoadFailure);
+        EntityStore.removeWriteFailureListener(this.onSendFailure);
     }
 
     onChange() {
@@ -83,21 +81,6 @@ class EditView extends React.Component {
         const choiceFields = this.getView().getFieldsOfType('choice');
 
         EntityActions.updateData(name, value, choiceFields);
-    }
-
-    onLoadFailure(error) {
-        console.error(error);
-        if (error.status && 404 === error.status) {
-            EntityActions.flagResourceNotFound();
-
-            return;
-        }
-
-        this.onFailure(error, 'read');
-    }
-
-    onEditFailure(error) {
-        this.onFailure(error, 'write');
     }
 
     save(e) {
@@ -127,8 +110,7 @@ class EditView extends React.Component {
     }
 
     render() {
-        const entityName = this.context.router.getCurrentParams().entity;
-        if (!this.hasEntityAndView(entityName)) {
+        if (!this.isValidEntityAndView) {
             return <NotFoundView/>;
         }
 
@@ -140,6 +122,7 @@ class EditView extends React.Component {
             return <NotFoundView/>;
         }
 
+        const entityName = this.context.router.getCurrentParams().entity;
         const view = this.getView(entityName);
         const dataStore = this.state.data.get('dataStore').first();
         const entry = dataStore.getFirstEntry(view.entity.uniqueId);

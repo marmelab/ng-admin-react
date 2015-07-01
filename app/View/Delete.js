@@ -3,7 +3,7 @@ import Inflector from 'inflected';
 import {Link} from 'react-router';
 import {shouldComponentUpdate} from 'react-immutable-render-mixin';
 
-import { hasEntityAndView, getView, onFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import NotFoundView from './NotFound';
@@ -21,7 +21,8 @@ class DeleteView extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
-        this.onFailure = onFailure.bind(this);
+        this.onLoadFailure = onLoadFailure.bind(this);
+        this.onSendFailure = onSendFailure.bind(this);
 
         this.viewName = 'DeleteView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
@@ -34,11 +35,8 @@ class DeleteView extends React.Component {
         this.boundedOnChange = this.onChange.bind(this);
         EntityStore.addChangeListener(this.boundedOnChange);
 
-        this.boundedOnLoadFailure = this.onLoadFailure.bind(this);
-        EntityStore.addReadFailureListener(this.boundedOnLoadFailure);
-
-        this.boundedOnDeleteFailure = this.onDeleteFailure.bind(this);
-        EntityStore.addWriteFailureListener(this.boundedOnDeleteFailure);
+        EntityStore.addReadFailureListener(this.onLoadFailure);
+        EntityStore.addWriteFailureListener(this.onSendFailure);
 
         if (this.isValidEntityAndView) {
             this.refreshData();
@@ -57,8 +55,8 @@ class DeleteView extends React.Component {
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeDeleteListener(this.boundedOnDelete);
-        EntityStore.removeReadFailureListener(this.boundedOnLoadFailure);
-        EntityStore.removeWriteFailureListener(this.boundedOnDeleteFailure);
+        EntityStore.removeReadFailureListener(this.onLoadFailure);
+        EntityStore.removeWriteFailureListener(this.onSendFailure);
     }
 
     onChange() {
@@ -84,20 +82,6 @@ class DeleteView extends React.Component {
         Notification.log('Element successfully deleted.', { addnCls: 'humane-flatty-success' });
 
         this.context.router.transitionTo('list', {entity: entityName});
-    }
-
-    onLoadFailure(error) {
-        if (error.status && 404 === error.status) {
-            EntityActions.flagResourceNotFound();
-
-            return;
-        }
-
-        this.onFailure(error, 'read');
-    }
-
-    onDeleteFailure(error) {
-        this.onFailure(error, 'write');
     }
 
     render() {

@@ -14,7 +14,7 @@ function getEntrySources() {
     sources.push('humane-js/themes/flatty.css');
     sources.push('react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
     sources.push('medium-editor/dist/css/medium-editor.css');
-    sources.push('medium-editor/dist/css/themes/default.css');
+    sources.push('medium-editor/dist/css/themes/bootstrap.css');
     sources.push('codemirror/lib/codemirror.css');
     sources.push('codemirror/addon/lint/lint.css');
 

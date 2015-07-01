@@ -14,6 +14,7 @@ import ShowView from './View/Show';
 import CreateView from './View/Create';
 import EditView from './View/Edit';
 import DeleteView from './View/Delete';
+import NotFoundView from './View/NotFound';
 
 import ViewActions from './Component/ViewActions';
 import FieldViewConfiguration from './Field/FieldViewConfiguration';
@@ -29,6 +30,8 @@ let routes = (
         <Router.Route name="edit" path="/:entity/edit/:id" handler={EditView}/>
         <Router.Route name="delete" path="/:entity/delete/:id" handler={DeleteView}/>
         <Router.Route name="show" path="/:entity/show/:id" handler={ShowView}/>
+
+        <Router.NotFoundRoute handler={NotFoundView}/>
     </Router.Route>
 );
 

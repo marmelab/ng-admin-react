@@ -93,5 +93,11 @@ export default {
             id,
             view
         });
+    },
+
+    flagResourceNotFound() {
+        AppDispatcher.dispatch({
+            actionType: 'resource_not_found'
+        });
     }
 };

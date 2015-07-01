@@ -1,6 +1,9 @@
 import React from 'react';
 import { shouldComponentUpdate } from 'react-immutable-render-mixin';
-import Notification from '../Services/Notification';
+
+import { hasEntityAndView, getView, onLoadFailure } from '../Mixins/MainView';
+
+import NotFoundView from './NotFound';
 
 import Datagrid from '../Component/Datagrid/Datagrid';
 import MaDatagridPagination from '../Component/Datagrid/MaDatagridPagination';
@@ -17,16 +20,22 @@ class ListView extends React.Component {
         super(props, context);
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+        this.hasEntityAndView = hasEntityAndView.bind(this);
+        this.getView = getView.bind(this);
+        this.onLoadFailure = onLoadFailure.bind(this);
+
+        this.viewName = 'ListView';
+        this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
     }
 
     componentDidMount() {
         this.boundedOnChange = this.onChange.bind(this);
         EntityStore.addChangeListener(this.boundedOnChange);
+        EntityStore.addReadFailureListener(this.onLoadFailure);
 
-        this.boundedOnFailure = this.onLoadFailure.bind(this);
-        EntityStore.addFailureListener(this.boundedOnFailure);
-
-        this.refreshData();
+        if (this.isValidEntityAndView) {
+            this.refreshData();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -35,19 +44,16 @@ class ListView extends React.Component {
             nextProps.query.sortField !== this.props.query.sortField ||
             nextProps.query.sortDir !== this.props.query.sortDir) {
 
-            this.refreshData();
+            this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
+            if (this.isValidEntityAndView) {
+                this.refreshData();
+            }
         }
     }
 
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
-        EntityStore.removeFailureListener(this.boundedOnFailure);
-    }
-
-    getView(entityName) {
-        entityName = entityName || this.context.router.getCurrentParams().entity;
-
-        return this.props.configuration.getEntity(entityName).views.ListView;
+        EntityStore.removeReadFailureListener(this.onLoadFailure);
     }
 
     onChange() {
@@ -60,16 +66,6 @@ class ListView extends React.Component {
         EntityActions.loadListData(this.context.restful, this.props.configuration, this.getView(), page, sortField, sortDir, search);
     }
 
-    onLoadFailure(error) {
-        console && console.error(error);
-
-        // if error from Restangular request
-        var message = error.message || error.status + ' - ' + error.statusText;
-        Notification.log(`Error while fetching data: ${message}.`, {
-            addnCls: 'humane-flatty-error'
-        });
-    }
-
     buildPagination(view) {
         const totalItems = this.state.data.get('totalItems');
         const page = this.state.data.get('page');
@@ -78,8 +74,16 @@ class ListView extends React.Component {
     }
 
     render() {
+        if (!this.isValidEntityAndView) {
+            return <NotFoundView/>;
+        }
+
         if (!this.state) {
             return null;
+        }
+
+        if (this.state.data.get('resourceNotFound')) {
+            return <NotFoundView/>;
         }
 
         const configuration = this.props.configuration;

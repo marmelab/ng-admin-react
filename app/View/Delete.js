@@ -3,17 +3,29 @@ import Inflector from 'inflected';
 import {Link} from 'react-router';
 import {shouldComponentUpdate} from 'react-immutable-render-mixin';
 
-import ViewActions from '../Component/ViewActions';
+import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
+
 import Compile from '../Component/Compile';
+import NotFoundView from './NotFound';
+
+import ViewActions from '../Component/ViewActions';
 import EntityActions from '../Actions/EntityActions';
+
 import EntityStore from '../Stores/EntityStore';
 import Notification from '../Services/Notification';
 
 class DeleteView extends React.Component {
-    constructor() {
-        super();
+    constructor(props, context) {
+        super(props, context);
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+        this.hasEntityAndView = hasEntityAndView.bind(this);
+        this.getView = getView.bind(this);
+        this.onLoadFailure = onLoadFailure.bind(this);
+        this.onSendFailure = onSendFailure.bind(this);
+
+        this.viewName = 'DeleteView';
+        this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
     }
 
     componentDidMount() {
@@ -23,23 +35,28 @@ class DeleteView extends React.Component {
         this.boundedOnChange = this.onChange.bind(this);
         EntityStore.addChangeListener(this.boundedOnChange);
 
-        this.boundedOnFailure = this.onDeletionFailure.bind(this);
-        EntityStore.addFailureListener(this.boundedOnFailure);
+        EntityStore.addReadFailureListener(this.onLoadFailure);
+        EntityStore.addWriteFailureListener(this.onSendFailure);
 
-        this.refreshData();
+        if (this.isValidEntityAndView) {
+            this.refreshData();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.entity !== this.props.params.entity ||
-            nextProps.params.id !== this.props.params.id) {
-            this.refreshData();
+        if (nextProps.params.entity !== this.props.params.entity || nextProps.params.id !== this.props.params.id) {
+            this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
+            if (this.isValidEntityAndView) {
+                this.refreshData();
+            }
         }
     }
 
     componentWillUnmount() {
         EntityStore.removeChangeListener(this.boundedOnChange);
         EntityStore.removeDeleteListener(this.boundedOnDelete);
-        EntityStore.removeFailureListener(this.boundedOnFailure);
+        EntityStore.removeReadFailureListener(this.onLoadFailure);
+        EntityStore.removeWriteFailureListener(this.onSendFailure);
     }
 
     onChange() {
@@ -47,21 +64,15 @@ class DeleteView extends React.Component {
     }
 
     refreshData() {
-        const {id} = this.context.router.getCurrentParams();
+        const { id } = this.context.router.getCurrentParams();
 
         EntityActions.loadDeleteData(this.context.restful, this.props.configuration, this.getView(), id);
     }
 
     deleteEntry() {
-        const {id} = this.context.router.getCurrentParams();
+        const { id } = this.context.router.getCurrentParams();
 
         EntityActions.deleteData(this.context.restful, this.props.configuration, id, this.getView());
-    }
-
-    getView(entityName) {
-        entityName = entityName || this.context.router.getCurrentParams().entity;
-
-        return this.props.configuration.getEntity(entityName).deletionView();
     }
 
     onDelete() {
@@ -73,29 +84,27 @@ class DeleteView extends React.Component {
         this.context.router.transitionTo('list', {entity: entityName});
     }
 
-    onDeletionFailure(response) {
-        let body = response.data;
-        if ('object' === typeof message) {
-            body = JSON.stringify(body);
+    render() {
+        if (!this.isValidEntityAndView) {
+            return <NotFoundView/>;
         }
 
-        Notification.log(`Oops, an error occured : (code: ${response.status}) ${body}`, {addnCls: 'humane-flatty-error'});
-    }
-
-    render() {
         if (!this.state) {
             return null;
         }
 
-        const params = this.context.router.getCurrentParams(),
-            entityName = params.entity,
-            view = this.props.configuration.getEntity(entityName).deletionView(),
-            dataStore = this.state.data.get('dataStore').first(),
-            entry = dataStore.getFirstEntry(view.entity.uniqueId),
-            backParams = {
-                entity: entityName,
-                id: params.id
-            };
+        if (this.state.data.get('resourceNotFound')) {
+            return <NotFoundView/>;
+        }
+
+        const entityName = this.context.router.getCurrentParams().entity;
+        const view = this.getView(entityName);
+        const dataStore = this.state.data.get('dataStore').first();
+        const entry = dataStore.getFirstEntry(view.entity.uniqueId);
+        const backParams = {
+            entity: entityName,
+            id: this.context.router.getCurrentParams().id
+        };
 
         if (!entry) {
             return null;

@@ -16,24 +16,32 @@ const Components = {
 
 class Compile extends React.Component {
     evalInContext(template, context) {
-        /*jshint evil:true*/
-        var variables = [];
-        for (let i in context) {
-            if (context.hasOwnProperty(i)) {
-                variables.push(`var ${i} = this.${i}`);
+        let variables = [];
+
+        if ('string' === typeof template) {
+            let args = [];
+            for (let i in context) {
+                if (this.hasOwnProperty(i)) {
+                    args.push(i);
+                    variables.push(this[i]);
+                }
             }
+            // code string to eval
+            args.push(`return ${jsx.fromString(template, context)};`);
+
+            // code will be executed in an isolated scope
+            template = Function.apply(null, args);
         }
 
         if ('function' === typeof template) {
-            this.React = React;
-            template = template.apply(this, []);
+            return template.apply(this, variables);
         }
 
-        if ('string' === typeof template) {
-            return eval(`${variables.join(';')}; ${jsx.fromString(template, context)}`);
+        if (console) {
+            console.error(`Unable to compile template of type ${typeof template}`);
         }
 
-        return template;
+        return '';
     }
 
     render() {

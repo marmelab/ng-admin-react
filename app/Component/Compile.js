@@ -26,10 +26,11 @@ class Compile extends React.Component {
                     variables.push(this[i]);
                 }
             }
-            const codeStringToEval = `return ${jsx.fromString(template, context)}`;
+            // code string to eval
+            args.push(`return ${jsx.fromString(template, context)};`);
 
             // code will be executed in an isolated scope
-            template = new Function(args.join(', '), codeStringToEval);
+            template = Function.apply(null, args);
         }
 
         if ('function' === typeof template) {

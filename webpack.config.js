@@ -46,7 +46,8 @@ function getPlugins() {
         plugins.push(new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
-            }
+            },
+            mangle: false
         }));
     }
 
@@ -79,10 +80,9 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /react-router\/.*\.js$/, loader: 'babel'},
             { test: /\.js$/, loaders: ['react-hot', 'babel?stage=1&optional[]=runtime'], exclude: /node_modules/ },
-            { test: /\.css$/, loader: ExtractTextPlugin.extract('css') },
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
+            { test: /\.css$/, loader: ExtractTextPlugin.extract('css?sourceMap') },
+            { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass?sourceMap') },
             { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: 'url' }
         ]
     },

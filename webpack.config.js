@@ -81,8 +81,8 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.js$/, loaders: ['react-hot', 'babel?stage=1&optional[]=runtime'], exclude: /node_modules/ },
-            { test: /\.css$/, loader: ExtractTextPlugin.extract('css?sourceMap') },
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass?sourceMap') },
+            { test: /\.css$/, loader: ExtractTextPlugin.extract('css') },
+            { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
             { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf|\.eot$/, loader: 'url' }
         ]
     },

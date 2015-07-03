@@ -1,14 +1,23 @@
 import React from 'react';
 
 class CheckboxField extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { value: !!this.props.value };
+    }
+
     onChange(e) {
-        this.props.updateField(this.props.name, e.target.checked ? 1 : 0);
+        const value = e.target.checked;
+        this.setState({ value });
+
+        this.props.updateField(this.props.name, value ? 1 : 0);
     }
 
     render() {
         const attributes = {
             type: 'checkbox',
-            checked: !!this.props.value,
+            checked: this.state.value,
             name: this.props.name,
             id: this.props.name,
             onChange: this.onChange.bind(this)

@@ -1,7 +1,8 @@
 import React from 'react';
 import Inflector from 'inflected';
 import {Link} from 'react-router';
-import {shouldComponentUpdate} from 'react-immutable-render-mixin';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
+import { List } from 'immutable';
 
 import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
 
@@ -66,13 +67,13 @@ class DeleteView extends React.Component {
     refreshData() {
         const { id } = this.context.router.getCurrentParams();
 
-        EntityActions.loadDeleteData(this.context.restful, this.props.configuration, this.getView(), id);
+        EntityActions.loadDeleteData(this.context.restful, this.context.configuration, this.getView(), id);
     }
 
     deleteEntry() {
         const { id } = this.context.router.getCurrentParams();
 
-        EntityActions.deleteData(this.context.restful, this.props.configuration, id, this.getView());
+        EntityActions.deleteData(this.context.restful, this.context.configuration, id, this.getView());
     }
 
     onDelete() {
@@ -89,7 +90,7 @@ class DeleteView extends React.Component {
             return <NotFoundView/>;
         }
 
-        if (!this.state) {
+        if (!this.state.hasOwnProperty('data')) {
             return null;
         }
 
@@ -114,7 +115,7 @@ class DeleteView extends React.Component {
             <div>
                 <div className="row">
                     <div className="col-lg-12">
-                        <ViewActions entityName={view.entity.name()} buttons={['back']} />
+                        <ViewActions entityName={view.entity.name()} buttons={List(['back'])} />
 
                         <div className="page-header">
                             <h1><Compile entry={entry}>{view.title() || 'Delete one ' + Inflector.singularize(entityName)}</Compile></h1>
@@ -137,9 +138,7 @@ class DeleteView extends React.Component {
 
 DeleteView.contextTypes = {
     router: React.PropTypes.func.isRequired,
-    restful: React.PropTypes.func.isRequired
-};
-DeleteView.propTypes = {
+    restful: React.PropTypes.func.isRequired,
     configuration: React.PropTypes.object.isRequired
 };
 

@@ -6,9 +6,8 @@ class ReferencedListFieldView {
         return (
             <ReferencedList
                 entries={this.props.dataStore.getEntries(this.props.field.targetEntity().uniqueId + '_list') || []}
-                entityName={this.props.entity.name()}
-                field={this.props.field}
-                configuration={this.props.configuration} />
+                entityName={this.props.field.targetEntity().name()}
+                field={this.props.field} />
             );
     }
 
@@ -24,11 +23,16 @@ class ReferencedListFieldView {
         return (
             <ReferencedList
                 entries={this.props.dataStore.getEntries(this.props.field.targetEntity().uniqueId + '_list') || []}
-                entityName={this.props.entity.name()}
-                field={this.props.field}
-                configuration={this.props.configuration} />
+                entityName={this.props.field.targetEntity().name()}
+                field={this.props.field} />
             );
     }
 }
+
+ReferencedListFieldView.propTypes = {
+    entity: React.PropTypes.object.isRequired,
+    field: React.PropTypes.object.isRequired,
+    entries: React.PropTypes.array.isRequired
+};
 
 export default ReferencedListFieldView;

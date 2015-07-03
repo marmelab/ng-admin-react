@@ -2,20 +2,21 @@ import React from 'react';
 import classNames from 'classnames';
 
 class ButtonField extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
-        this.value = !!props.value;
+        this.state = { value: !!props.value };
     }
 
     isActive() {
-        return !!this.value;
+        return this.state.value;
     }
 
     toggle() {
-        this.value = !this.value;
+        const value = !this.state.value;
+        this.setState({ value });
 
-        this.props.updateField(this.props.name, this.value ? 1 : 0);
+        this.props.updateField(this.props.name, value ? 1 : 0);
     }
 
     render() {

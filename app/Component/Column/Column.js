@@ -7,7 +7,7 @@ class Column extends React.Component {
     getDetailAction (entry) {
         return function() {
             const entityName = this.props.entity.name();
-            const entity = this.props.configuration.getEntity(entityName);
+            const entity = this.context.configuration.getEntity(entityName);
             const route = entity.editionView().enabled ? 'edit' : 'show';
 
             this.context.router.transitionTo(route, {entity: entityName, id: entry.identifierValue});
@@ -24,7 +24,7 @@ class Column extends React.Component {
         }
 
         const referenceEntity = field.targetEntity().name();
-        const relatedEntity = this.props.configuration.getEntity(referenceEntity);
+        const relatedEntity = this.context.configuration.getEntity(referenceEntity);
 
         if (!relatedEntity) { return false; }
 
@@ -46,7 +46,7 @@ class Column extends React.Component {
         }
 
         return (
-            <Compile detailAction={detailAction} field={field} configuration={this.props.configuration}
+            <Compile detailAction={detailAction} field={field} configuration={this.context.configuration}
                 dataStore={this.props.dataStore} entity={entity} entry={entry} value={value}>
                 {column}
             </Compile>
@@ -58,12 +58,12 @@ Column.propTypes = {
     field: React.PropTypes.object.isRequired,
     entry: React.PropTypes.object.isRequired,
     entity: React.PropTypes.object.isRequired,
-    configuration: React.PropTypes.object.isRequired,
     dataStore: React.PropTypes.object
 };
 
 Column.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    configuration: React.PropTypes.object.isRequired
 };
 
 export default Column;

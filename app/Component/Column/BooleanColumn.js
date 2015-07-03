@@ -11,7 +11,7 @@ class BooleanColumn extends React.Component {
 }
 
 BooleanColumn.propTypes = {
-    value: React.PropTypes.any.isRequired
+    value: React.PropTypes.any
 };
 
 require('../../autoloader')('BooleanColumn', BooleanColumn);

@@ -1,11 +1,18 @@
 import React from 'react';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 import Compile from './Compile';
 
 import { FilterButton, MaBackButton, MaCreateButton, MaShowButton, MaEditButton, MaDeleteButton, MaListButton } from './Button';
 
 class ViewActions extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
+    }
+
     render() {
-        const { size, entityName, buttons, entry, view } = this.props;
+        const { size, entityName, buttons, entry, view, filters, showFilter } = this.props;
         let results;
         let i = 0;
 
@@ -17,7 +24,7 @@ class ViewActions extends React.Component {
         results = buttons.map(button => {
             switch (button) {
                 case 'filters':
-                    return <FilterButton key={i++} entityName={entityName} filters={view.filters()} />;
+                    return <FilterButton key={i++} entityName={entityName} filters={filters} showFilter={showFilter} />;
                 case 'create':
                     return <MaCreateButton key={i++} entityName={entityName} size={size} />;
                 case 'show':
@@ -55,9 +62,11 @@ class ViewActions extends React.Component {
 ViewActions.propTypes = {
     entityName: React.PropTypes.string,
     entry: React.PropTypes.object,
-    buttons: React.PropTypes.array.isRequired,
+    buttons: React.PropTypes.object.isRequired,
     size: React.PropTypes.string,
-    view: React.PropTypes.object
+    view: React.PropTypes.object,
+    filters: React.PropTypes.object,
+    showFilter: React.PropTypes.func
 };
 
 ViewActions.defaultProps = { view: null };

@@ -1,16 +1,23 @@
 import AppDispatcher from '../Services/AppDispatcher';
 
 export default {
-    displayFilter(filter) {
+    initFilters(filters) {
         AppDispatcher.dispatch({
-            actionType: 'display_filter',
+            actionType: 'init_filters',
+            filters
+        });
+    },
+
+    showFilter(filter) {
+        AppDispatcher.dispatch({
+            actionType: 'show_filter',
             filter
         });
     },
 
-    removeFilter(filter) {
+    hideFilter(filter) {
         AppDispatcher.dispatch({
-            actionType: 'remove_filter',
+            actionType: 'hide_filter',
             filter
         });
     }

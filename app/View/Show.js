@@ -1,6 +1,7 @@
 import React from 'react';
 import Inflector from 'inflected';
-import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
+import { List } from 'immutable';
 
 import { hasEntityAndView, getView, onLoadFailure } from '../Mixins/MainView';
 
@@ -15,6 +16,8 @@ import Compile from '../Component/Compile';
 class ShowView extends React.Component {
     constructor(props, context) {
         super(props, context);
+
+        this.state = {}; // needed for ReactComponentWithPureRenderMixin::shouldComponentUpdate()
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
@@ -61,7 +64,7 @@ class ShowView extends React.Component {
         const {id} = this.context.router.getCurrentParams();
         const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadShowData(this.context.restful, this.props.configuration, this.getView(), id, sortField, sortDir);
+        EntityActions.loadShowData(this.context.restful, this.context.configuration, this.getView(), id, sortField, sortDir);
     }
 
     render() {
@@ -69,7 +72,7 @@ class ShowView extends React.Component {
             return <NotFoundView/>;
         }
 
-        if (!this.state) {
+        if (!this.state.hasOwnProperty('data')) {
             return null;
         }
 
@@ -81,7 +84,7 @@ class ShowView extends React.Component {
         const view = this.getView(entityName);
         const dataStore = this.state.data.getIn(['dataStore', 'object']);
         const entry = dataStore.getFirstEntry(view.getEntity().uniqueId);
-        const actions = view.actions() || ['list', 'edit', 'delete'];
+        const actions = List(view.actions() || ['list', 'edit', 'delete']);
 
         if (!entry) {
             return null;
@@ -102,8 +105,7 @@ class ShowView extends React.Component {
                             <label className="col-sm-2 control-label">{ field.label() }</label>
 
                             <div className={'show-value react-admin-field-' + field.name() + ' ' + (field.getCssClasses(entry) || 'col-sm-10 col-md-8 col-lg-7')}>
-                                <Column field={field} entity={view.getEntity()} entry={entry} dataStore={dataStore}
-                                        configuration={this.props.configuration} />
+                                <Column field={field} entity={view.getEntity()} entry={entry} dataStore={dataStore} />
                             </div>
                         </div>
                     ))}
@@ -115,9 +117,7 @@ class ShowView extends React.Component {
 
 ShowView.contextTypes = {
     router: React.PropTypes.func.isRequired,
-    restful: React.PropTypes.func.isRequired
-};
-ShowView.propTypes = {
+    restful: React.PropTypes.func.isRequired,
     configuration: React.PropTypes.object.isRequired
 };
 

@@ -1,6 +1,8 @@
 import React from 'react';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 import Inflector from 'inflected';
-import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+import debounce from 'lodash/function/debounce';
+import { List } from 'immutable';
 
 import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
 
@@ -17,11 +19,14 @@ class EditView extends React.Component {
     constructor(props, context) {
         super(props, context);
 
+        this.state = {}; // needed for ReactComponentWithPureRenderMixin::shouldComponentUpdate()
+
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
         this.onLoadFailure = onLoadFailure.bind(this);
         this.onSendFailure = onSendFailure.bind(this);
+        this.updateField = debounce(this.updateField.bind(this), 300);
 
         this.viewName = 'EditView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
@@ -38,7 +43,7 @@ class EditView extends React.Component {
         EntityStore.addWriteFailureListener(this.onSendFailure);
 
         if (this.isValidEntityAndView) {
-            this.refreshData();
+            this.init();
         }
     }
 
@@ -50,7 +55,7 @@ class EditView extends React.Component {
 
             this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
             if (this.isValidEntityAndView) {
-                this.refreshData();
+                this.init();
             }
         }
     }
@@ -60,6 +65,11 @@ class EditView extends React.Component {
         EntityStore.removeUpdateListener(this.boundedOnUpdate);
         EntityStore.removeReadFailureListener(this.onLoadFailure);
         EntityStore.removeWriteFailureListener(this.onSendFailure);
+    }
+
+    init() {
+        this.actions = List(this.getView().actions() || ['list', 'delete']);
+        this.refreshData();
     }
 
     onChange() {
@@ -74,7 +84,7 @@ class EditView extends React.Component {
         const {id} = this.context.router.getCurrentParams();
         const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadEditData(this.context.restful, this.props.configuration, this.getView(), id, sortField, sortDir);
+        EntityActions.loadEditData(this.context.restful, this.context.configuration, this.getView(), id, sortField, sortDir);
     }
 
     updateField(name, value) {
@@ -86,7 +96,7 @@ class EditView extends React.Component {
     save(e) {
         e.preventDefault();
 
-        EntityActions.saveData(this.context.restful, this.props.configuration, this.getView());
+        EntityActions.saveData(this.context.restful, this.context.configuration, this.getView());
     }
 
     buildFields(view, entry, dataStore) {
@@ -100,8 +110,7 @@ class EditView extends React.Component {
                 <div className="form-field form-group" key={field.order()}>
                     <Field field={field} value={value} values={values}
                            entity={view.getEntity()} entry={entry}
-                           configuration={this.props.configuration}
-                           dataStore={dataStore} updateField={this.updateField.bind(this)} />
+                           dataStore={dataStore} updateField={this.updateField} />
                 </div>
             );
         }
@@ -114,7 +123,7 @@ class EditView extends React.Component {
             return <NotFoundView/>;
         }
 
-        if (!this.state) {
+        if (!this.state.hasOwnProperty('data')) {
             return null;
         }
 
@@ -126,7 +135,6 @@ class EditView extends React.Component {
         const view = this.getView(entityName);
         const dataStore = this.state.data.get('dataStore').first();
         const entry = dataStore.getFirstEntry(view.entity.uniqueId);
-        const actions = view.actions() || ['list', 'delete'];
 
         if (!entry) {
             return null;
@@ -134,7 +142,7 @@ class EditView extends React.Component {
 
         return (
             <div className="view edit-view">
-                <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
+                <ViewActions entityName={view.entity.name()} entry={entry} buttons={this.actions} />
 
                 <div className="page-header">
                     <h1><Compile entry={entry}>{view.title() || 'Edit one ' + Inflector.singularize(entityName)}</Compile></h1>
@@ -160,9 +168,7 @@ class EditView extends React.Component {
 
 EditView.contextTypes = {
     router: React.PropTypes.func.isRequired,
-    restful: React.PropTypes.func.isRequired
-};
-EditView.propTypes = {
+    restful: React.PropTypes.func.isRequired,
     configuration: React.PropTypes.object.isRequired
 };
 

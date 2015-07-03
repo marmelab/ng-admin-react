@@ -1,44 +1,42 @@
 import React from 'react';
-import {Link} from 'react-router';
 
 class ColumnHeader extends React.Component {
-    render() {
-        const params = this.context.router.getCurrentParams();
-        const routes = this.context.router.getCurrentRoutes();
-        const currentQuery = this.context.router.getCurrentQuery();
-        const route = routes[routes.length - 1];
-        let {sort, fieldName, name, label} = this.props;
+    onSort(sortDir) {
+        const { name, fieldName } = this.props;
 
-        const query = {
-            sortField: `${name}.${fieldName}`,
-            sortDir: 'ASC' === sort ? 'DESC' : 'ASC'
+        return () => {
+            this.props.onSort(`${name}.${fieldName}`, sortDir);
         };
+    }
 
-        if (currentQuery.page) {
-            query.page = currentQuery.page;
-        }
+    render() {
+        const { sort, fieldName, label, onSort } = this.props;
+        let element = <span>{label}</span>;
 
-        if (sort) {
-            sort = <span className={`sorted sorted-${sort.toLowerCase()}`}></span>;
+        if (onSort) {
+            let sortIcon = null;
+            if (sort) {
+                sortIcon = <span className={`sorted sorted-${sort.toLowerCase()}`}></span>;
+            }
+            const sortDir = 'ASC' === sort ? 'DESC' : 'ASC';
+
+            element = <a onClick={this.onSort(sortDir)}>{sortIcon}{label}</a>;
         }
 
         return (
             <th className={`react-admin-column-${fieldName}`} key={fieldName}>
-                <Link to={route.name} params={params} query={query}>
-                    {sort}
-                    {label}
-                </Link>
+                {element}
             </th>
         );
     }
 }
 
 ColumnHeader.propTypes = {
-    configuration: React.PropTypes.object,
     fieldName: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired,
     sort: React.PropTypes.string,
-    name: React.PropTypes.string
+    name: React.PropTypes.string,
+    onSort: React.PropTypes.func
 };
 
 ColumnHeader.contextTypes = {

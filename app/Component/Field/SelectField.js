@@ -2,10 +2,24 @@ import React from 'react';
 import Select from 'react-select';
 
 class SelectField extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { value: props.value };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.value !== this.props.value) {
+            this.setState({ value: nextProps.value });
+        }
+    }
+
     onChange(value) {
         if (!!this.props.multiple) {
             value = value.split(',');
         }
+
+        this.setState({ value });
 
         this.props.updateField(this.props.name, value);
     }
@@ -19,8 +33,8 @@ class SelectField extends React.Component {
             onChange: this.onChange.bind(this)
         };
 
-        if (this.props.value && (!attributes.multi || this.props.value.length)) {
-            attributes.value = `${this.props.value}`;
+        if (this.state.value && (!attributes.multi || this.state.value.length)) {
+            attributes.value = `${this.state.value}`;
         }
 
         return (

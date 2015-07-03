@@ -16,7 +16,7 @@ class ReferencedList extends React.Component {
                 entries={entries}
                 sortDir={sortDir}
                 sortField={sortField}
-                configuration={this.props.configuration}
+                configuration={this.context.configuration}
                 />
         );
     }
@@ -25,12 +25,12 @@ class ReferencedList extends React.Component {
 ReferencedList.propTypes = {
     entityName: React.PropTypes.string.isRequired,
     entries: React.PropTypes.array.isRequired,
-    field: React.PropTypes.object.isRequired,
-    configuration: React.PropTypes.object.isRequired
+    field: React.PropTypes.object.isRequired
 };
 
 ReferencedList.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    configuration: React.PropTypes.object.isRequired
 };
 
 require('../../autoloader')('ReferencedList', ReferencedList);

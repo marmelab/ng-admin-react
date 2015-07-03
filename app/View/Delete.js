@@ -19,6 +19,8 @@ class DeleteView extends React.Component {
     constructor(props, context) {
         super(props, context);
 
+        this.state = {}; // needed for ReactComponentWithPureRenderMixin::shouldComponentUpdate()
+
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);

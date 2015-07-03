@@ -127,6 +127,10 @@ class ListView extends React.Component {
             query.search = {};
         }
 
+        if (query.page) {
+            delete query.page;
+        }
+
         if ('string' === typeof value && !value.length) {
             value = null;
         }

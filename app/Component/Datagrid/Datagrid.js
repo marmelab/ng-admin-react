@@ -1,4 +1,5 @@
 import React from 'react';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 
 import Header from '../../Component/Datagrid/ColumnHeader';
 import DatagridActions from '../../Component/Datagrid/DatagridActions';
@@ -6,8 +7,10 @@ import DatagridActions from '../../Component/Datagrid/DatagridActions';
 import Column from '../Column/Column';
 
 class Datagrid extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
     getDetailAction(entry) {

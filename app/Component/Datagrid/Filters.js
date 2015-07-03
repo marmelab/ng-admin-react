@@ -12,7 +12,7 @@ class Filters extends React.Component {
     }
 
     buildRows(filters) {
-        const { view, dataStore, updateField, hideFilter } = this.props;
+        const { entity, dataStore, updateField, hideFilter } = this.props;
         const configuration = this.context.configuration;
         const { search } = this.context.router.getCurrentQuery() || {};
 
@@ -44,7 +44,7 @@ class Filters extends React.Component {
 
                         <div className={className}>
                             <Compile field={filter} updateField={updateField} dataStore={dataStore}
-                                entity={view.getEntity()} value={value} values={values} fieldName={fieldName} entry={null}
+                                entity={entity} value={value} values={values} fieldName={fieldName} entry={null}
                                 configuration={configuration} autoFocus={autoFocus}>
                             {fieldTemplate}
                             </Compile>
@@ -67,11 +67,11 @@ class Filters extends React.Component {
 }
 
 Filters.propTypes = {
-    filters: React.PropTypes.object,
-    view: React.PropTypes.object,
-    dataStore: React.PropTypes.object,
-    updateField: React.PropTypes.func,
-    hideFilter: React.PropTypes.func
+    filters: React.PropTypes.object.isRequired,
+    updateField: React.PropTypes.func.isRequired,
+    hideFilter: React.PropTypes.func.isRequired,
+    entity: React.PropTypes.object,
+    dataStore: React.PropTypes.object
 };
 
 Filters.contextTypes = {

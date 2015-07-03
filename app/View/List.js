@@ -215,10 +215,8 @@ class ListView extends React.Component {
             filter = (
                 <Filters
                     filters={filters.get('selected')}
-                    view={view}
+                    entity={view.entity}
                     dataStore={dataStore}
-                    sortDir={sortDir}
-                    sortField={sortField}
                     hideFilter={this.boundedHideFilter}
                     updateField={this.boundedUpdateFilterField} />
                 );

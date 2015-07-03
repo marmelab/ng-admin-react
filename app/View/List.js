@@ -30,6 +30,14 @@ class ListView extends React.Component {
         this.getView = getView.bind(this);
         this.onLoadFailure = onLoadFailure.bind(this);
 
+        this.boundedUpdateFilterField = this.updateFilterField.bind(this);
+        this.boundedShowFilter = this.showFilter.bind(this);
+        this.boundedHideFilter = this.hideFilter.bind(this);
+        this.boundedOnListSort = this.onListSort.bind(this);
+        this.boundedOnPageChange = this.onPageChange.bind(this);
+
+        this.refreshList = debounce(this.refreshList.bind(this), 300);
+
         this.viewName = 'ListView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
     }
@@ -41,12 +49,6 @@ class ListView extends React.Component {
 
         this.boundedOnChangeFilters = this.onChangeFilters.bind(this);
         ApplicationStore.addFilterListener(this.boundedOnChangeFilters);
-        this.boundedUpdateFilterField = this.updateFilterField.bind(this);
-        this.boundedShowFilter = this.showFilter.bind(this);
-        this.boundedHideFilter = this.hideFilter.bind(this);
-        this.boundedOnListSort = this.onListSort.bind(this);
-
-        this.refreshList = debounce(this.refreshList.bind(this), 300);
 
         if (this.isValidEntityAndView) {
             this.init();
@@ -155,9 +157,15 @@ class ListView extends React.Component {
 
     onListSort(field, dir) {
         let query = this.context.router.getCurrentQuery() || {};
-
         query.sortField = field;
         query.sortDir = dir;
+
+        this.refreshList(query);
+    }
+
+    onPageChange(page) {
+        let query = this.context.router.getCurrentQuery() || {};
+        query.page = page;
 
         this.refreshList(query);
     }
@@ -177,9 +185,9 @@ class ListView extends React.Component {
 
     buildPagination(view) {
         const totalItems = this.state.entity.get('totalItems');
-        const page = this.state.entity.get('page');
+        const page = +this.state.entity.get('page');
 
-        return <MaDatagridPagination totalItems={totalItems} entity={view.entity.name()} page={page} perPage={view.perPage()} />;
+        return <MaDatagridPagination totalItems={totalItems} page={page} perPage={view.perPage()} onChange={this.boundedOnPageChange} />;
     }
 
     render() {

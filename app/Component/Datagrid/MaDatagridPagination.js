@@ -1,36 +1,19 @@
 import React from 'react';
-import {Link} from 'react-router';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 
 class MaDatagridPagination extends React.Component {
-    componentDidMount() {
-        this.computePagination(this.props);
+    constructor(props, context) {
+        super(props, context);
+
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.computePagination(nextProps);
+    onChange(page) {
+        return () => { this.props.onChange(page); };
     }
 
-    computePagination(props) {
-        const totalItems = props.totalItems;
-        const page = props.page || 1;
-        const perPage = props.perPage || 1;
-        const nbPages = Math.ceil(totalItems / perPage) || 1;
-        const offsetEnd = Math.min(page * perPage, totalItems);
-        const offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
-        const displayPagination = perPage < totalItems;
-
-        this.setState({
-            offsetBegin: offsetBegin,
-            offsetEnd: offsetEnd,
-            nbPages: nbPages,
-            displayPagination: displayPagination,
-            page: page
-        });
-    }
-
-    range (page) {
+    range(page, nbPages) {
         let input = [];
-        const nbPages = this.state.nbPages;
 
         // display page links around the current page
         if (page > 2) {
@@ -63,14 +46,13 @@ class MaDatagridPagination extends React.Component {
     }
 
     render() {
-        if (!this.state) {
-            return null;
-        }
-
         const totalItems = this.props.totalItems;
-        const entity = this.props.entity;
-        const page = +this.state.page;
-        const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
+        const page = this.props.page || 1;
+        const perPage = this.props.perPage || 1;
+        const nbPages = Math.ceil(totalItems / perPage) || 1;
+        const offsetEnd = Math.min(page * perPage, totalItems);
+        const offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
+        const displayPagination = perPage < totalItems;
 
         let itemCount = null;
         let pagination = null;
@@ -78,7 +60,7 @@ class MaDatagridPagination extends React.Component {
         if (totalItems > 0) {
             itemCount = (
                 <div className="total">
-                    <strong>{ this.state.offsetBegin }</strong> - <strong>{ this.state.offsetEnd }</strong> on <strong>{ totalItems }</strong>
+                    <strong>{ offsetBegin }</strong> - <strong>{ offsetEnd }</strong> on <strong>{ totalItems }</strong>
                 </div>
             );
         } else {
@@ -89,26 +71,26 @@ class MaDatagridPagination extends React.Component {
             );
         }
 
-        if (this.state.displayPagination) {
+        if (displayPagination) {
             let prev = <li></li>;
             let next = <li></li>;
             let items = [];
 
             if (page != 1) {
-                prev = <li><Link className="prev" to="list" params={{entity: entity}} query={{page: page - 1, sortField: sortField, sortDir: sortDir}}>« Prev</Link></li>;
+                prev = <li><a className="prev" onClick={this.onChange(page - 1)}>« Prev</a></li>;
             }
 
-            if (page != this.state.nbPages) {
-                next = <li><Link className="next" to="list" params={{entity: entity}} query={{page: page + 1, sortField: sortField, sortDir: sortDir}}>Next »</Link></li>;
+            if (page != nbPages) {
+                next = <li><a className="next" onClick={this.onChange(page + 1)}>Next »</a></li>;
             }
 
-            this.range(page).map(i => {
+            this.range(page, nbPages).map(i => {
                 const className = i == page ? 'active' : '';
 
                 if ('.' == i) {
                     items.push(<li key={i} className={className}><span>&hellip;</span></li>);
                 } else {
-                    items.push(<li key={i} className={className}><Link to="list" params={{entity: entity}} query={{page: i, sortField: sortField, sortDir: sortDir}}>{i}</Link></li>);
+                    items.push(<li key={i} className={className}><a to="list" onClick={this.onChange(i)}>{i}</a></li>);
                 }
             });
 
@@ -132,13 +114,10 @@ class MaDatagridPagination extends React.Component {
 }
 
 MaDatagridPagination.propTypes = {
-    entity: React.PropTypes.string.isRequired,
     totalItems: React.PropTypes.number.isRequired,
-    perPage: React.PropTypes.number.isRequired
-};
-
-MaDatagridPagination.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    perPage: React.PropTypes.number.isRequired,
+    page: React.PropTypes.number.isRequired,
+    onChange: React.PropTypes.func.isRequired
 };
 
 require('../../autoloader')('MaDatagridPagination', MaDatagridPagination);

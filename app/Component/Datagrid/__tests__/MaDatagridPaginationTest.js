@@ -1,22 +1,22 @@
 jest.autoMockOff();
-jest.setMock('react-router', { Link: require('../../Button/__mocks__/Link') });
 
 describe('MaDatagridPagination', () => {
     const React = require('react/addons');
     const TestUtils = React.addons.TestUtils;
     const MaDatagridPagination = require('../MaDatagridPagination');
-    const routerWrapper = require('../../../Test/RouterWrapper');
 
-    function getPagination(items, page, perPage, entity = null) {
-        return routerWrapper(() => {
-            return <MaDatagridPagination totalItems={items} entity={entity} page={page} perPage={perPage} />
-        });
+    let pages = [];
+    const onChange = page => {
+        pages.push(page);
+    };
+
+    function getPagination(items, page, perPage) {
+        return TestUtils.renderIntoDocument(<MaDatagridPagination totalItems={items} onChange={onChange} page={page} perPage={perPage} />);
     }
 
     describe('Without items', () => {
         it('Should display "No record found"', () => {
             let pagination = getPagination(0, 1, 10);
-
             pagination = React.findDOMNode(pagination);
 
             expect(pagination.innerHTML).toContain('No record found.');
@@ -67,21 +67,13 @@ describe('MaDatagridPagination', () => {
     });
 
     describe('pagination link', () => {
-        it('Should change url parameters', () => {
-            const entity = {
-                name: 'MyEntity'
-            };
-
-            const pagination = getPagination(56, 2, 10, entity);
+        it('Should call onChange callback', () => {
+            const pagination = getPagination(56, 2, 10);
             const nextPage = React.findDOMNode(pagination).querySelector('a.next');
 
             TestUtils.Simulate.click(nextPage);
 
-            const params = JSON.parse(nextPage.attributes['data-params'].value);
-            const query = JSON.parse(nextPage.attributes['data-query'].value);
-
-            expect(params.entity.name).toEqual('MyEntity');
-            expect(query.page).toEqual(3);
+            expect(pages).toEqual([3]);
         });
     });
 });

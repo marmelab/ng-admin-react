@@ -135,17 +135,22 @@ class ListView extends React.Component {
             value = null;
         }
 
+        let hasModification = false;
         if (value !== null && value !== undefined) {
             query.search[name] = value;
+            hasModification = true;
         } else if (name in query.search) {
             delete query.search[name];
+            hasModification = true;
         }
 
         if (0 === Object.keys(query.search).length) {
             delete query.search;
         }
 
-        this.refreshList(query);
+        if (hasModification) {
+            this.refreshList(query);
+        }
     }
 
     onListSort(field, dir) {

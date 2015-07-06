@@ -3,7 +3,15 @@ import formatJson from 'format-json';
 import Codemirror from 'react-codemirror';
 
 class JsonField extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { value: props.value };
+    }
+
     onChange(code) {
+        this.setState({ value: code });
+
         if (code && 'string' === typeof code) {
             try {
                 code = JSON.parse(code);
@@ -16,7 +24,7 @@ class JsonField extends React.Component {
     }
 
     render() {
-        let {value} = this.props;
+        let { value } = this.state;
         const onChange = this.onChange.bind(this);
         const options = {
             lineNumbers: true,

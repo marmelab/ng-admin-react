@@ -1,11 +1,25 @@
 jest.autoMockOff();
-jest.setMock('react-router', {Link : require('../Button/__mocks__/Link')});
+jest.setMock('react-router', { Link: require('../Button/__mocks__/Link') });
 
 describe('DashboardPanel', () => {
     const React = require('react/addons');
     const TestUtils = React.addons.TestUtils;
     const DashboardPanel = require('../DashboardPanel');
-    const routerWrapper = require('../../Test/RouterWrapper');
+    const RouterStub = require('../../Test/RouterStub');
+    const ComponentWrapper = require('../../Test/ComponentWrapper');
+
+    function wrapComponent(configuration, cb) {
+        const childContextTypes = {
+            router: React.PropTypes.func,
+            configuration: React.PropTypes.object
+        };
+        const childContext = {
+            router: RouterStub,
+            configuration: configuration
+        };
+
+        return ComponentWrapper(childContextTypes, childContext, cb);
+    }
 
     const Entity = require('admin-config/lib/Entity/Entity');
     const Entry = require('admin-config/lib/Entry');
@@ -29,7 +43,7 @@ describe('DashboardPanel', () => {
             };
         }
 
-        return routerWrapper(() => <DashboardPanel
+        return wrapComponent(configuration, () => <DashboardPanel
             view={view}
             label={label}
             dataStore={dataStore}

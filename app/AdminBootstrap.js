@@ -40,6 +40,12 @@ FieldViewConfiguration.registerFieldView('text', TextFieldView);
 FieldViewConfiguration.registerFieldView('wysiwyg', WysiwygFieldView);
 
 class AdminBootstrap extends React.Component {
+    getChildContext() {
+        return {
+            configuration: this.props.configuration
+        };
+    }
+
     render() {
         return (
             <div>
@@ -52,6 +58,10 @@ class AdminBootstrap extends React.Component {
         );
     }
 }
+
+AdminBootstrap.childContextTypes = {
+    configuration: React.PropTypes.object.isRequired
+};
 
 AdminBootstrap.propTypes = {
     configuration: React.PropTypes.object.isRequired

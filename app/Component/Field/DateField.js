@@ -4,8 +4,20 @@ import DateTimePicker from 'react-bootstrap-datetimepicker';
 import classNames from 'classnames';
 
 class DateField extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { value: props.value };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.value !== this.props.value) {
+            this.setState({ value: nextProps.value });
+        }
+    }
+
     getFormat(type) {
-        let {field} = this.props;
+        let { field } = this.props;
 
         let format = field.format();
         if (!format) {
@@ -20,8 +32,10 @@ class DateField extends React.Component {
     }
 
     render() {
-        let {value, type} = this.props;
-        let format = this.getFormat(type);
+        const { type } = this.props;
+        const format = this.getFormat(type);
+
+        let { value } = this.state;
 
         if (!value) {
             value = moment().format(format);

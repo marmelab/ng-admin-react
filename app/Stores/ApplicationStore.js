@@ -12,30 +12,30 @@ class ApplicationStore extends EventEmitter {
 
     initData() {
         this.data = Map({
-            filters: List()
+            filters: Map({
+                selected: List([]),
+                unselected: List([])
+            })
         });
     }
 
-    displayFilter(filter) {
-        let filters = this.data.get('filters');
-        filters = filters.push(filter);
-
-        this.data = this.data.update('filters', () => filters);
+    initFilters(filters) {
+        this.data = this.data.updateIn(['filters', 'selected'], () => List(filters.selected));
+        this.data = this.data.updateIn(['filters', 'unselected'], () => List(filters.unselected));
 
         this.emitFilterChange();
     }
 
-    removeFilter(filter) {
-        let filters = this.data.get('filters');
-        let position = filters.findIndex((ind) => {
-            return ind.name() === filter.name();
-        });
+    showFilter(filter) {
+        this.data = this.data.updateIn(['filters', 'selected'], filters => filters.push(filter));
+        this.data = this.data.updateIn(['filters', 'unselected'], filters => filters.filterNot(f => filter.name() === f.name()));
 
-        if (position > -1) {
-            filters = filters.delete(position);
-        }
+        this.emitFilterChange();
+    }
 
-        this.data = this.data.update('filters', () => filters);
+    hideFilter(filter) {
+        this.data = this.data.updateIn(['filters', 'unselected'], filters => filters.push(filter));
+        this.data = this.data.updateIn(['filters', 'selected'], filters => filters.filterNot(f => filter.name() === f.name()));
 
         this.emitFilterChange();
     }
@@ -61,11 +61,14 @@ const store = new ApplicationStore();
 
 AppDispatcher.register((action) => {
     switch(action.actionType) {
-        case 'display_filter':
-            store.displayFilter(action.filter);
+        case 'init_filters':
+            store.initFilters(action.filters);
             break;
-        case 'remove_filter':
-            store.removeFilter(action.filter);
+        case 'show_filter':
+            store.showFilter(action.filter);
+            break;
+        case 'hide_filter':
+            store.hideFilter(action.filter);
             break;
     }
 });

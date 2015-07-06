@@ -21,7 +21,6 @@ class DashboardPanel extends React.Component {
                 <Datagrid
                     name={view.name()}
                     entityName={entity.name()}
-                    configuration={this.props.configuration}
                     fields={view.fields()}
                     entries={entries}
                     sortDir={this.props.sortDir}
@@ -34,7 +33,6 @@ class DashboardPanel extends React.Component {
 }
 
 DashboardPanel.propTypes = {
-    configuration: React.PropTypes.object,
     view: React.PropTypes.object.isRequired,
     label: React.PropTypes.string.isRequired,
     dataStore: React.PropTypes.object.isRequired,

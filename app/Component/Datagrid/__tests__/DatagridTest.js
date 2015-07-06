@@ -5,7 +5,21 @@ describe('Datagrid', () => {
     const React = require('react/addons');
     const TestUtils = React.addons.TestUtils;
     const Datagrid = require('../Datagrid');
-    const routerWrapper = require('../../../Test/RouterWrapper');
+    const RouterStub = require('../../../Test/RouterStub');
+    const ComponentWrapper = require('../../../Test/ComponentWrapper');
+
+    function wrapComponent(configuration, cb) {
+        const childContextTypes = {
+            router: React.PropTypes.func,
+            configuration: React.PropTypes.object
+        };
+        const childContext = {
+            router: RouterStub,
+            configuration: configuration
+        };
+
+        return ComponentWrapper(childContextTypes, childContext, cb);
+    }
 
     const ListView = require('admin-config/lib/View/ListView');
     const Entry = require('admin-config/lib/Entry');
@@ -23,6 +37,11 @@ describe('Datagrid', () => {
     FieldViewConfiguration.registerFieldView('number', NumberFieldView);
     FieldViewConfiguration.registerFieldView('date', DateFieldView);
 
+    let sorted = {};
+    const onSort = (name, dir) => {
+        sorted[name] = dir;
+    };
+
     let view, router, fields;
 
     function getDatagrid(name, entityName, fields, view, router, entries, sortDir, sortField, configuration) {
@@ -32,17 +51,18 @@ describe('Datagrid', () => {
             };
         }
 
-        return routerWrapper(() => <Datagrid
-            name={name}
-            fields={fields}
-            entityName={entityName}
-            view={view}
-            router={router}
-            entries={entries}
-            sortDir={sortDir}
-            sortField={sortField}
-            listActions={view.listActions()}
-            configuration={configuration}/>
+        return wrapComponent(configuration, () => <Datagrid
+                name={name}
+                fields={fields}
+                entityName={entityName}
+                view={view}
+                router={router}
+                entries={entries}
+                sortDir={sortDir}
+                sortField={sortField}
+                listActions={view.listActions()}
+                onSort={onSort}
+            />
         );
     }
 
@@ -75,7 +95,7 @@ describe('Datagrid', () => {
             const header = datagridNode.querySelector('thead th a');
             TestUtils.Simulate.click(header);
 
-            expect(header.attributes['data-click-to'].value).toEqual('my-route');
+            expect(sorted).toEqual({ 'myView.id': 'ASC' });
         });
     });
 

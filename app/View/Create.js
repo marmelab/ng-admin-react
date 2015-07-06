@@ -1,6 +1,8 @@
 import React from 'react';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 import Inflector from 'inflected';
-import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+import debounce from 'lodash/function/debounce';
+import { List } from 'immutable';
 
 import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
 
@@ -17,11 +19,14 @@ class CreateView extends React.Component {
     constructor(props, context) {
         super(props, context);
 
+        this.state = {}; // needed for ReactComponentWithPureRenderMixin::shouldComponentUpdate()
+
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
         this.onLoadFailure = onLoadFailure.bind(this);
         this.onSendFailure = onSendFailure.bind(this);
+        this.updateField = debounce(this.updateField.bind(this), 300);
 
         this.viewName = 'CreateView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);
@@ -38,7 +43,7 @@ class CreateView extends React.Component {
         EntityStore.addWriteFailureListener(this.onSendFailure);
 
         if (this.isValidEntityAndView) {
-            this.refreshData();
+            this.init();
         }
     }
 
@@ -46,7 +51,7 @@ class CreateView extends React.Component {
         if (nextProps.params.entity !== this.props.params.entity) {
             this.isValidEntityAndView = this.hasEntityAndView(nextProps.params.entity);
             if (this.isValidEntityAndView) {
-                this.refreshData();
+                this.init();
             }
         }
     }
@@ -58,12 +63,17 @@ class CreateView extends React.Component {
         EntityStore.removeWriteFailureListener(this.onSendFailure);
     }
 
+    init() {
+        this.actions = List(this.getView().actions() || ['list']);
+        this.refreshData();
+    }
+
     onChange() {
         this.setState(EntityStore.getState());
     }
 
     refreshData() {
-        EntityActions.loadCreateData(this.context.restful, this.props.configuration, this.getView());
+        EntityActions.loadCreateData(this.context.restful, this.context.configuration, this.getView());
     }
 
     updateField(name, value) {
@@ -73,7 +83,7 @@ class CreateView extends React.Component {
     save(e) {
         e.preventDefault();
 
-        EntityActions.saveData(this.context.restful, this.props.configuration, this.getView());
+        EntityActions.saveData(this.context.restful, this.context.configuration, this.getView());
     }
 
     onCreate() {
@@ -110,7 +120,7 @@ class CreateView extends React.Component {
             return <NotFoundView/>;
         }
 
-        if (!this.state) {
+        if (!this.state.hasOwnProperty('data')) {
             return null;
         }
 
@@ -122,7 +132,6 @@ class CreateView extends React.Component {
         const view = this.getView(entityName);
         const dataStore = this.state.data.get('dataStore').first();
         const entry = dataStore.getFirstEntry(view.entity.uniqueId);
-        const actions = view.actions() || ['list'];
 
         if (!entry) {
             return null;
@@ -130,7 +139,7 @@ class CreateView extends React.Component {
 
         return (
             <div className="view create-view">
-                <ViewActions entityName={view.entity.name()} entry={entry} buttons={actions} />
+                <ViewActions entityName={view.entity.name()} entry={entry} buttons={this.actions} />
 
                 <div className="page-header">
                     <h1><Compile entry={entry}>{view.title() || 'Create new ' + Inflector.singularize(entityName)}</Compile></h1>
@@ -156,9 +165,7 @@ class CreateView extends React.Component {
 
 CreateView.contextTypes = {
     router: React.PropTypes.func.isRequired,
-    restful: React.PropTypes.func.isRequired
-};
-CreateView.propTypes = {
+    restful: React.PropTypes.func.isRequired,
     configuration: React.PropTypes.object.isRequired
 };
 

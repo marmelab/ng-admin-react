@@ -21,7 +21,7 @@ class Field extends React.Component {
                 <div className={className}>
                     <Compile field={field} updateField={this.props.updateField} dataStore={this.props.dataStore}
                              entity={entity} value={value} values={values} fieldName={fieldName} entry={entry}
-                             configuration={this.props.configuration} autoFocus={this.props.autoFocus}>
+                             configuration={this.context.configuration} autoFocus={this.props.autoFocus}>
                         {fieldTemplate}
                     </Compile>
                 </div>
@@ -42,6 +42,10 @@ Field.propTypes = {
     labelClass: React.PropTypes.string,
     fieldClass: React.PropTypes.string,
     autoFocus: React.PropTypes.bool
+};
+
+Field.contextTypes = {
+    configuration: React.PropTypes.object
 };
 
 require('../../autoloader')('Field', Field);

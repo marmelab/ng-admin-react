@@ -1,4 +1,5 @@
 import React from 'react';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 
 import Header from '../../Component/Datagrid/ColumnHeader';
 import DatagridActions from '../../Component/Datagrid/DatagridActions';
@@ -6,14 +7,16 @@ import DatagridActions from '../../Component/Datagrid/DatagridActions';
 import Column from '../Column/Column';
 
 class Datagrid extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
     getDetailAction(entry) {
         return () => {
             const entityName = this.props.entityName;
-            const entity = this.props.configuration.getEntity(entityName);
+            const entity = this.context.configuration.getEntity(entityName);
             const route = entity.editionView().enabled ? 'edit' : 'show';
 
             this.context.router.transitionTo(route, {entity: entityName, id: entry.identifierValue});
@@ -30,7 +33,7 @@ class Datagrid extends React.Component {
         }
 
         const referenceEntity = field.targetEntity().name();
-        const relatedEntity = this.props.configuration.getEntity(referenceEntity);
+        const relatedEntity = this.context.configuration.getEntity(referenceEntity);
 
         if (!relatedEntity) { return false; }
 
@@ -52,11 +55,11 @@ class Datagrid extends React.Component {
             headers.push(
                 <Header
                     key={i}
-                    configuration={this.props.configuration}
                     sort={sort}
                     name={this.props.name}
                     fieldName={fieldName}
-                    label={this.props.fields[i].label()} />
+                    label={this.props.fields[i].label()}
+                    onSort={this.props.onSort} />
             );
         }
 
@@ -69,7 +72,7 @@ class Datagrid extends React.Component {
     }
 
     buildRecords() {
-        const entity = this.props.configuration.getEntity(this.props.entityName);
+        const entity = this.context.configuration.getEntity(this.props.entityName);
 
         return this.props.entries.map((r, i) => (
             <tr key={i}>{this.buildCells(r, entity)}</tr>
@@ -83,7 +86,7 @@ class Datagrid extends React.Component {
 
         for (let i in this.props.fields) {
             const field = this.props.fields[i];
-            const renderedField = <Column field={field} entity={entity} entry={row} configuration={this.props.configuration} />;
+            const renderedField = <Column field={field} entity={entity} entry={row} />;
 
             cells.push(<td key={i}>{renderedField}</td>);
         }
@@ -116,16 +119,17 @@ class Datagrid extends React.Component {
 Datagrid.propTypes = {
     name: React.PropTypes.string.isRequired,
     entityName: React.PropTypes.string.isRequired,
-    configuration: React.PropTypes.object,
     listActions: React.PropTypes.array.isRequired,
     fields: React.PropTypes.array.isRequired,
     entries: React.PropTypes.array.isRequired,
     sortDir: React.PropTypes.string,
-    sortField: React.PropTypes.string
+    sortField: React.PropTypes.string,
+    onSort: React.PropTypes.func
 };
 
 Datagrid.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.func.isRequired,
+    configuration: React.PropTypes.object
 };
 
 require('../../autoloader')('Datagrid', Datagrid);

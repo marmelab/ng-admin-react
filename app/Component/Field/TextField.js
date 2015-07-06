@@ -1,8 +1,17 @@
 import React from 'react';
 
 class TextField extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { value: props.value ? props.value : null };
+    }
+
     onChange(e) {
-        this.props.updateField(this.props.name, e.target.value);
+        const value = e.target.value;
+
+        this.setState({ value });
+        this.props.updateField(this.props.name, value);
     }
 
     render() {
@@ -10,7 +19,7 @@ class TextField extends React.Component {
             name: this.props.name,
             id: this.props.name,
             onChange: this.onChange.bind(this),
-            value: this.props.value ? this.props.value : null
+            value: this.state.value
         };
 
         return (

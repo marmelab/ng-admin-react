@@ -1,29 +1,12 @@
 jest.autoMockOff();
 
-let storeFilters;
-let listenerCb;
-
-jest.setMock('../../../Stores/ApplicationStore', {
-    getState: () => ({
-        data: {
-            get: function() {
-                return storeFilters;
-            }
-        }
-    }),
-    addFilterListener: (cb) => { listenerCb = cb; },
-    removeFilterListener: () => {}
-});
-
 describe('Filters', () => {
     const Immutable = require('immutable');
     const React = require('react/addons');
     const TestUtils = React.addons.TestUtils;
     const routerWrapper = require('../../../Test/RouterWrapper');
 
-    const ListView = require('admin-config/lib/View/ListView');
     const Field = require('admin-config/lib/Field/Field');
-    const Entity = require('admin-config/lib/Entity/Entity');
 
     const FieldViewConfiguration = require('../../../Field/FieldViewConfiguration');
     const StringFieldView = require('../../../Field/StringFieldView');
@@ -32,51 +15,75 @@ describe('Filters', () => {
 
     FieldViewConfiguration.registerFieldView('string', StringFieldView);
 
-    let view = new ListView('myView');
-    let entity = new Entity('myEntity');
     let pinnedFilter = new Field('author');
     pinnedFilter.pinned(true);
 
     let notPinned = new Field('name');
 
-    view.setEntity(entity);
+    let hidden = [];
+    const hideFilter = (filter) => {
+        return () => {
+            hidden.push(filter.name());
+        };
+    };
 
-    function getFilters(view) {
-        return routerWrapper(() => <Filters view={view} />);
+    let updated = {};
+    const updateField = (name, value) => {
+        updated[name] = value;
+    };
+
+    function getFilters(filters) {
+        return routerWrapper(() => <Filters filters={filters} hideFilter={hideFilter} updateField={updateField} />);
     }
 
-    describe('Filter', () => {
-        it('should display pinned filter directly', () => {
-            storeFilters = new Immutable.List();
-            storeFilters = storeFilters.push(pinnedFilter);
-
-            let filters = getFilters(view);
+    describe('Display', () => {
+        it('should display pinned and selected filters', () => {
+            const selectedFilters = Immutable.List([pinnedFilter, notPinned]);
+            let filters = getFilters(selectedFilters);
             filters = React.findDOMNode(filters);
 
-            const field = filters.querySelector('input');
-            const label = filters.querySelector('label');
+            const pinnedField = filters.querySelector('.filter-author input');
+            const pinnedLabel = filters.querySelector('.filter-author label');
+            const pinnedRemove = filters.querySelector('.filter-author a.remove');
 
-            expect(field.attributes.name.value).toEqual('author');
-            expect(field.attributes.type.value).toEqual('text');
-            expect(label.innerHTML).toEqual('Author');
+            expect(pinnedField.attributes.name.value).toEqual('author');
+            expect(pinnedField.attributes.type.value).toEqual('text');
+            expect(pinnedLabel.innerHTML).toEqual('Author');
+            expect(pinnedRemove).toEqual(null);
+
+            const notPinnedField = filters.querySelector('.filter-name input');
+            const notPinnedLabel = filters.querySelector('.filter-name label');
+            const notPinnedRemove = filters.querySelector('.filter-name a.remove');
+
+            expect(notPinnedField.attributes.name.value).toEqual('name');
+            expect(notPinnedLabel.innerHTML).toEqual('Name');
+            expect(notPinnedRemove.innerHTML).toContain('glyphicon-remove');
+        });
+    });
+
+    describe('Callback', () => {
+        it('should call hideFilter callback on filter remove', () => {
+            const selectedFilters = Immutable.List([pinnedFilter, notPinned]);
+            let filters = getFilters(selectedFilters);
+            filters = React.findDOMNode(filters);
+
+            const notPinnedRemove = filters.querySelector('.filter-name a.remove');
+
+            TestUtils.Simulate.click(notPinnedRemove);
+
+            expect(hidden).toEqual(['name']);
         });
 
-        it('should display a filter from store', () => {
-            storeFilters = new Immutable.List();
+        it('should call updateField callback on filter value changed', () => {
+            const selectedFilters = Immutable.List([pinnedFilter, notPinned]);
+            let filters = getFilters(selectedFilters);
+            filters = React.findDOMNode(filters);
 
-            let filters = getFilters(view);
+            const notPinnedField = filters.querySelector('.filter-name input');
 
-            storeFilters = storeFilters.push(notPinned);
-            listenerCb();
+            TestUtils.Simulate.change(notPinnedField, { target: { value: 'Me'} });
 
-            let filtersNode = React.findDOMNode(filters);
-
-
-            const field = filtersNode.querySelector('input');
-            const label = filtersNode.querySelector('label');
-
-            expect(field.attributes.name.value).toEqual('name');
-            expect(label.innerHTML).toEqual('Name');
+            expect(updated).toEqual({ name: 'Me' });
         });
     });
 });

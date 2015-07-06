@@ -1,5 +1,5 @@
 import React from 'react';
-import { shouldComponentUpdate } from 'react-immutable-render-mixin';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 
 import DashboardPanel from '../Component/DashboardPanel';
 
@@ -9,6 +9,8 @@ import EntityStore from '../Stores/EntityStore';
 class DashboardView extends React.Component {
     constructor() {
         super();
+
+        this.state = {}; // needed for ReactComponentWithPureRenderMixin::shouldComponentUpdate()
 
         this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
@@ -39,7 +41,7 @@ class DashboardView extends React.Component {
     refreshData() {
         const {sortField, sortDir} = this.context.router.getCurrentQuery() || {};
 
-        EntityActions.loadDashboardPanels(this.context.restful, this.props.configuration, sortField, sortDir);
+        EntityActions.loadDashboardPanels(this.context.restful, this.context.configuration, sortField, sortDir);
     }
 
     buildPanels(panels, odd=true) {
@@ -58,7 +60,6 @@ class DashboardView extends React.Component {
                 panelViews.push((
                     <div key={key} className="panel panel-default">
                         <DashboardPanel
-                            configuration={this.props.configuration}
                             label={label}
                             view={view}
                             dataStore={dataStore}
@@ -72,7 +73,7 @@ class DashboardView extends React.Component {
     }
 
     render() {
-        if (!this.state) {
+        if (!this.state.hasOwnProperty('data')) {
             return null;
         }
 
@@ -107,10 +108,7 @@ class DashboardView extends React.Component {
 
 DashboardView.contextTypes = {
     router: React.PropTypes.func.isRequired,
-    restful: React.PropTypes.func.isRequired
-};
-
-DashboardView.propTypes = {
+    restful: React.PropTypes.func.isRequired,
     configuration: React.PropTypes.object.isRequired
 };
 

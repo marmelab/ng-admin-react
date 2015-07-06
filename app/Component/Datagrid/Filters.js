@@ -1,110 +1,22 @@
 import React from 'react';
+import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 
-import ApplicationActions from '../../Actions/ApplicationActions';
-import EntityActions from '../../Actions/EntityActions';
 import Compile from '../../Component/Compile';
-
-import ApplicationStore from '../../Stores/ApplicationStore';
 import FieldViewConfiguration from '../../Field/FieldViewConfiguration';
 
 class Filters extends React.Component {
-    componentDidMount() {
-        this.boundedFilterUpdated = this.filterUpdated.bind(this);
-        ApplicationStore.addFilterListener(this.boundedFilterUpdated);
+    constructor(props, context) {
+        super(props, context);
 
-        this.setState(ApplicationStore.getState());
-
-        // Display filters if there is any filter in query params
-        const viewFilters = this.props.view.filters();
-        const {search} = this.context.router.getCurrentQuery() || {};
-
-        if (search) {
-            for (let i in viewFilters) {
-                let filter = viewFilters[i];
-                let filterName = filter.name();
-
-                if (!filter.pinned() && filterName in search) {
-                    this.addFilter(filter);
-                }
-            }
-        }
+        this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     }
 
-    componentWillUnmount() {
-        ApplicationStore.removeFilterListener(this.boundedFilterUpdated);
-    }
+    buildRows(filters) {
+        const { entity, dataStore, updateField, hideFilter } = this.props;
+        const configuration = this.context.configuration;
+        const { search } = this.context.router.getCurrentQuery() || {};
 
-    filterUpdated() {
-        this.setState(ApplicationStore.getState());
-    }
-
-    addFilter(filter) {
-        ApplicationActions.displayFilter(filter);
-    }
-
-    removeFilter(filter) {
-        return () => {
-            ApplicationActions.removeFilter(filter);
-            this.updateField(filter.name(), null);
-        };
-    }
-
-    refreshData(query) {
-        const {view} = this.props;
-        const {page, sortField, sortDir} = this.context.router.getCurrentQuery() || {};
-        let search = null;
-
-        if ('search' in query) {
-            search = query.search;
-        }
-
-        EntityActions.loadListData(this.context.restful, this.props.configuration, view, page, sortField, sortDir, search);
-    }
-
-    updateField(name, value) {
-        const {view} = this.props;
-        const {page, sortField, sortDir, search} = this.context.router.getCurrentQuery() || {};
-        const entityName = view.entity.name();
-
-        let query = {page, sortField, sortDir, search};
-        if (!query.search) {
-            query.search = {};
-        }
-
-        if ('string' === typeof value && !value.length) {
-            value = null;
-        }
-
-        if (value !== null && value !== undefined) {
-            query.search[name] = value;
-        } else if (name in query.search) {
-            delete query.search[name];
-        }
-
-        if (0 === Object.keys(query.search).length) {
-            delete query.search;
-        }
-
-        this.context.router.transitionTo('list', {entity: entityName}, query);
-        this.refreshData(query);
-    }
-
-    render() {
-        if (!this.state) {
-            return null;
-        }
-
-        const filters = this.state.data.get('filters');
-        const {view, configuration, dataStore} = this.props;
-        const updateField = this.updateField.bind(this);
-        const removeFilter = this.removeFilter.bind(this);
-        const {search} = this.context.router.getCurrentQuery() || {};
-
-        if (!filters.count()) {
-            return null;
-        }
-
-        const rows = filters.map((filter, i) => {
+        return filters.map((filter, i) => {
             const filterName = filter.name();
             const value = search && filterName in search ? search[filterName] : null;
             const autoFocus = !filter.pinned();
@@ -117,7 +29,7 @@ class Filters extends React.Component {
 
             if (!filter.pinned()) {
                 deleteLink = (
-                    <a className="remove" onClick={removeFilter(filter)}>
+                    <a className="remove" onClick={hideFilter(filter)}>
                         <span className="glyphicon glyphicon-remove"></span>
                     </a>
                 );
@@ -132,7 +44,7 @@ class Filters extends React.Component {
 
                         <div className={className}>
                             <Compile field={filter} updateField={updateField} dataStore={dataStore}
-                                entity={view.getEntity()} value={value} values={values} fieldName={fieldName} entry={null}
+                                entity={entity} value={value} values={values} fieldName={fieldName} entry={null}
                                 configuration={configuration} autoFocus={autoFocus}>
                             {fieldTemplate}
                             </Compile>
@@ -141,20 +53,31 @@ class Filters extends React.Component {
                 </div>
             );
         });
+    }
 
-        return <div className="filters form-horizontal col-md-offset-6 col-md-6 col-lg-6">{rows}</div>;
+    render() {
+        const filters = this.props.filters;
+
+        return (
+            <div className="filters form-horizontal col-md-offset-6 col-md-6 col-lg-6">
+                {this.buildRows(filters)}
+            </div>
+        );
     }
 }
 
 Filters.propTypes = {
-    view: React.PropTypes.object,
-    configuration: React.PropTypes.object,
+    filters: React.PropTypes.object.isRequired,
+    updateField: React.PropTypes.func.isRequired,
+    hideFilter: React.PropTypes.func.isRequired,
+    entity: React.PropTypes.object,
     dataStore: React.PropTypes.object
 };
 
 Filters.contextTypes = {
     router: React.PropTypes.func.isRequired,
-    restful: React.PropTypes.func.isRequired
+    restful: React.PropTypes.func.isRequired,
+    configuration: React.PropTypes.object.isRequired
 };
 
 require('../../autoloader')('Filters', Filters);

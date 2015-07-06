@@ -21,7 +21,7 @@ describe('FieldButton', () => {
     };
 
     describe('With good props', () => {
-        xit('Should display label and default size', () => {
+        it('Should display label and default size', () => {
             let filterButton = TestUtils.renderIntoDocument(<FilterButton filters={List([filter])} showFilter={showFilter} />);
             filterButton = React.findDOMNode(filterButton);
 

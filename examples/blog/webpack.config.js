@@ -1,15 +1,22 @@
+function getEntrySources() {
+    var sources = [];
+
+    if (process.env.NODE_ENV !== 'production') { // for live reload
+        sources.push('webpack-dev-server/client?http://0.0.0.0:8088');
+        sources.push('webpack/hot/dev-server');
+    }
+    sources.push('./config-webpack.js'); // must be the last one
+
+    return sources;
+}
 
 module.exports = {
     entry: {
-        'app': [
-            'webpack-dev-server/client?http://0.0.0.0:8088',
-            'webpack/hot/dev-server',
-            './config-webpack.js'
-        ]
+        'app': getEntrySources()
     },
     output: {
         path: __dirname + '/build',
-        filename: '[name].min.js'
+        filename: '[name].js'
     },
     module: {
         loaders: [

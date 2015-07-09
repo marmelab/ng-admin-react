@@ -9,6 +9,35 @@
     restServer.init(apiData);
     restServer.toggleLogging(); // logging is off by default, enable it
 
+    restServer.addRequestInterceptor(function(request) {
+        var filters = request.params.filter;
+        request.params.filter = function(item) {
+            for (var key in filters) {
+                if ('search' === key) {
+                    for (var i in item) {
+                        if ('object' === typeof item[i]) {
+                            for (var j in item[i]) {
+                                if (-1 !== ('' + item[i][j]).indexOf(filters[key])) {
+                                    return true;
+                                }
+                            }
+
+                            continue;
+                        }
+                        if (-1 !== ('' + item[i]).indexOf(filters[key])) {
+                            return true;
+                        }
+                    }
+                }
+                if (item[key] != filters[key]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        return request;
+    });
+
     // use sinon.js to monkey-patch XmlHttpRequest
     sinon.FakeXMLHttpRequest.useFilters = true;
     sinon.FakeXMLHttpRequest.addFilter(function (method, url) {

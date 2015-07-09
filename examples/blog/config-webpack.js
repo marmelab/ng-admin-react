@@ -183,7 +183,8 @@ function configureApp(nga, fieldViewConfiguration, components, routes, restful, 
                 .map(truncate)
                 .targetEntity(post)
                 .targetField(nga.field('title').map(truncate)),
-            nga.field('author'),
+            nga.field('author.name')
+                .label('Author'),
             nga.field('note', 'choices')
                .choices([
                    { label: 'Usefull', value: 'usefull' },
@@ -191,7 +192,9 @@ function configureApp(nga, fieldViewConfiguration, components, routes, restful, 
                ])
         ])
         .filters([
-            nga.field('q', 'string').label('').attributes({'placeholder': 'Global Search'}),
+            nga.field('search', 'string').label('Search')
+                .attributes({'placeholder': 'Global Search'})
+                .pinned(true),
             nga.field('created_at', 'date')
                 .label('Posted')
                 .attributes({'placeholder': 'Filter by date'})
@@ -219,7 +222,8 @@ function configureApp(nga, fieldViewConfiguration, components, routes, restful, 
             nga.field('created_at', 'date')
                 .label('Posted')
                 .defaultValue(new Date()), // preset fields in creation view with defaultValue
-            nga.field('author'),
+            nga.field('author.name')
+                .label('Author'),
             nga.field('body', 'wysiwyg'),
             nga.field('post_id', 'reference')
                 .label('Post')

@@ -3,6 +3,7 @@ import { Map, List } from 'immutable';
 
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
+import Entry from 'admin-config/lib/Entry';
 
 import AppDispatcher from '../Services/AppDispatcher';
 import EntryRequester from '../Services/EntryRequester';
@@ -234,13 +235,10 @@ class EntityStore extends EventEmitter {
     }
 
     saveData(restful, configuration, view) {
-        const values = this.data.get('values');
+        const values = this.data.get('values').toJS();
         const id = this.data.get('originEntityId');
 
-        let rawEntry = {};
-        for (let [name, value] of values) {
-            rawEntry[name] = value;
-        }
+        let rawEntry = new Entry(view.entity.name(), values, id);
 
         this.getEntryRequester(restful, configuration)
             .saveEntry(this.data.getIn(['dataStore', 'object']), view, rawEntry, id)

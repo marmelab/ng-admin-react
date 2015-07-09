@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 import { List } from 'immutable';
 
-import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure, onSendFailure, onFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import NotFoundView from './NotFound';
@@ -26,6 +26,7 @@ class DeleteView extends React.Component {
         this.getView = getView.bind(this);
         this.onLoadFailure = onLoadFailure.bind(this);
         this.onSendFailure = onSendFailure.bind(this);
+        this.onFailure = onFailure.bind(this);
 
         this.viewName = 'DeleteView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);

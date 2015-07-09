@@ -3,7 +3,7 @@ import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMix
 import debounce from 'lodash/function/debounce';
 import { List } from 'immutable';
 
-import { hasEntityAndView, getView, onLoadFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure, onFailure } from '../Mixins/MainView';
 
 import NotFoundView from './NotFound';
 
@@ -29,6 +29,7 @@ class ListView extends React.Component {
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
         this.onLoadFailure = onLoadFailure.bind(this);
+        this.onFailure = onFailure.bind(this);
 
         this.boundedUpdateFilterField = this.updateFilterField.bind(this);
         this.boundedShowFilter = this.showFilter.bind(this);

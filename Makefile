@@ -1,9 +1,7 @@
 .PHONY: build
 
 install:
-	@npm install
 	@./node_modules/.bin/webdriver-manager update
-	mkdir -p examples/blog/build/
 	mv node_modules/react-medium-editor node_modules/react-medium-editor_es6
 	mv node_modules/admin-config node_modules/admin-config_es6
 	./node_modules/.bin/babel node_modules/react-medium-editor_es6 --out-dir node_modules/react-medium-editor --stage 1 --compact false > /dev/null
@@ -13,12 +11,16 @@ install:
 
 build:
 	@NODE_ENV=production ./node_modules/.bin/webpack --optimize-minimize --optimize-occurence-order --optimize-dedupe --progress --colors --devtool source-map
-	@cp -Rf build/* examples/blog/build/
 	@echo "Files build/react-admin.min.css and build/react-admin.min.js updated (with minification)"
 
 install-blog:
+	mkdir -p examples/blog/build/
+	@cd ./examples/blog && npm install && cd ../..
 	@cd ./examples/blog && ./node_modules/.bin/bower install && cd ../..
 	@cp ./node_modules/babel-core/browser.min.js ./examples/blog/build/babel.min.js
+
+build-blog:
+	cp -Rf build/* examples/blog/build/
 
 run-blog:
 	@./node_modules/.bin/webpack-dev-server --progress --colors --devtool cheap-module-inline-source-map --hot --inline --content-base examples/blog
@@ -47,4 +49,4 @@ test-unit: test-unit-init test-unit-run test-unit-clean
 test-e2e:
 	@./node_modules/.bin/protractor protractor.conf.js
 
-test: test-unit build run-test-e2e
+test: test-unit build build-blog run-test-e2e

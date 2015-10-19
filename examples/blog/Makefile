@@ -1,9 +1,5 @@
 .PHONY: build
 
-install:
-	npm install
-	bower install
-
 build:
 	@NODE_ENV=production ./node_modules/.bin/webpack --progress --colors --devtool source-map
 	@echo "File build/app.js updated"

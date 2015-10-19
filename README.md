@@ -90,7 +90,7 @@ post.showView() // a showView displays one entry in full page - allows to displa
 ### Using browser package
 
 ``` sh
-make install-blog
+npm install
 make run-blog
 ```
 
@@ -99,8 +99,9 @@ The application is now available at `http://localhost:8080/`.
 ### Using server package
 
 ``` sh
+npm install
+
 cd examples/blog
-make install
 make run
 ```
 

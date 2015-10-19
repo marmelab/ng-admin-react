@@ -6,6 +6,7 @@ build/*.svg
 build/*.ttf
 build/*.eot
 build/*.woff
+build/*.map
 examples/blog/build/*
 src/
 jest.lastrun

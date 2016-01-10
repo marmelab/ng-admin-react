@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactRouter = require('react-router');
-var ReactAdmin = require('./build/react-admin-standalone.min');
+var ReactAdmin = require('../build/react-admin-standalone.min');
 
 function truncate(value) {
     if (!value) {
@@ -11,6 +11,7 @@ function truncate(value) {
 }
 
 function configureApp(nga, fieldViewConfiguration, components, routes, restful, autoload) {
+
     restful.addFullRequestInterceptor(function (params) {
         if (params._page) {
             var start = (params._page - 1) * params._perPage;

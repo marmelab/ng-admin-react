@@ -1,8 +1,8 @@
 var React = require('react');
 
-export default function (name, nga, admin) {
+export default function (nga, admin) {
 
-  var tag = admin.getEntity(name)
+  var tag = admin.getEntity('tags')
       .readOnly(); // a readOnly entity has disabled creation, edition, and deletion views
 
   tag.views['DashboardView']

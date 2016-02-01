@@ -31,9 +31,9 @@ function configureApp(nga, fieldViewConfiguration, components, routes, restful, 
         .addEntity(nga.entity('comments'))
         .addEntity(nga.entity('posts'));
     // init them
-    var tag = require('./entities/tag')('tags', nga, admin);
-    var comment = require('./entities/comment')('comments', nga, admin, truncate);
-    var post = require('./entities/post')('posts', nga, admin, truncate);
+    var tag = require('./entities/tag')(nga, admin);
+    var comment = require('./entities/comment')(nga, admin, truncate);
+    var post = require('./entities/post')(nga, admin, truncate);
 
     // customize menu
     admin.menu(require('./menu')(nga, admin));

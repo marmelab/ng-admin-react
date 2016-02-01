@@ -1,8 +1,8 @@
 var React = require('react');
 
-export default function (name, nga, admin, truncate) {
+export default function (nga, admin, truncate) {
 
-  var post = admin.getEntity(name); // the API endpoint for posts will be http://localhost:3000/posts/:id
+  var post = admin.getEntity('posts'); // the API endpoint for posts will be http://localhost:3000/posts/:id
 
   post.views['DashboardView'] // customize the dashboard panel for this entity
       .title('Recent posts')

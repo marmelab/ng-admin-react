@@ -1,9 +1,9 @@
 var React = require('react');
 
-export default function (name, nga, admin, truncate) {
+export default function (nga, admin, truncate) {
 
   // define all entities at the top to allow references between them
-  var comment = admin.getEntity(name)
+  var comment = admin.getEntity('comments')
       .baseApiUrl('http://localhost:3000/') // The base API endpoint can be customized by entity
       .identifier(nga.field('id')); // you can optionally customize the identifier used in the api ('id' by default)
 

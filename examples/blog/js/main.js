@@ -2,14 +2,6 @@ var React = require('react');
 var ReactRouter = require('react-router');
 var ReactAdmin = require('../build/react-admin-standalone.min');
 
-function truncate(value) {
-    if (!value) {
-        return '';
-    }
-
-    return value.length > 50 ? value.substr(0, 50) + '...' : value;
-}
-
 function configureApp(nga, fieldViewConfiguration, components, routes, restful, autoload) {
 
     require('./api_flavor').init(restful);
@@ -32,8 +24,8 @@ function configureApp(nga, fieldViewConfiguration, components, routes, restful, 
         .addEntity(nga.entity('posts'));
     // init them
     var tag = require('./entities/tag')(nga, admin);
-    var comment = require('./entities/comment')(nga, admin, truncate);
-    var post = require('./entities/post')(nga, admin, truncate);
+    var comment = require('./entities/comment')(nga, admin);
+    var post = require('./entities/post')(nga, admin);
 
     // customize menu
     admin.menu(require('./menu')(nga, admin));

@@ -1,6 +1,7 @@
 var React = require('react');
+import { truncate } from '../utils';
 
-export default function (nga, admin, truncate) {
+export default function (nga, admin) {
 
   var post = admin.getEntity('posts'); // the API endpoint for posts will be http://localhost:3000/posts/:id
 

@@ -1,6 +1,7 @@
 var React = require('react');
+import { truncate } from '../utils';
 
-export default function (nga, admin, truncate) {
+export default function (nga, admin) {
 
   // define all entities at the top to allow references between them
   var comment = admin.getEntity('comments')

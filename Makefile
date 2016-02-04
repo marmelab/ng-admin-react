@@ -34,7 +34,7 @@ stop-test-server: test-server.PID
 run-test-e2e: start-test-server test-e2e stop-test-server
 
 test-unit-init:
-	./node_modules/babel/bin/babel/index.js app --out-dir src --stage 1 --compact false > /dev/null
+	./node_modules/.bin/babel app --out-dir src --stage 1 --compact false > /dev/null
 
 test-unit-clean:
 	rm -rf ./src
@@ -45,6 +45,6 @@ test-unit-run:
 test-unit: test-unit-init test-unit-run test-unit-clean
 
 test-e2e:
-	@./node_modules/protractor/bin/protractor protractor.conf.js
+	@./node_modules/.bin/protractor protractor.conf.js
 
 test: test-unit build run-test-e2e

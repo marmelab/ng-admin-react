@@ -11,7 +11,7 @@ exports.config = {
         }
     ],
     specs: ['e2e/*.js'],
-    baseUrl: 'http://' + (process.env.CI ? 'reactadmin' : 'localhost') + ':8081/test.html',
+    baseUrl: 'http://' + (process.env.CI ? 'reactadmin' : 'localhost') + ':8081/index.html',
     jasmineNodeOpts: {
         onComplete: null,
         isVerbose: true,

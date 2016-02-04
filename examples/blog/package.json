@@ -9,8 +9,6 @@
   "devDependencies": {
     "babel": "^5.6.2",
     "babel-loader": "^5.1.4",
-    "fakerest": "^1.1.4",
-    "sinon": "^1.14.1",
     "webpack": "^1.9.11",
     "webpack-dev-server": "^1.9.0"
   },

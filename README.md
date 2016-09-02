@@ -6,7 +6,13 @@ Add a ReactJS admin GUI to any RESTful API. Based on [ng-admin](https://github.c
 
 ## Status
 
-Development is pre-beta but is progressing fast. React-admin will be backwards compatible with ng-admin, which means that the API for describing an admin will be the same:
+**This project is discontinued**. PRs will not be merged.
+
+We've published a full rewrite and commited to support it at [admin-on-rest](https://github.com/marmelab/admin-on-rest).
+
+## Usage
+
+React-admin is be backwards compatible with ng-admin, which means that the API for describing an admin are be the same:
 
 ```js
 var ad = AdminDescription;

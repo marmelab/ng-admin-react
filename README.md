@@ -2,8 +2,6 @@
 
 Add a ReactJS admin GUI to any RESTful API. Based on [ng-admin](https://github.com/marmelab/ng-admin).
 
-[![Screencast](http://marmelab.com/ng-admin/images/screencast.png)](https://vimeo.com/118697682)
-
 ## Status
 
 **This project is discontinued**. PRs will not be merged.

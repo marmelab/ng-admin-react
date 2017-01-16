@@ -9,7 +9,7 @@ class Field extends React.Component {
         const fieldName = field.name();
 
         const fieldView = FieldViewConfiguration.getFieldView(field.type());
-        const className = `edit-value react-admin-field-${field.name()} ` +
+        const className = `edit-value react-admin-field-${field.name().replace('.', '_')} ` +
             (field.getCssClasses(this.props.entry) || (fieldClass || 'col-sm-10 col-md-8 col-lg-7'));
 
         const fieldTemplate = fieldView ? fieldView.getWriteWidget : null;

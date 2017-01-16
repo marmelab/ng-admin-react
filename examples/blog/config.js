@@ -184,7 +184,8 @@
                     .map(truncate)
                     .targetEntity(post)
                     .targetField(nga.field('title').map(truncate)),
-                nga.field('author'),
+                nga.field('author.name')
+                   .label('Author'),
                 nga.field('note', 'choices')
                    .choices([
                        { label: 'Usefull', value: 'usefull' },
@@ -192,8 +193,8 @@
                    ])
             ])
             .filters([
-                nga.field('author', 'string').label('Author search')
-                    .attributes({'placeholder': 'Author Search'})
+                nga.field('search', 'string').label('Search')
+                    .attributes({'placeholder': 'Global Search'})
                     .pinned(true),
                 nga.field('created_at', 'date')
                     .label('Posted')
@@ -221,7 +222,8 @@
                 nga.field('created_at', 'date')
                     .label('Posted')
                     .defaultValue(new Date()), // preset fields in creation view with defaultValue
-                nga.field('author'),
+                nga.field('author.name')
+                    .label('Author'),
                 nga.field('body', 'wysiwyg'),
                 nga.field('post_id', 'reference')
                     .label('Post')

@@ -2,6 +2,7 @@ import objectAssign from 'object-assign';
 import PromisesResolver from 'admin-config/lib/Utils/PromisesResolver';
 import ReadQueries from 'admin-config/lib/Queries/ReadQueries';
 import WriteQueries from 'admin-config/lib/Queries/WriteQueries';
+import Entry from 'admin-config/lib/Entry';
 import DataStore from 'admin-config/lib/DataStore/DataStore';
 
 class EntryRequester {
@@ -26,7 +27,7 @@ class EntryRequester {
             .getAll(view, page, options.filters, options.sortField, options.sortDir)
             .then((response) => {
                 rawEntries = response.data;
-                entries = dataStore.mapEntries(view.entity.name(), view.identifier(), view.getFields(), rawEntries);
+                entries = view.mapEntries(rawEntries);
                 totalItems = +response.totalItems;
 
                 return { rawEntries, entries };
@@ -55,7 +56,7 @@ class EntryRequester {
         let dataStore = new DataStore();
 
         let promise = new Promise((resolve) => {
-            let entry = dataStore.createEntry(view.entity.name(), view.identifier(), view.getFields());
+            const entry = Entry.createForFields(view.getFields(), view.entity.name());
 
             resolve({
                 rawEntries: [],
@@ -82,23 +83,14 @@ class EntryRequester {
         }, options);
 
         let dataStore = new DataStore();
-        let response;
 
         let promise = this.readQueries
             .getOne(view.getEntity(), view.type, identifierValue, view.identifier(), view.getUrl())
             .then((data) => {
-                response = {
-                    rawEntries: [data]
+                return {
+                    rawEntries: [data],
+                    entries: [view.mapEntry(data)]
                 };
-
-                response.entries = [dataStore.mapEntry(
-                    view.entity.name(),
-                    view.identifier(),
-                    view.getFields(),
-                    response.rawEntries[0]
-                )];
-
-                return response;
             });
 
         if (options.references) {
@@ -126,23 +118,17 @@ class EntryRequester {
 
     saveEntry(dataStore, view, rawEntry, id=null) {
         let query;
+        let entry = rawEntry.transformToRest(view.fields());
 
         if (id) {
-            query = this.writeQueries.updateOne(view, rawEntry, id);
+            query = this.writeQueries.updateOne(view, entry, id);
         } else {
-            query = this.writeQueries.createOne(view, rawEntry);
+            query = this.writeQueries.createOne(view, entry);
         }
 
         return query.then((data) => {
-            let entry = dataStore.mapEntry(
-                view.entity.name(),
-                view.identifier(),
-                view.getFields(),
-                data
-            );
-
+            entry = view.mapEntry(data);
             dataStore.fillReferencesValuesFromEntry(entry, view.getReferences(), true);
-
             dataStore.setEntries(view.getEntity().uniqueId, [entry]);
 
             return dataStore;
@@ -170,21 +156,13 @@ class EntryRequester {
         .then((optimizedReference) => {
             optimizedReferencedData = optimizedReference;
 
-            let references = view.getReferences(),
-                referencedData = objectAssign(nonOptimizedReferencedData, optimizedReferencedData),
-                referencedEntries;
+            const references = view.getReferences();
+            let referencedData = objectAssign(nonOptimizedReferencedData, optimizedReferencedData);
 
             for (let name in referencedData) {
-                referencedEntries = dataStore.mapEntries(
-                    references[name].targetEntity().name(),
-                    references[name].targetEntity().identifier(),
-                    [references[name].targetField()],
-                    referencedData[name]
-                );
-
                 dataStore.setEntries(
                     references[name].targetEntity().uniqueId + '_values',
-                    referencedEntries
+                    view.mapEntries(referencedData[name])
                 );
             }
 
@@ -206,18 +184,16 @@ class EntryRequester {
         })
         .then((referencedListData) => {
             const referencedLists = view.getReferencedLists();
-            let referencedList;
-            let referencedListEntries;
 
             for (let i in referencedLists) {
-                referencedList = referencedLists[i];
-                referencedListEntries = referencedListData[i];
+                let referencedList = referencedLists[i];
+                let referencedListEntries = referencedListData[i];
 
-                referencedListEntries = dataStore.mapEntries(
-                    referencedList.targetEntity().name(),
-                    referencedList.targetEntity().identifier(),
+                referencedListEntries = Entry.createArrayFromRest(
+                    referencedListEntries,
                     referencedList.targetFields(),
-                    referencedListEntries
+                    referencedList.targetEntity().name(),
+                    referencedList.targetEntity().identifier()
                 );
 
                 dataStore.setEntries(
@@ -241,14 +217,13 @@ class EntryRequester {
         })
         .then((choicesData) => {
             const choices = view.getReferences();
-            let choiceEntries;
 
             for (let name in choicesData) {
-                choiceEntries = dataStore.mapEntries(
-                    choices[name].targetEntity().name(),
-                    choices[name].targetEntity().identifier(),
+                let choiceEntries = Entry.createArrayFromRest(
+                    choicesData[name],
                     [choices[name].targetField()],
-                    choicesData[name]
+                    choices[name].targetEntity().name(),
+                    choices[name].targetEntity().identifier()
                 );
 
                 dataStore.setEntries(

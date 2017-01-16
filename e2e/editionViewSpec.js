@@ -151,7 +151,7 @@ describe('EditionView', function () {
     });
 
     describe('FileField', function() {
-        var filePath = "/tmp/my-resume.txt";
+        var filePath = '/tmp/my-resume.txt';
 
         beforeEach(function() {
             // Create dump file
@@ -201,6 +201,44 @@ describe('EditionView', function () {
                     });
                 });
             });
+        });
+    });
+
+    describe('nested field', function () {
+        beforeEach(function() {
+            browser.get(browser.baseUrl + '#/comments/edit/11').then(function () {
+                browser.driver.wait(function () {
+                    return browser.driver.isElementPresent(by.css('.react-admin-field-author_name input'));
+                }, 10000); // wait 10s
+            });
+        });
+
+        it('should map nested fields from the REST response', function () {
+            $$('.react-admin-field-author_name input')
+                .then(function (inputs) {
+                    expect(inputs.length).toBe(1);
+                    expect(inputs[0].getAttribute('value')).toBe('Logan Schowalter');
+                    return inputs[0];
+                })
+                .then(function(input) {
+                    return input.sendKeys('r');
+                })
+                .then(function() {
+                    return $('#edit-view button[type="submit"]').click();
+                })
+                .then(function() {
+                    return browser.get(browser.baseUrl + '#/comments/list');
+                })
+                .then(function() {
+                    return browser.get(browser.baseUrl + '#/comments/edit/11').then(function () {
+                        browser.driver.wait(function () {
+                            return browser.driver.isElementPresent(by.css('.react-admin-field-author_name input'));
+                        }, 10000); // wait 10s
+                    });
+                })
+                .then(function() {
+                    expect($('.react-admin-field-author_name input').getAttribute('value')).toBe('Logan Schowalterr');
+                });
         });
     });
 });

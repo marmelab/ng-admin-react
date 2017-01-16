@@ -25,10 +25,10 @@ describe('Filters', function () {
         });
 
         it('should display a pinned filter', function () {
-            expect($('.filter-value input').getAttribute('name')).toBe('author');
+            expect($('.filter-value input').getAttribute('name')).toBe('search');
         });
 
-        it('should filter by author', function () {
+        it('should filter by author name', function () {
             $('.filter-value input').sendKeys('Manu').then(function () {
                 browser.driver.wait(function () {
                     return browser.driver.isElementPresent(by.css('table tr:nth-child(1) td:nth-child(2)'));

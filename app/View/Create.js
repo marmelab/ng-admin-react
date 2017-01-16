@@ -4,7 +4,7 @@ import Inflector from 'inflected';
 import debounce from 'lodash/function/debounce';
 import { List } from 'immutable';
 
-import { hasEntityAndView, getView, onLoadFailure, onSendFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure, onSendFailure, onFailure } from '../Mixins/MainView';
 
 import Compile from '../Component/Compile';
 import Notification from '../Services/Notification';
@@ -26,6 +26,7 @@ class CreateView extends React.Component {
         this.getView = getView.bind(this);
         this.onLoadFailure = onLoadFailure.bind(this);
         this.onSendFailure = onSendFailure.bind(this);
+        this.onFailure = onFailure.bind(this);
         this.updateField = debounce(this.updateField.bind(this), 300);
 
         this.viewName = 'CreateView';

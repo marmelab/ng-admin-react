@@ -3,7 +3,7 @@ import Inflector from 'inflected';
 import { shouldComponentUpdate } from 'react/lib/ReactComponentWithPureRenderMixin';
 import { List } from 'immutable';
 
-import { hasEntityAndView, getView, onLoadFailure } from '../Mixins/MainView';
+import { hasEntityAndView, getView, onLoadFailure, onFailure } from '../Mixins/MainView';
 
 import NotFoundView from './NotFound';
 
@@ -23,6 +23,7 @@ class ShowView extends React.Component {
         this.hasEntityAndView = hasEntityAndView.bind(this);
         this.getView = getView.bind(this);
         this.onLoadFailure = onLoadFailure.bind(this);
+        this.onFailure = onFailure.bind(this);
 
         this.viewName = 'ShowView';
         this.isValidEntityAndView = this.hasEntityAndView(context.router.getCurrentParams().entity);

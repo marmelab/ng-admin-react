@@ -25,7 +25,7 @@ describe('MaEditButton', () => {
 
         it('Should redirect to the create route', () => {
             let editButton = TestUtils.renderIntoDocument(<MaEditButton entityName={'MyEntity'} entry={entry} label={'Hello'} size={'xs'} />);
-            editButtonNode = React.findDOMNode(editButton);
+            let editButtonNode = React.findDOMNode(editButton);
 
             expect(editButtonNode.attributes['data-click-to'].value).toEqual('');
 

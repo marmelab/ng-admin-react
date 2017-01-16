@@ -4,7 +4,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 function getEntrySources() {
     var sources = [];
 
-    if (process.env.NODE_ENV !== 'production') { // for live reload
+    if ('production' !== process.env.NODE_ENV) { // for live reload
         sources.push('webpack-dev-server/client?http://0.0.0.0:8080');
         sources.push('webpack/hot/dev-server');
     }
@@ -42,7 +42,7 @@ function getPlugins() {
         })
     ];
 
-    if (process.env.NODE_ENV === 'production') {
+    if ('production' === process.env.NODE_ENV) {
         plugins.push(new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
@@ -62,20 +62,21 @@ module.exports = {
         path: __dirname + '/build',
         filename: '[name].min.js',
         library: 'ReactAdmin',
-        libraryTarget: 'umd'
+        libraryTarget: 'umd',
+        publicPath: '/build'
     },
     externals: {
-        "react": {
-            root: "React",
-            commonjs2: "react",
-            commonjs: "react",
-            amd: "react"
+        'react': {
+            root: 'React',
+            commonjs2: 'react',
+            commonjs: 'react',
+            amd: 'react'
         },
-        "react-router": {
-            root: "ReactRouter",
-            commonjs2: "react-router",
-            commonjs: "react-router",
-            amd: "react-router"
+        'react-router': {
+            root: 'ReactRouter',
+            commonjs2: 'react-router',
+            commonjs: 'react-router',
+            amd: 'react-router'
         }
     },
     module: {

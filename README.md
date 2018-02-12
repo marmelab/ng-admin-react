@@ -1,4 +1,4 @@
-# React-admin [![Build Status](https://travis-ci.org/marmelab/react-admin.svg?branch=master)](https://travis-ci.org/marmelab/react-admin)
+# ng-admin React [![Build Status](https://travis-ci.org/marmelab/react-admin.svg?branch=master)](https://travis-ci.org/marmelab/react-admin)
 
 Add a ReactJS admin GUI to any RESTful API. Based on [ng-admin](https://github.com/marmelab/ng-admin).
 
